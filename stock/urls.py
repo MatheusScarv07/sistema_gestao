@@ -1,7 +1,7 @@
-from views import home
+from stock.views import home
 from django.urls import path
 
 urlpatterns = [
-    path('/stock',home )
+    path('stock/',home )
     
 ]
