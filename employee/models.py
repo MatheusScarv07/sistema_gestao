@@ -4,7 +4,7 @@ from django.db import models
 class Employee(models.Model):
 
    
-    nome = models.CharField(max_length=70, null=False)
-    cargo = models.CharField(max_length=70, null=False)
-    status = models.BooleanField(null=False)
+    nome = models.CharField(max_length=70, null=True)
+    cargo = models.CharField(max_length=70, null=True)
+    status = models.BooleanField(null=True)
 
