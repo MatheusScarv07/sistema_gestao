@@ -9,7 +9,7 @@ class Budget(models.Model):
     data_orcamento = models.DateTimeField(auto_now_add=True)
     total = models.DecimalField(max_digits=10, decimal_places=2)
     cpf_cnpj_cliente = models.TextField(null=True, blank=True)
-    nome_cliente = models.TextField(null=True, blank=True)
+    nome_cliente = models.CharField(max_length=70, null=False )
     vendedor = models.ForeignKey(Supplier, on_delete=models.SET_NULL, null=True, blank=True)
     produto = models.ForeignKey(Stock, on_delete=models.SET_NULL, null=True, blank=True)
     valor_unitario = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
