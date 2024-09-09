@@ -22,26 +22,25 @@
         </select>
 
         <!-- HTML para o formulário -->
-        <input type="text" id="product_id" placeholder="ID do produto">
-        <input type="text" id="quantity" placeholder="Quantidade">
+        <input type="text" id="product_id" placeholder="ID do produto" onchange="fetchProductData(document.getElementById('product_id').value)">
+        <input type="text" id="quantity" placeholder="Quantidade" onchange="price_finally()">
         <input type="text" id="product_name" placeholder="Nome do produto" readonly>
-        <input type="text" id="unit_price" placeholder="Preço Unitário" readonly>
+        <input type="text" id="unit_price" placeholder="Preço Unitário" readonly onchange="price_finally()">
         <input type="text" id="total_price" placeholder="Preço Total" readonly>
-        <button type="button" id="add_product">Adicionar Produto</button>
+        <button type="button" id="add_product" onclick=add_cart()>Adicionar Produto</button>
 
         <!-- HTML para a tabela -->
         <table id="cart">
           <thead>
             <tr>
-              <th>ID</th>
               <th>Nome</th>
               <th>Quantidade</th>
               <th>Preço Unitário</th>
               <th>Preço Total</th>
             </tr>
           </thead>
-          <tbody>
-            <!-- As linhas da tabela serão adicionadas aqui -->
+          <tbody id="dados">
+            
           </tbody>
         </table>
         <input type="text" placeholder="No comment" name="name">

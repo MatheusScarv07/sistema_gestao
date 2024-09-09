@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 from sale.controler.clients import get_clients
 from sale.controler.cart import cart
 from stock.models import Stock
@@ -23,6 +24,7 @@ def get_product(request, product_id):
             'name': product.nome,  # Nome do produto no banco
             'price': product.valor_venda  # Preço unitário do produto
         }
+        print(product_data)
         return JsonResponse(product_data)
     except Stock.DoesNotExist:
         return JsonResponse({'error': 'Produto não encontrado'}, status=404)
