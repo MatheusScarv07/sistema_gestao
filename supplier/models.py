@@ -7,3 +7,7 @@ class Supplier(models.Model):
     endereco = models.CharField(max_length=255, null=True)
     cnpj = models.CharField(max_length=14, null=True)
     email = models.EmailField(null=True, blank=True)
+
+    def __str__(self):
+        return self.nome
+    

@@ -1,23 +1,55 @@
+{% load static %}
 {% include "sales/partials/head.html" %}
 <body>
   
   {% include "sales/partials/header.html" %}
   <main>
     <div class="content">
+      <div class="sub_menu">
+        <a href="/sales"><button>Painel</button></a>
+        <a href="/sale/new-sale"><button>Nova Venda</button></a>
+        <a href="/sales/searchsales"><button>Consultar Vendas</button></a>
+      </div>
       <h1>NEW SALE</h1>
-     <form action="">
-      <input type="text" placeholder="CPF/CNPJ client" name="name">
-      <input type="text" placeholder="nome client" name="name">
-      <input type="text" placeholder="id sller" name="name">
-      <input type="text" placeholder="nome seller" name="name">
-      <input type="text" placeholder="id product" name="name">
-      <input type="text" placeholder="name product" name="name">
-      <input type="text" placeholder="No comment" name="name">
+      <form id="sale_form" action="">
+        <select id="client_select">
+          {% for client in clients %}
+          <option value="{{client.id}}">{{client.nome}} - {{client.cpf_cnpj}}</option>
+          {% endfor %}
+        </select>
+        <select id="vendor_select">
+          <option value="">Vendendor 1</option>
+        </select>
 
-      <button>ADD SALE</button>
-     </form>
+        <!-- HTML para o formulário -->
+        <input type="text" id="product_id" placeholder="ID do produto">
+        <input type="text" id="quantity" placeholder="Quantidade">
+        <input type="text" id="product_name" placeholder="Nome do produto" readonly>
+        <input type="text" id="unit_price" placeholder="Preço Unitário" readonly>
+        <input type="text" id="total_price" placeholder="Preço Total" readonly>
+        <button type="button" id="add_product">Adicionar Produto</button>
+
+        <!-- HTML para a tabela -->
+        <table id="cart">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Quantidade</th>
+              <th>Preço Unitário</th>
+              <th>Preço Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- As linhas da tabela serão adicionadas aqui -->
+          </tbody>
+        </table>
+        <input type="text" placeholder="No comment" name="name">
+        <button type="submit">ADD SALE</button>
+      </form>
     </div>
     <footer>footer</footer>
   </main>
+  <script src="{% static 'sale/js/sales.js' %}"></script>
 </body>
 </html>
