@@ -25,7 +25,10 @@ const price_finally = () =>{
 
 }
 
-const add_cart = () => {
+const enviarCarrinhoParaBanco = () => {
+    // Coletar dados do carrinho temporário
+    
+    
     const id_cliente = document.getElementById("client_select").value;
     const id_produto = document.getElementById("product_id").value;
     const name_product = document.getElementById("product_name").value;
@@ -33,26 +36,80 @@ const add_cart = () => {
     const valor_uni = document.getElementById("unit_price").value;
     const valor_total = document.getElementById("total_price").value;
     const dadosDoCarrinho = document.getElementById("dados");
+    const dadosCarrinho = {
+        'id_cliente': id_cliente,
+        'id_produto': id_produto,
+        'name': name_product,
+        'Qntde': quantidade,
+        'valor': valor_uni,
+        'valor_total': valor_total
+    }
+    
+    // Enviar dados para o backend via fetch
+    fetch('/sale/salvar-carrinho', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify(dadosCarrinho)
+    })
+    renderizarTabelaCarrinho()
+    .catch(error => console.error('Erro:', error));
+};
 
-    // Create a new table row element
-    const newRow = document.createElement("tr");
+const renderizarTabelaCarrinho = () => {
+    fetch('/sales/cart_products')
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error('Erro ao buscar produtos do carrinho:', data.error);
+            return;
+        }
+        
+        console.log(data);
+        const tableBody = document.querySelector('#cart-table tbody');
+        
+        if (!tableBody) {
+            console.error('Elemento tbody não encontrado. Verifique se o ID do table está correto.');
+            return;
+        }
+        
+        tableBody.innerHTML = ''; // Clear existing rows
+        
+        if (!Array.isArray(data.cart_products) || data.cart_products.length === 0) {
+            const emptyRow = document.createElement('tr');
+            emptyRow.innerHTML = '<td colspan="4">Nenhum produto no carrinho</td>';
+            tableBody.appendChild(emptyRow);
+            return;
+        }
+        
+        data.cart_products.forEach(item => {
+            const linha = document.createElement("tr");
+            linha.innerHTML = `
+                <td>${item.name_produto || ''}</td>
+                <td>${item.quantidade || ''}</td>
+                <td>${item.valor_uni || ''}</td>
+                <td>${item.valor_total || ''}</td>
+            `;
+            tableBody.appendChild(linha);
+        });
+    })
+    .catch(error => console.error('Erro:', error));
+};
 
-    // Create table cells for each product attribute
-    const nameCell = document.createElement("td");
-    nameCell.textContent = name_product;
-    const quantityCell = document.createElement("td");
-    quantityCell.textContent = quantidade;
-    const valorUniCell = document.createElement("td");
-    valorUniCell.textContent = valor_uni;
-    const valorTotalCell = document.createElement("td");
-    valorTotalCell.textContent = valor_total;
-
-    // Append cells to the row
-    newRow.appendChild(nameCell);
-    newRow.appendChild(quantityCell);
-    newRow.appendChild(valorUniCell);
-    newRow.appendChild(valorTotalCell);
-
-    // Append the new row to the table
-    dadosDoCarrinho.appendChild(newRow);
+// Função auxiliar para obter o token CSRF
+const getCookie = (name) => {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 };
