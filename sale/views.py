@@ -57,6 +57,20 @@ def cart(request):
 def cart_products(request):
     cart_products = CartTemp.objects.all()
     products_data = list(cart_products.values()) 
-    print(products_data) # Convert queryset to list of dictionaries
     return JsonResponse({'cart_products': products_data}, safe=False)
     
+
+def excluir_produto(request, id):
+    try:
+        produto = CartTemp.objects.get(id=id)
+        produto.delete()
+
+        # Optionally, update the cart total or other relevant data
+        # cart_total = CartTemp.objects.aggregate(Sum('quantidade'))
+
+        # Return a success message or redirect to the appropriate page
+        return JsonResponse({'success': True, 'message': 'Produto excluído com sucesso'})
+
+    except CartTemp.DoesNotExist:
+        # Handle the case where the product doesn't exist
+        return JsonResponse({'success': False, 'message': 'Produto não encontrado'})
