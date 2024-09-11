@@ -12,6 +12,7 @@
       </div>
       <h1>NEW SALE</h1>
       <form id="sale_form" action="">
+        {% csrf_token %}
         <select id="client_select">
           {% for client in clients %}
           <option value="{{client.id}}">{{client.nome}} - {{client.cpf_cnpj}}</option>
@@ -39,9 +40,13 @@
       <th>Quantidade</th>
       <th>Valor Unitário</th>
       <th>Valor Total</th>
+      <th>Option</th>
     </tr>
   </thead>
   <tbody id="dados">
+    <td>
+      <button>a</button>
+    </td>
     <!-- Os dados do carrinho serão inseridos aqui dinamicamente -->
   </tbody>
 </table>
@@ -52,3 +57,4 @@
   <script src="{% static 'sale/js/sales.js' %}"></script>
 </body>
 </html>
+
