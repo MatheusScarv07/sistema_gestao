@@ -27,25 +27,25 @@
         <input type="text" id="product_name" placeholder="Nome do produto" readonly>
         <input type="text" id="unit_price" placeholder="Preço Unitário" readonly onchange="price_finally()">
         <input type="text" id="total_price" placeholder="Preço Total" readonly>
-        <button type="button" id="add_product" onclick=add_cart()>Adicionar Produto</button>
+        <button type="button" id="add_product" onclick=enviarCarrinhoParaBanco()>Adicionar Produto</button>
 
         <!-- HTML para a tabela -->
-        <table id="cart">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Quantidade</th>
-              <th>Preço Unitário</th>
-              <th>Preço Total</th>
-            </tr>
-          </thead>
-          <tbody id="dados">
-            
-          </tbody>
-        </table>
-        <input type="text" placeholder="No comment" name="name">
-        <button type="submit">ADD SALE</button>
-      </form>
+         <!-- Tabela para exibir o carrinho salvo -->
+<h2>Carrinho Salvo</h2>
+<table id="tabela-carrinho">
+  <thead>
+    <tr>
+      <th>Produto</th>
+      <th>Quantidade</th>
+      <th>Valor Unitário</th>
+      <th>Valor Total</th>
+    </tr>
+  </thead>
+  <tbody id="dados">
+    <!-- Os dados do carrinho serão inseridos aqui dinamicamente -->
+  </tbody>
+</table>
+      </form> 
     </div>
     <footer>footer</footer>
   </main>
