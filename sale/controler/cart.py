@@ -2,7 +2,7 @@ from sale.models import CartTemp
 from stock.models import Stock
 from django.http import JsonResponse
 
-def cart():
+def cart_products():
     # Acessando o manager diretamente pela classe CartTemp
     products = CartTemp.objects.all()  # Se você quer obter o primeiro item
     if products:  # Verifica se existe algum produto
