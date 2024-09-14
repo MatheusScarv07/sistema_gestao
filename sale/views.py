@@ -1,19 +1,29 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from sale.controler.clients import get_clients
-from sale.controler.cart import cart
+from sale.controler.cart import cart_products
 from sale.models import CartTemp
 from stock.models import Stock
+from client.models import Client
+from employee.models import Employee
+from django.views.decorators.csrf import csrf_exempt
 import json
 # Create your views here.
 def home (request):
     return render(request, 'sales/pages/home.html')
-
+@csrf_exempt
 def new_sale(request):
     clients = get_clients()
-    
+    carts = CartTemp.objects.all()
+    button_enviar = False
+    response = ''
+    vendedor = Employee.objects.all()
     return render(request, 'sales/pages/sales.html', context={
-        'clients': clients
+        'clientes': clients,
+        'vendedores': vendedor,
+        'cart': carts,
+        'button_enviar': button_enviar,
+        'response': response
     })
 def get_product(request, product_id):
     try:
@@ -32,45 +42,119 @@ def get_product(request, product_id):
     
 def searchsales(request):
     return render(request, 'sales/pages/searchsales.html')
-
+@csrf_exempt
 def cart(request):
+    response = ''
     if request.method == 'POST':
-        data = json.loads(request.body)
-        # Cria uma nova instância de CartTemp com os dados recebidos
-        cart_item = CartTemp(
-            id_cliente=data.get('id_cliente'),
-            id_produto=data.get('id_produto'),
-            name_product=data.get('name'),
-            quantidade=data.get('Qntde'),
-            valor_uni=data.get('valor'),
-            valor_total=data.get('valor_total')
+        cliente_id = request.POST.get('cliente')
+        vendedor_id = request.POST.get('vendedor')
+        id_produto = request.POST.get('id_produto')
+        product_name = request.POST.get('name')
+        quantidade = float(request.POST.get('Qntde'))
+        valor_uni = float(request.POST.get('valor'))
+        valor_total = float(request.POST.get('valor_total'))
+
+        # Salva o ID do cliente e vendedor na sessão
+        request.session['cliente_id'] = cliente_id
+        request.session['vendedor_id'] = vendedor_id
+
+        try:
+            # Busca cliente e vendedor
+            cliente = Client.objects.get(id=cliente_id)
+            vendedor = Employee.objects.get(id=vendedor_id)
+        except Client.DoesNotExist:
+            response = 'Cliente não encontrado'
+            return JsonResponse({'error': response}, status=404)
+        except Employee.DoesNotExist:
+            response = 'Vendedor não encontrado'
+            return JsonResponse({'error': response}, status=404)
+
+        # Verifica estoque do produto
+        try:
+            dados_carrinho = Stock.objects.get(id=id_produto)
+        except Stock.DoesNotExist:
+            response = 'Produto não encontrado'
+            return JsonResponse({'error': response}, status=404)
+
+        if dados_carrinho.estoque <= 0:
+            response = 'Produto indisponível'
+        elif quantidade > dados_carrinho.estoque:
+            response = f'Quantidade Indisponível: tem {dados_carrinho.estoque}'
+        else:
+            # Cria e salva o item no carrinho
+            cart_item = CartTemp(
+                id_cliente=cliente_id,
+                id_produto=id_produto,
+                name_product=product_name,
+                quantidade=quantidade,
+                valor_uni=valor_uni,
+                valor_total=valor_total
+            )
+            cart_item.save()
+            response = 'Produto Adicionado'
+
+        # Busca todos os itens do carrinho
+        carts = CartTemp.objects.all()
+        button_enviar = True
+
+        # Renderiza o template com o contexto correto
+        return render(
+            request,
+            'sales/pages/sales.html',
+            context={
+                'clientes': Client.objects.all(),  # Passa todos os clientes
+                'vendedores': Employee.objects.all(),  # Passa todos os vendedores
+                'selected_cliente': cliente,  # Passa o cliente selecionado
+                'selected_vendedor': vendedor,  # Passa o vendedor selecionado
+                'cart': carts,
+                'response': response,
+                'button_enviar': button_enviar
+            }
         )
-        
-        # Salva o item no banco de dados
-        cart_item.save()
-          # Imprime os dados no console
-        # Faça algo com os dados, como salvar no banco de dados
-        return JsonResponse({'message': 'Dados salvos com sucesso'})
     else:
-        return JsonResponse({'error': 'Método não permitido'})
-    
-def cart_products(request):
+        return JsonResponse({'error': 'Método não permitido'}, status=405)
+""" def cart_products(request):
     cart_products = CartTemp.objects.all()
     products_data = list(cart_products.values()) 
-    return JsonResponse({'cart_products': products_data}, safe=False)
+    return JsonResponse({'cart_products': products_data}, safe=False) """
     
 
+@csrf_exempt
 def excluir_produto(request, id):
     try:
         produto = CartTemp.objects.get(id=id)
         produto.delete()
 
-        # Optionally, update the cart total or other relevant data
-        # cart_total = CartTemp.objects.aggregate(Sum('quantidade'))
+        # Obtenha os dados necessários para renderizar a página do carrinho
+        cliente_id = request.session.get('cliente_id')
+        vendedor_id = request.session.get('vendedor_id')
 
-        # Return a success message or redirect to the appropriate page
-        return JsonResponse({'success': True, 'message': 'Produto excluído com sucesso'})
+        if cliente_id and vendedor_id:
+            try:
+                cliente = Client.objects.get(id=cliente_id)
+                vendedor = Employee.objects.get(id=vendedor_id)
+                clientes = Client.objects.all()
+                vendedores = Employee.objects.all()
+                carts = CartTemp.objects.all()
+                return render(
+                    request,
+                    'sales/pages/sales.html',
+                    context={
+                        'clientes': clientes,  # A lista completa de clientes
+                        'vendedores': vendedores,  # A lista completa de vendedores
+                        'cart': carts,
+                        'response': 'Produto excluído com sucesso',
+                        'button_enviar': True,
+                        'selected_cliente': cliente,  # O cliente selecionado
+                        'selected_vendedor': vendedor,  # O vendedor selecionado
+                    }
+                )
+            except Client.DoesNotExist:
+                return render(request, 'sales/pages/sales.html', {'response': 'Cliente não encontrado'})
+            except Employee.DoesNotExist:
+                return render(request, 'sales/pages/sales.html', {'response': 'Vendedor não encontrado'})
+        else:
+            return redirect('sale/salvar-carrinho/')
 
     except CartTemp.DoesNotExist:
-        # Handle the case where the product doesn't exist
         return JsonResponse({'success': False, 'message': 'Produto não encontrado'})
