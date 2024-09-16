@@ -11,27 +11,41 @@
         <a href="/sales/searchsales"><button>Consultar Vendas</button></a>
       </div>
       <h1>NEW SALE</h1>
-      <form id="sale_form" action="">
-        {% csrf_token %}
-        <select id="client_select">
-          {% for client in clients %}
-          <option value="{{client.id}}">{{client.nome}} - {{client.cpf_cnpj}}</option>
-          {% endfor %}
-        </select>
-        <select id="vendor_select">
-          <option value="">Vendendor 1</option>
-        </select>
+      <form action="/sale/salvar-carrinho/" method="post">
+        <!-- Select para Cliente -->
+<!-- Select para Cliente -->
+<select name="cliente" id="cliente">
+  <!-- Opção padrão -->
+  <option value="" disabled {% if not selected_cliente %}selected{% endif %}>Selecione o Cliente</option>
+  
+  <!-- Iteração sobre os clientes -->
+  {% for cliente in clientes %}
+      <option value="{{ cliente.id }}" {% if selected_cliente and cliente.id == selected_cliente.id %}selected{% endif %}>
+          {{ cliente.nome }}
+      </option>
+  {% endfor %}
+</select>
 
-        <!-- HTML para o formulário -->
-        <input type="text" id="product_id" placeholder="ID do produto" onchange="fetchProductData(document.getElementById('product_id').value)">
-        <input type="text" id="quantity" placeholder="Quantidade" onchange="price_finally()">
-        <input type="text" id="product_name" placeholder="Nome do produto" readonly>
-        <input type="text" id="unit_price" placeholder="Preço Unitário" readonly onchange="price_finally()">
-        <input type="text" id="total_price" placeholder="Preço Total" readonly>
-        <button type="button" id="add_product" onclick=enviarCarrinhoParaBanco()>Adicionar Produto</button>
-
-        <!-- HTML para a tabela -->
-         <!-- Tabela para exibir o carrinho salvo -->
+<!-- Select para Vendedor -->
+<select name="vendedor" id="vendedor">
+  <!-- Opção padrão -->
+  <option value="" disabled {% if not selected_vendedor %}selected{% endif %}>Selecione o Vendedor</option>
+  
+  <!-- Iteração sobre os vendedores -->
+  {% for vendedor in vendedores %}
+      <option value="{{ vendedor.id }}" {% if selected_vendedor and vendedor.id == selected_vendedor.id %}selected{% endif %}>
+          {{ vendedor.nome }}
+      </option>
+  {% endfor %}
+</select>
+        <input name="id_produto" type="text" id="product_id" placeholder="ID do produto" onchange="fetchProductData(document.getElementById('product_id').value)">
+        <input name="Qntde" type="text" id="quantity" placeholder="Quantidade" onchange="price_finally()">
+        <input name="name" type="text" id="product_name" placeholder="Nome do produto" readonly>
+        <input name="valor" type="text" id="unit_price" placeholder="Preço Unitário" readonly onchange="price_finally()">
+        <input name="valor_total" type="text" id="total_price" placeholder="Preço Total" readonly>
+        <button type="submit">ADD Produto</button>
+      </form>
+      <p>{{response}}</p>
 <h2>Carrinho Salvo</h2>
 <table id="tabela-carrinho">
   <thead>
@@ -44,15 +58,25 @@
     </tr>
   </thead>
   <tbody id="dados">
-    <td>
-      <button>a</button>
-    </td>
-    <!-- Os dados do carrinho serão inseridos aqui dinamicamente -->
+    {% for item in cart  %}
+    <tr>
+      <td>{{item.name_product}}</td>
+      <td>{{item.quantidade}}</td>
+      <td>{{item.valor_uni}}</td>
+      <td>{{item.valor_total}}</td>
+      <td><a href="{% url 'excluir_produto' item.id %}">excluir</a></td>
+    </tr>
+    {% endfor %}
   </tbody>
 </table>
+      <form id="sale_form" action="">
+        {% if button_enviar %}
+        <button button type="submit">efetuar aprovação</button>
+        {% endif %}
+          
       </form> 
     </div>
-    <footer>footer</footer>
+    <footer>Assinatura</footer>
   </main>
   <script src="{% static 'sale/js/sales.js' %}"></script>
 </body>
