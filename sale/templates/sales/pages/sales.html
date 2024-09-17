@@ -69,12 +69,16 @@
     {% endfor %}
   </tbody>
 </table>
-      <form id="sale_form" action="">
+      <form id="sale_form" action="sale/new_sale/concluido/" method="post">
         {% if button_enviar %}
         <button button type="submit">efetuar aprovação</button>
         {% endif %}
-          
-      </form> 
+      </form>
+      <form action="" method="post">
+        {% if button_enviar %}
+        <button button type="submit">Enviar Orçamento</button>
+        {% endif %}
+      </form>
     </div>
     <footer>Assinatura</footer>
   </main>
