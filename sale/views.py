@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 from sale.controler.clients import get_clients
 from sale.controler.cart import cart_products
-from sale.models import CartTemp
+from sale.models import CartTemp, Sale
 from stock.models import Stock
 from client.models import Client
 from employee.models import Employee
@@ -10,6 +10,7 @@ from sale.models import Sale
 from django.views.decorators.csrf import csrf_exempt
 from budget.models import Budget
 import random
+from random import randint
 from datetime import datetime
 import json
 # Create your views here.
@@ -166,6 +167,32 @@ def excluir_produto(request, id):
 
 
 @csrf_exempt
+def efetuar_venda(request):
+    try:
+        carrinho = CartTemp.objects.all()
+        numero_venda  = randint(1, 1000)
+        cliente_venda = Client.objects.get(id = request.session.get('cliente_id') )
+        vendedor_venda = Employee.objects.get(id = request.session.get('vendedor_id') )
+        print(cliente_venda)
+        print(vendedor_venda)
+        print(request.session.get('cliente_id'))
+        print(request.session.get('vendedor_id') )
+        for produto in carrinho:
+            data = datetime.now()
+            item = Stock.objects.get(id = produto.id_produto)
+            new = Sale(
+                num_sale = numero_venda,
+                cliente = cliente_venda,
+                data_venda = data,
+                vendedor = vendedor_venda,
+                cpf_cnpj_cliente = cliente_venda.cpf_cnpj,
+                produto = item,
+                valor_unitario = produto.valor_uni,
+                quantidade = produto.quantidade,
+                valor_total = produto.valor_total
+            )
+            new.save()
+        
 def enviar_orcamento(request):
     if request.method == 'POST':
         carrinho = CartTemp.objects.all()
@@ -204,6 +231,15 @@ def enviar_orcamento(request):
         response = ''
         vendedor = Employee.objects.all()
         return render(request, 'sales/pages/sales.html', context={
+            'clientes': clients,
+            'vendedores': vendedor,
+            'cart': carts,
+            'button_enviar': button_enviar,
+            'response': response
+        })
+    except Exception as e:
+        # Handle exceptions appropriately, e.g., return an error response
+        return HttpResponseBadRequest(f"An error occurred: {e}")
         'clientes': clients,
         'vendedores': vendedor,
         'cart': carts,
@@ -212,5 +248,4 @@ def enviar_orcamento(request):
     })
     else:
         return JsonResponse({'error': 'Método não permitido'}, status=405)
-    
-
+ 
