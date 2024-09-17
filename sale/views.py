@@ -6,7 +6,11 @@ from sale.models import CartTemp
 from stock.models import Stock
 from client.models import Client
 from employee.models import Employee
+from sale.models import Sale
 from django.views.decorators.csrf import csrf_exempt
+from budget.models import Budget
+import random
+from datetime import datetime
 import json
 # Create your views here.
 def home (request):
@@ -57,6 +61,7 @@ def cart(request):
         # Salva o ID do cliente e vendedor na sessão
         request.session['cliente_id'] = cliente_id
         request.session['vendedor_id'] = vendedor_id
+        
 
         try:
             # Busca cliente e vendedor
@@ -158,3 +163,54 @@ def excluir_produto(request, id):
 
     except CartTemp.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Produto não encontrado'})
+
+
+@csrf_exempt
+def enviar_orcamento(request):
+    if request.method == 'POST':
+        carrinho = CartTemp.objects.all()
+        numero_saida = random.randint(1, 100)
+        for item in carrinho:
+            agora = datetime.now()
+            
+            cliente_venda = Client.objects.get(id = request.session.get('cliente_id') )
+            vendedor_venda = Employee.objects.get(id = request.session.get('vendedor_id') )
+            produto = Stock.objects.get(id = item.id_produto)
+
+            budget = Budget(
+                cliente = cliente_venda,
+                data_orcamento = agora,
+                total = item.valor_total,
+                cpf_cnpj_cliente = cliente_venda.cpf_cnpj,
+                vendedor = vendedor_venda,
+                produto = produto,
+                valor_unitario = item.valor_uni,
+                quantidade = item.quantidade,
+                valor_total = item.valor_total
+
+                )   
+               
+            budget.save()
+
+        response = f'Orcamento {numero_saida} criado'
+
+      
+
+        # Renderiza o template com o contexto correto
+        CartTemp.objects.all().delete()
+        clients = get_clients()
+        carts = CartTemp.objects.all()
+        button_enviar = False
+        response = ''
+        vendedor = Employee.objects.all()
+        return render(request, 'sales/pages/sales.html', context={
+        'clientes': clients,
+        'vendedores': vendedor,
+        'cart': carts,
+        'button_enviar': button_enviar,
+        'response': response
+    })
+    else:
+        return JsonResponse({'error': 'Método não permitido'}, status=405)
+    
+
