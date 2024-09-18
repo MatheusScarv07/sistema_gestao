@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Sale, CartTemp
+from .models import Sale, CartTemp, SaleInfo
 
 # Verificar se Sale já está registrado antes de registrar
 if not admin.site.is_registered(Sale):
@@ -16,3 +16,10 @@ if not admin.site.is_registered(CartTemp):
         pass
 
     admin.site.register(CartTemp, CartTempAdmin)
+
+if not admin.site.is_registered(SaleInfo):
+    class SaleInfoAdmin(admin.ModelAdmin):
+        # Defina as configurações do SaleInfoAdmin aqui
+        pass
+
+    admin.site.register(SaleInfo, SaleInfoAdmin)

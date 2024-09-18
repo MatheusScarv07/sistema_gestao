@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 from sale.controler.clients import get_clients
 from sale.controler.cart import cart_products
-from sale.models import CartTemp, Sale
+from sale.models import CartTemp, Sale, SaleInfo
 from stock.models import Stock
 from client.models import Client
 from employee.models import Employee
@@ -14,6 +14,8 @@ from random import randint
 from datetime import datetime
 import json
 # Create your views here.
+
+
 def home (request):
     return render(request, 'sales/pages/home.html')
 @csrf_exempt
@@ -45,8 +47,7 @@ def get_product(request, product_id):
     except Stock.DoesNotExist:
         return JsonResponse({'error': 'Produto não encontrado'}, status=404)
     
-def searchsales(request):
-    return render(request, 'sales/pages/searchsales.html')
+
 @csrf_exempt
 def cart(request):
     response = ''
@@ -172,11 +173,8 @@ def efetuar_venda(request):
         carrinho = CartTemp.objects.all()
         numero_venda  = randint(1, 1000)
         cliente_venda = Client.objects.get(id = request.session.get('cliente_id') )
-        vendedor_venda = Employee.objects.get(id = request.session.get('vendedor_id') )
-        print(cliente_venda)
-        print(vendedor_venda)
-        print(request.session.get('cliente_id'))
-        print(request.session.get('vendedor_id') )
+        vendedor_venda = Employee.objects.get(id = request.session.get('vendedor_id'))
+        valor = []
         for produto in carrinho:
             data = datetime.now()
             item = Stock.objects.get(id = produto.id_produto)
@@ -191,39 +189,16 @@ def efetuar_venda(request):
                 quantidade = produto.quantidade,
                 valor_total = produto.valor_total
             )
+            valor.append(produto.valor_total)
             new.save()
-        
-def enviar_orcamento(request):
-    if request.method == 'POST':
-        carrinho = CartTemp.objects.all()
-        numero_saida = random.randint(1, 100)
-        for item in carrinho:
-            agora = datetime.now()
-            
-            cliente_venda = Client.objects.get(id = request.session.get('cliente_id') )
-            vendedor_venda = Employee.objects.get(id = request.session.get('vendedor_id') )
-            produto = Stock.objects.get(id = item.id_produto)
-
-            budget = Budget(
-                cliente = cliente_venda,
-                data_orcamento = agora,
-                total = item.valor_total,
-                cpf_cnpj_cliente = cliente_venda.cpf_cnpj,
-                vendedor = vendedor_venda,
-                produto = produto,
-                valor_unitario = item.valor_uni,
-                quantidade = item.quantidade,
-                valor_total = item.valor_total
-
-                )   
-               
-            budget.save()
-
-        response = f'Orcamento {numero_saida} criado'
-
-      
-
-        # Renderiza o template com o contexto correto
+        valor_venda = sum(valor)
+        info = SaleInfo(
+            num_sale = numero_venda,
+            cliente = cliente_venda,
+            cpf_cnpj = cliente_venda.cpf_cnpj,
+            valor = valor_venda,
+        )
+        info.save()
         CartTemp.objects.all().delete()
         clients = get_clients()
         carts = CartTemp.objects.all()
@@ -240,12 +215,67 @@ def enviar_orcamento(request):
     except Exception as e:
         # Handle exceptions appropriately, e.g., return an error response
         return HttpResponseBadRequest(f"An error occurred: {e}")
-        'clientes': clients,
-        'vendedores': vendedor,
-        'cart': carts,
-        'button_enviar': button_enviar,
-        'response': response
-    })
-    else:
-        return JsonResponse({'error': 'Método não permitido'}, status=405)
+        
+def enviar_orcamento(request):
+    try:
+        if request.method == 'POST':
+            carrinho = CartTemp.objects.all()
+            numero_saida = random.randint(1, 100)
+            for item in carrinho:
+                agora = datetime.now()
+                
+                cliente_venda = Client.objects.get(id = request.session.get('cliente_id') )
+                vendedor_venda = Employee.objects.get(id = request.session.get('vendedor_id') )
+                produto = Stock.objects.get(id = item.id_produto)
+
+                budget = Budget(
+                    cliente = cliente_venda,
+                    data_orcamento = agora,
+                    total = item.valor_total,
+                    cpf_cnpj_cliente = cliente_venda.cpf_cnpj,
+                    vendedor = vendedor_venda,
+                    produto = produto,
+                    valor_unitario = item.valor_uni,
+                    quantidade = item.quantidade,
+                    valor_total = item.valor_total
+
+                    )   
+                
+                budget.save()
+
+            response = f'Orcamento {numero_saida} criado'
+
+        
+
+            # Renderiza o template com o contexto correto
+            CartTemp.objects.all().delete()
+            clients = get_clients()
+            carts = CartTemp.objects.all()
+            button_enviar = False
+            response = ''
+            vendedor = Employee.objects.all()
+            return render(request, 'sales/pages/sales.html', context={
+                'clientes': clients,
+                'vendedores': vendedor,
+                'cart': carts,
+                'button_enviar': button_enviar,
+                'response': response
+            })
+    except Exception as e:
+        # Handle exceptions appropriately, e.g., return an error response
+        return HttpResponseBadRequest(f"An error occurred: {e}")
+        
  
+def searchsales(request):
+    try: 
+        data = datetime.today()
+        vendas = SaleInfo.objects.filter(data_venda=data)
+        return render(request, 'sales/pages/searchsales.html', context={
+            'vendas':vendas
+        })
+    except Exception as e:
+        ...
+
+
+
+    

@@ -8,7 +8,7 @@ from employee.models import Employee
 class Sale(models.Model):
     num_sale = models.IntegerField(null=True)
     cliente = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True)
-    data_venda = models.DateTimeField(auto_now_add=True)
+    data_venda = models.DateField(auto_now_add=True)
     vendedor = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True)
     cpf_cnpj_cliente = models.CharField(max_length=14,null=True, blank=True)
     produto = models.ForeignKey(Stock, on_delete=models.SET_NULL, null=True, blank=True)
@@ -19,7 +19,13 @@ class Sale(models.Model):
     def __str__(self):
         return self.cliente
     
-
+class SaleInfo(models.Model):
+    num_sale = models.IntegerField(null=True)
+    data_venda = models.DateField(auto_now_add=True)
+    cliente = models.ForeignKey(Client, on_delete=models.CASCADE)
+    cpf_cnpj = models.CharField(max_length=14, null=True)
+    vendedor = models.ForeignKey(Employee, on_delete=models.CASCADE, null=True, blank=True) 
+    valor = models.FloatField(null=True)
 
 class CartTemp(models.Model):
     id_cliente = models.IntegerField(null=True, blank=True)
