@@ -216,7 +216,7 @@ def efetuar_venda(request):
         # Handle exceptions appropriately, e.g., return an error response
         return HttpResponseBadRequest(f"An error occurred: {e}")
 
-        
+@csrf_exempt       
 def enviar_orcamento(request):
     try:
         if request.method == 'POST':
@@ -276,58 +276,9 @@ def enviar_orcamento(request):
             })      
     except Exception as e:
         # Handle exceptions appropriately, e.g., return an error response
-        return HttpResponseBadRequest(f"An error occurred: {e}")
-        
-def enviar_orcamento(request):
-    try:
-        if request.method == 'POST':
-            carrinho = CartTemp.objects.all()
-            numero_saida = random.randint(1, 100)
-            for item in carrinho:
-                agora = datetime.now()
-                
-                cliente_venda = Client.objects.get(id = request.session.get('cliente_id') )
-                vendedor_venda = Employee.objects.get(id = request.session.get('vendedor_id') )
-                produto = Stock.objects.get(id = item.id_produto)
+        return HttpResponseBadRequest(f"An error occurred: {e}")     
 
-                budget = Budget(
-                    cliente = cliente_venda,
-                    data_orcamento = agora,
-                    total = item.valor_total,
-                    cpf_cnpj_cliente = cliente_venda.cpf_cnpj,
-                    vendedor = vendedor_venda,
-                    produto = produto,
-                    valor_unitario = item.valor_uni,
-                    quantidade = item.quantidade,
-                    valor_total = item.valor_total
 
-                    )   
-                
-                budget.save()
-
-            response = f'Orcamento {numero_saida} criado'
-
-        
-
-            # Renderiza o template com o contexto correto
-            CartTemp.objects.all().delete()
-            clients = get_clients()
-            carts = CartTemp.objects.all()
-            button_enviar = False
-            response = ''
-            vendedor = Employee.objects.all()
-            return render(request, 'sales/pages/sales.html', context={
-                'clientes': clients,
-                'vendedores': vendedor,
-                'cart': carts,
-                'button_enviar': button_enviar,
-                'response': response
-            })
-    except Exception as e:
-        # Handle exceptions appropriately, e.g., return an error response
-        return HttpResponseBadRequest(f"An error occurred: {e}")
-        
- 
 def searchsales(request):
     try: 
         data = datetime.today()

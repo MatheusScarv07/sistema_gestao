@@ -11,12 +11,14 @@
         <h3>Consultar Orcamento</h3>
         {% for orcamento in  budget %}
         
-        <a href="/orcamento/{{orcamento.number_budget}}">{{orcamento.number_budget}}</a>
-         <p>{{orcamento.data_orcamento}}</p>
-         <p>{{orcamento.cliente}}</p>
-         <p>{{orcamento.cpf_cnpj_cliente}}</p>
-         <p>{{orcamento.vendedor}}</p>
-         <p>{{orcamento.total}}</p>
+        
+        
+         <p>{{orcamento.produto}}</p>
+         <p>{{orcamento.quantidade}}</p>
+         <p>{{orcamento.valor_unitario}}</p>
+         <p>{{orcamento.valor_total}}</p>
+         
+         
         
         {% endfor %}
         </div>
