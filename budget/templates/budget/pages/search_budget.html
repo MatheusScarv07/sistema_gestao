@@ -1,22 +1,26 @@
 {% include "budget/partials/head.html" %}
+
+
+
 <body>
     {% include "budget/partials/header.html" %}
+ 
+   <main>
+    <div class="content">
+      
+        <h3>Consultar Orcamento</h3>
+        {% for orcamento in  budget %}
+        
+         <p>{{orcamento.cliente}}</p>
+        
+        {% endfor %}
+        </div>
+    </div>
+    <footer>aqui está o footer</footer>
+   </main>
 
-  <main>
-    <form action="">
-      <h1>Search Budget</h1>
-  
-      <form action="">
-        <input type="text" placeholder="name client" name="name">
-        <input type="text" placeholder="cpf client" name="name">
-        <input type="text" placeholder="cnpj client" name="name">
-        <input type="text" placeholder="number budget" name="name">
-        <input type="text" placeholder="date budget" name="name">
-
-        <button>Search</button>
-      </form>
-
-  </main>
-  
+   
+ 
+ 
 </body>
 </html>

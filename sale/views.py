@@ -8,7 +8,7 @@ from client.models import Client
 from employee.models import Employee
 from sale.models import Sale
 from django.views.decorators.csrf import csrf_exempt
-from budget.models import Budget
+from budget.models import Budget, BudgetInfo
 import random
 from random import randint
 from datetime import datetime
@@ -191,7 +191,7 @@ def efetuar_venda(request):
             )
             valor.append(produto.valor_total)
             new.save()
-        valor_venda = sum(valor)
+            valor_venda = sum(valor)
         info = SaleInfo(
             num_sale = numero_venda,
             cliente = cliente_venda,
@@ -211,8 +211,69 @@ def efetuar_venda(request):
             'cart': carts,
             'button_enviar': button_enviar,
             'response': response
-        })
-    except Exception as e:
+        })      
+            except Exception as e:
+        # Handle exceptions appropriately, e.g., return an error response
+        return HttpResponseBadRequest(f"An error occurred: {e}")
+
+        
+def enviar_orcamento(request):
+    if request.method == 'POST':
+        carrinho = CartTemp.objects.all()
+        numero_saida = random.randint(1, 100)
+        valor_T = []
+        cliente_venda = Client.objects.get(id = request.session.get('cliente_id') )
+        vendedor_venda = Employee.objects.get(id = request.session.get('vendedor_id') )
+        for item in carrinho:
+            agora = datetime.today()
+            
+            
+            produto = Stock.objects.get(id = item.id_produto)
+
+            budget = Budget(
+                number_budget = numero_saida,
+                cliente = cliente_venda,
+                data_orcamento = agora,
+                total = item.valor_total,
+                cpf_cnpj_cliente = cliente_venda.cpf_cnpj,
+                vendedor = vendedor_venda,
+                produto = produto,
+                valor_unitario = item.valor_uni,
+                quantidade = item.quantidade,
+                valor_total = item.valor_total
+
+                )   
+            
+               
+            budget.save()
+            valor_T.append(item.valor_total)
+
+        response = f'Orcamento {numero_saida} criado'
+        soma_valores = sum(valor_T)
+
+        info = BudgetInfo(
+            number_budget = numero_saida,
+            data_orcamento = agora,
+            cpf_cnpj_cliente = cliente_venda.cpf_cnpj,
+            cliente = cliente_venda,
+            total = soma_valores,
+            vendedor = vendedor_venda,
+        )
+        info.save()
+        CartTemp.objects.all().delete()
+        clients = get_clients()
+        carts = CartTemp.objects.all()
+        button_enviar = False
+        response = ''
+        vendedor = Employee.objects.all()
+        return render(request, 'sales/pages/sales.html', context={
+            'clientes': clients,
+            'vendedores': vendedor,
+            'cart': carts,
+            'button_enviar': button_enviar,
+            'response': response
+        })      
+            except Exception as e:
         # Handle exceptions appropriately, e.g., return an error response
         return HttpResponseBadRequest(f"An error occurred: {e}")
         
