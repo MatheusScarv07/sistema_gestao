@@ -236,8 +236,8 @@ def enviar_orcamento(request):
             'cart': carts,
             'button_enviar': button_enviar,
             'response': response
-        })
-    except Exception as e:
+        })      
+            except Exception as e:
         # Handle exceptions appropriately, e.g., return an error response
         return HttpResponseBadRequest(f"An error occurred: {e}")
         'clientes': clients,
