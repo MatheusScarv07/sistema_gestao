@@ -5,8 +5,9 @@ from stock.models import Stock
 
 # Create your models here.
 class Budget(models.Model):
+    number_budget = models.IntegerField(null=True)
     cliente = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True)
-    data_orcamento = models.DateTimeField(auto_now_add=True)
+    data_orcamento = models.DateField(auto_now_add=True)
     total = models.DecimalField(max_digits=10, decimal_places=2)
     cpf_cnpj_cliente = models.CharField(max_length=14,null=True, blank=True)
     nome_cliente = models.CharField(max_length=70, null=True )
@@ -15,6 +16,17 @@ class Budget(models.Model):
     valor_unitario = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     quantidade = models.IntegerField(null=True, blank=True)
     valor_total = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+
+
+
+class BudgetInfo(models.Model):
+    number_budget = models.IntegerField(null=True)
+    data_orcamento = models.DateField(auto_now_add=True)
+    cpf_cnpj_cliente = models.CharField(max_length=14,null=True, blank=True)
+    cliente = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    vendedor = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True)
 
    
     

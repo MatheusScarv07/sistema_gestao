@@ -8,7 +8,7 @@ from client.models import Client
 from employee.models import Employee
 from sale.models import Sale
 from django.views.decorators.csrf import csrf_exempt
-from budget.models import Budget
+from budget.models import Budget, BudgetInfo
 import random
 from random import randint
 from datetime import datetime
@@ -197,14 +197,17 @@ def enviar_orcamento(request):
     if request.method == 'POST':
         carrinho = CartTemp.objects.all()
         numero_saida = random.randint(1, 100)
+        valor_T = []
+        cliente_venda = Client.objects.get(id = request.session.get('cliente_id') )
+        vendedor_venda = Employee.objects.get(id = request.session.get('vendedor_id') )
         for item in carrinho:
-            agora = datetime.now()
+            agora = datetime.today()
             
-            cliente_venda = Client.objects.get(id = request.session.get('cliente_id') )
-            vendedor_venda = Employee.objects.get(id = request.session.get('vendedor_id') )
+            
             produto = Stock.objects.get(id = item.id_produto)
 
             budget = Budget(
+                number_budget = numero_saida,
                 cliente = cliente_venda,
                 data_orcamento = agora,
                 total = item.valor_total,
@@ -216,10 +219,24 @@ def enviar_orcamento(request):
                 valor_total = item.valor_total
 
                 )   
+            
                
             budget.save()
+            valor_T.append(item.valor_total)
 
         response = f'Orcamento {numero_saida} criado'
+        soma_valores = sum(valor_T)
+
+        info = BudgetInfo(
+            number_budget = numero_saida,
+            data_orcamento = agora,
+            cpf_cnpj_cliente = cliente_venda.cpf_cnpj,
+            cliente = cliente_venda,
+            total = soma_valores,
+            vendedor = vendedor_venda,
+        )
+        info.save()
+
 
       
 
