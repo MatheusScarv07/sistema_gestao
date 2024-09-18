@@ -10,6 +10,6 @@ urlpatterns = [
     path('sale/salvar-carrinho/', cart),
     path('sales/cart_products', cart_products),
     path('sale/excluir_produto/<int:id>/', excluir_produto, name='excluir_produto'),
-    path('sale/salvar-carrinho/sale/new_sale/concluido/', efetuar_venda)
+    path('sale/salvar-carrinho/sale/new_sale/concluido/', efetuar_venda),
     path('sale/salvar-carrinho/enviar_orcamento',enviar_orcamento)
 ]
