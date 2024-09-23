@@ -1,4 +1,4 @@
-// Função para buscar os dados de um produto específico usando o ID do produto
+ // Função para buscar os dados de um produto específico usando o ID do produto
 function fetchProductData(productId) {
   // Faz uma requisição fetch para obter os dados do produto
   fetch(`/sales/get_product/${productId}`)
@@ -27,7 +27,36 @@ const price_finally = () => {
 
   // Atualiza o campo de preço total no formulário
   document.getElementById(`total_price`).value = valor_finally;
+} 
+
+//FUNCAO ACIMA E A ANTIGA QUE ESTAVA FUNCIONANDO
+
+
+
+//ABAIXO FUNCAO NOVA PARA TESTE, REVISAR CASO TENHA VISIBILIDADE PARA FUNCIONAR
+
+
+
+/* function searchSales() {
+  const params = new URLSearchParams();
+
+  const name = document.getElementById('name').value;
+  const cpfCnpj = document.getElementById('cpfCnpj').value;
+  const vendedor = document.getElementById('vendedor').value;
+
+  // Adiciona somente parâmetros que não estejam vazios
+  if (name) params.append('name', name);
+  if (cpfCnpj) params.append('cpf_cnpj', cpfCnpj);
+  if (vendedor) params.append('vendedor', vendedor);
+
+  // Redireciona para a URL com os parâmetros adequados
+  const queryString = params.toString();
+  window.location.href = `/sales/searchsales?${queryString}`;
 }
+ */
+
+
+
 
 /* // Função para enviar os dados do carrinho para o backend
 const enviarCarrinhoParaBanco = () => {
