@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 from sale.controler.clients import get_clients
+from sale.controler.filter_vendas import obter_vendas_filtradas
 from sale.controler.cart import cart_products
 from sale.models import CartTemp, Sale, SaleInfo
 from stock.models import Stock
@@ -13,6 +14,7 @@ import random
 from random import randint
 from datetime import datetime
 import json
+
 # Create your views here.
 
 
@@ -225,8 +227,7 @@ def efetuar_venda(request):
      except Sale.DoesNotExist:
         return HttpResponseNotFound("Venda não encontrada")
 
-
-        
+@csrf_exempt
 def enviar_orcamento(request):
     try:
         if request.method == 'POST':
@@ -287,7 +288,8 @@ def enviar_orcamento(request):
     except Exception as e:
         # Handle exceptions appropriately, e.g., return an error response
         return HttpResponseBadRequest(f"An error occurred: {e}")
-        
+ 
+"""       
 def enviar_orcamento(request):
     try:
         if request.method == 'POST':
@@ -336,14 +338,18 @@ def enviar_orcamento(request):
     except Exception as e:
         # Handle exceptions appropriately, e.g., return an error response
         return HttpResponseBadRequest(f"An error occurred: {e}")
-        
+ """        
  
 def searchsales(request):
     try: 
         data = datetime.today()
         vendas = SaleInfo.objects.filter(data_venda=data)
+        clientes = Client.objects.all()
+        vendedor = Employee.objects.all()
         return render(request, 'sales/pages/searchsales.html', context={
-            'vendas':vendas
+            'vendas':vendas,
+            'clientes': clientes,
+            'vendedores': vendedor
         })
     except Exception as e:
         ... 
@@ -365,52 +371,23 @@ def search_sale_by_number(request, num_venda):
     except Exception as e:
         ...
 
-#CODIGO NOVO PARA TESTAR CASO O OUTRO NAO FUNCIONE
-""" def searchsales(request):
-    name = request.GET.get('name')
-    cpf_cnpj = request.GET.get('cpf_cnpj')
-    vendedor = request.GET.get('vendedor')
-
-    vendas = SaleInfo.objects.all()
-
-    if name:
-        vendas = vendas.filter(cliente__nome__icontains=name)
-    if cpf_cnpj:
-        vendas = vendas.filter(cliente__cpf_cnpj=cpf_cnpj)
-    if vendedor:
-        vendas = vendas.filter(vendedor__nome__icontains=vendedor)
-
-    return render(request, 'sales/pages/searchsales.html', context={'vendas': vendas}) """
-
-
-
-
-from django.db.models import Q
-
-from django.db.models import Q
-
-
-
-#CODIGO NOVO CRIADO PARA REVISAR, NAO ESTA FUNCIONANDO
-def obter_vendas_filtradas(data_inicio=None, data_fim=None, nome_cliente=None, cpf_cnpj=None, vendedor=None):
-    vendas = Sale.objects.all()  # Acesso ao modelo correto
-
-    # Aplicando filtros de forma dinâmica
-    if data_inicio:
-        vendas = vendas.filter(data_venda__gte=data_inicio)
-    if data_fim:
-        vendas = vendas.filter(data_venda__lte=data_fim)
-    if nome_cliente:
-        vendas = vendas.filter(cliente__nome__icontains=nome_cliente)  # Busca por nome parcial
-    if cpf_cnpj:
-        vendas = vendas.filter(cliente__cpf_cnpj=cpf_cnpj)  # Busca por CPF ou CNPJ exato
-    if vendedor:
-        vendas = vendas.filter(vendedor__nome__icontains=vendedor)  # Busca por nome do vendedor
-
-    # Ordenar por data de venda de forma ascendente
-    vendas = vendas.order_by('data_venda')
-
-    return vendas
+@csrf_exempt
+def search_sales_filter(request):
+    data_inicial = request.POST.get('date_inicial')
+    data_final = request.POST.get('date_final')
+    nome = request.POST.get('cliente')
+    cpf = request.POST.get('cpf')
+    number_sale = request.POST.get('number_sale')
+    vendedor = request.POST.get('vendedor')
+    print(f'View: {vendedor}')
+    clientes = Client.objects.all()
+    vendedor_db = Employee.objects.all()
+    vendas = obter_vendas_filtradas(data_inicial, data_final, nome,cpf,vendedor,number_sale)
+    return render(request, 'sales/pages/searchsales.html', context={
+            'vendas':vendas,
+            'clientes': clientes, 
+            'vendedores': vendedor_db
+        })
 
 
     

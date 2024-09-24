@@ -9,14 +9,26 @@
     </div>
     <h1>Search Sale</h1>
 
-    <form action="">
-      <input type="text" placeholder="name client" name="name">
-      <input type="text" placeholder="cpf client" name="name">
-      <input type="text" placeholder="cnpj client" name="name">
-      <input type="text" placeholder="number sale" name="name">
-      <input type="text" placeholder="date sale" name="name">
+    <form action="/sale/filtrar_vendas/" method='post'>
+      <input type="date" name="date_inicial" id="">
+      <input type="date" name="date_final" id="">
+      <select name="cliente" id="">
+        <option value="">cliente</option>
+        {% for cliente in clientes  %}
+        <option value="{{cliente.id}}">{{cliente.nome}}</option>
+        {% endfor %}
+      </select>
+      <select name="vendedor" id="">
+        <option value="">Vendedor</option>
+        {% for vendedor in vendedores  %}
+        <option value="{{vendedor.id}}">{{vendedor.nome}}</option>
+        {% endfor %}
+      </select>
+      <input type="text" placeholder="cpf" name="cpf">
+      <input type="text" placeholder="number sale" name="number_sale">
+      
 
-      <button>Search</button>
+      <button type="submit">Filtrar</button>
     </form>
     <div>
       {% for venda in vendas  %}
