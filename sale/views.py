@@ -197,6 +197,7 @@ def efetuar_venda(request):
             cliente = cliente_venda,
             cpf_cnpj = cliente_venda.cpf_cnpj,
             valor = valor_venda,
+            vendedor = vendedor_venda
         )
         info.save()
         CartTemp.objects.all().delete()
@@ -347,6 +348,22 @@ def searchsales(request):
     except Exception as e:
         ... 
 
+def search_sale_by_number(request, num_venda):
+    try:
+        products = Sale.objects.filter(num_sale = num_venda)
+        for produto in products:
+            nome = produto.cliente
+        return render(
+            request,
+            'sales/pages/info_sale.html',
+            context={
+                'products': products,
+                'nome': nome,
+                'num_venda': num_venda
+            }
+        )
+    except Exception as e:
+        ...
 
 #CODIGO NOVO PARA TESTAR CASO O OUTRO NAO FUNCIONE
 """ def searchsales(request):
