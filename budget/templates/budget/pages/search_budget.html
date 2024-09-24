@@ -7,11 +7,33 @@
  
    <main>
     <div class="content">
+        <form action="/budget/filtrar_budget/" method='post'>
+            <input type="date" name="date_inicial" id="">
+            <input type="date" name="date_final" id="">
+            <select name="cliente" id="">
+              <option value="">cliente</option>
+              {% for cliente in clientes  %}
+              <option value="{{cliente.id}}">{{cliente.nome}}</option>
+              {% endfor %}
+            </select>
+            <select name="vendedor" id="">
+              <option value="">Vendedor</option>
+              {% for vendedor in vendedores  %}
+              <option value="{{vendedor.id}}">{{vendedor.nome}}</option>
+              {% endfor %}
+            </select>
+            <input type="text" placeholder="cpf" name="cpf">
+            <input type="text" placeholder="number sale" name="number_budget">
+            
       
+            <button type="submit">Filtrar</button>
+          </form>
         <h3>Consultar Orcamento</h3>
         {% for orcamento in  budget %}
-        
+        <p>{{orcamento.number_budget}}</p>
          <p>{{orcamento.cliente}}</p>
+         <p>{{orcamento.data_orcamento}}</p>
+         <p>{{orcamento.total}}</p>
         
         {% endfor %}
         </div>
