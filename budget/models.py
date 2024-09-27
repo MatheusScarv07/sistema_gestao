@@ -27,6 +27,3 @@ class BudgetInfo(models.Model):
     cliente = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True)
     total = models.DecimalField(max_digits=10, decimal_places=2)
     vendedor = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True)
-
-   
-    

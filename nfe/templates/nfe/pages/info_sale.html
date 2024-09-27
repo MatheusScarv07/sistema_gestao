@@ -1,0 +1,26 @@
+{% include "sales/partials/head.html" %}
+<body>
+  {% include "sales/partials/header.html" %}
+  <main>
+    <div class="sub_menu">
+      <a href="/sales"><button>Painel</button></a>
+      <a href="/sale/new-sale"><button>Nova Venda</button></a>
+      <a href="/sales/searchsales"><button>Consultar Vendas</button></a>
+    </div>
+    <h1>{{nome}} - {{num_venda}}</h1>
+    <div>
+      {% for produto in products  %}
+      <p>{{produto.num_sale}}</p>
+      <p>{{produto.data_venda}}</p>
+      <p>{{produto.produto}}</p>
+      <p>{{produto.valor_unitario}}</p>
+      <p>{{produto.quantidade}}</p>
+      <p>{{produto.valor_total}}</p>
+      {% endfor %}
+    </div>
+  </main>
+
+  <footer></footer>
+  
+</body>
+</html>
