@@ -1,7 +1,7 @@
  // Função para buscar os dados de um produto específico usando o ID do produto
 function fetchProductData(productId) {
   // Faz uma requisição fetch para obter os dados do produto
-  fetch(`/sales/get_product/${productId}`)
+  fetch(`/nfe/get_product/${productId}`)
       .then(response => response.json()) // Converte a resposta para JSON
       .then(data => {
           console.log(data); // Exibe os dados no console
@@ -11,7 +11,6 @@ function fetchProductData(productId) {
           } else {
               // Preenche os campos do formulário com os dados do produto
               document.getElementById(`product_name`).value = data.name;
-              document.getElementById(`unit_price`).value = data.price;
           }
       })
       .catch(error => console.error('Error:', error)); // Tratamento de erros
