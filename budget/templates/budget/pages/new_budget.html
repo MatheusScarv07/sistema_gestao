@@ -2,29 +2,86 @@
 
 
 
-<body>
-    {% include "budget/partials/header.html" %}
- 
-   <main>
-    <div class="content">
-      <form action="">
-        <h1>NEW BUDGET</h1>
-    
-        <form action="">
-          <input type="text" placeholder="name client" name="name">
-          <input type="text" placeholder="cpf client" name="name">
-          <input type="text" placeholder="cnpj client" name="name">
-          <input type="text" placeholder="id product" name="name">
-          <input type="text" placeholder="name product" name="name">
-          <input type="text" placeholder="number-sale" name="name">
-          <button>Save</button>
-        </form>
-    </div>
-    <footer>aqui está o footer</footer>
-   </main>
+{% load static %}
 
-   
- 
- 
+<body>
+  
+  {% include "budget/partials/header.html" %}
+  <main>
+    <div class="content">
+      <div class="sub_menu">
+        <a href="/budget"><button>Painel</button></a>
+        
+      </div>
+      <h1>NEW BUDGET</h1>
+      <form action="/budget/salvar-carrinho/" method="post">
+        <!-- Select para Cliente -->
+<!-- Select para Cliente -->
+<select name="cliente" id="cliente">
+  <!-- Opção padrão -->
+  <option value="" disabled {% if not selected_cliente %}selected{% endif %}>Selecione o Cliente</option>
+  
+  <!-- Iteração sobre os clientes -->
+  {% for cliente in clientes %}
+      <option value="{{ cliente.id }}" {% if selected_cliente and cliente.id == selected_cliente.id %}selected{% endif %}>
+          {{ cliente.nome }}
+      </option>
+  {% endfor %}
+</select>
+
+<!-- Select para Vendedor -->
+<select name="vendedor" id="vendedor">
+  <!-- Opção padrão -->
+  <option value="" disabled {% if not selected_vendedor %}selected{% endif %}>Selecione o Vendedor</option>
+  
+  <!-- Iteração sobre os vendedores -->
+  {% for vendedor in vendedores %}
+      <option value="{{ vendedor.id }}" {% if selected_vendedor and vendedor.id == selected_vendedor.id %}selected{% endif %}>
+          {{ vendedor.nome }}
+      </option>
+  {% endfor %}
+</select>
+        <input name="id_produto" type="text" id="product_id" placeholder="ID do produto" onchange="fetchProductData(document.getElementById('product_id').value)">
+        <input name="Qntde" type="text" id="quantity" placeholder="Quantidade" onchange="price_finally()">
+        <input name="name" type="text" id="product_name" placeholder="Nome do produto" readonly>
+        <input name="valor" type="text" id="unit_price" placeholder="Preço Unitário" readonly onchange="price_finally()">
+        <input name="valor_total" type="text" id="total_price" placeholder="Preço Total" readonly>
+        <button type="submit">ADD Produto</button>
+      </form>
+      <p>{{response}}</p>
+<h2>Carrinho Salvo</h2>
+<table id="tabela-carrinho">
+  <thead>
+    <tr>
+      <th>Produto</th>
+      <th>Quantidade</th>
+      <th>Valor Unitário</th>
+      <th>Valor Total</th>
+      <th>Option</th>
+    </tr>
+  </thead>
+  <tbody id="dados">
+    {% for item in cart  %}
+    <tr>
+      <td>{{item.name_product}}</td>
+      <td>{{item.quantidade}}</td>
+      <td>{{item.valor_uni}}</td>
+      <td>{{item.valor_total}}</td>
+      <td><a href="{% url 'excluir_produto' item.id %}">excluir</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+      
+      <form action="/budget/enviar_orcamento/" method="post">
+        {% if button_enviar %}
+         <button button type="submit">Enviar Orçamento</button>
+            {% endif %}
+      </form>
+    </div>
+    <footer>Assinatura</footer>
+  </main>
+  <script src="{% static 'sale/js/sales.js' %}"></script>
 </body>
 </html>
+

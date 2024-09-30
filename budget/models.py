@@ -29,4 +29,13 @@ class BudgetInfo(models.Model):
     vendedor = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True)
 
    
-    
+class CartTempBudget(models.Model):
+    id_cliente = models.IntegerField(null=True, blank=True)
+    id_produto = models.IntegerField(null=True, blank=True)
+    name_product = models.CharField(max_length=70)
+    quantidade = models.FloatField(null=True)
+    valor_uni = models.FloatField(null=True)
+    valor_total = models.FloatField(null=True)
+
+    def __str__(self):
+        return self.name_product
