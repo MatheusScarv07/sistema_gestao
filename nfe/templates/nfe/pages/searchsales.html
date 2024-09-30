@@ -1,0 +1,46 @@
+{% include "sales/partials/head.html" %}
+<body>
+  {% include "sales/partials/header.html" %}
+  <main>
+    <div class="sub_menu">
+      <a href="/sales"><button>Painel</button></a>
+      <a href="/sale/new-sale"><button>Nova Venda</button></a>
+      <a href="/sales/searchsales"><button>Consultar Vendas</button></a>
+    </div>
+    <h1>Search Sale</h1>
+
+    <form action="/sale/filtrar_vendas/" method='post'>
+      <input type="date" name="date_inicial" id="">
+      <input type="date" name="date_final" id="">
+      <select name="cliente" id="">
+        <option value="">cliente</option>
+        {% for cliente in clientes  %}
+        <option value="{{cliente.id}}">{{cliente.nome}}</option>
+        {% endfor %}
+      </select>
+      <select name="vendedor" id="">
+        <option value="">Vendedor</option>
+        {% for vendedor in vendedores  %}
+        <option value="{{vendedor.id}}">{{vendedor.nome}}</option>
+        {% endfor %}
+      </select>
+      <input type="text" placeholder="cpf" name="cpf">
+      <input type="text" placeholder="number sale" name="number_sale">
+      
+
+      <button type="submit">Filtrar</button>
+    </form>
+    <div>
+      {% for venda in vendas  %}
+      <a href="/sale/info/{{venda.num_sale}}"><p>{{venda.num_sale}}</p></a>
+      <p>{{venda.data_venda}}</p>
+      <p>{{venda.cliente}}</p>
+      <p>{{venda.valor}}</p>
+      {% endfor %}
+    </div>
+  </main>
+
+  <footer></footer>
+  
+</body>
+</html>

@@ -26,6 +26,7 @@ class BudgetInfo(models.Model):
     cpf_cnpj_cliente = models.CharField(max_length=14,null=True, blank=True)
     cliente = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True)
     total = models.DecimalField(max_digits=10, decimal_places=2)
+
     vendedor = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True)
 
    
