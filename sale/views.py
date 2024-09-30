@@ -122,10 +122,7 @@ def cart(request):
         )
     else:
         return JsonResponse({'error': 'Método não permitido'}, status=405)
-""" def cart_products(request):
-    cart_products = CartTemp.objects.all()
-    products_data = list(cart_products.values()) 
-    return JsonResponse({'cart_products': products_data}, safe=False) """
+
     
 
 @csrf_exempt
