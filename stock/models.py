@@ -6,7 +6,6 @@ class Stock(models.Model):
     id = models.AutoField(primary_key=True)
     nome = models.CharField(max_length=70,null=True)
     descricao = models.CharField(max_length=70,null=True, blank=True)
-    preco = models.DecimalField(max_digits=10, decimal_places=2)
     estoque = models.FloatField(null=True)
     categoria = models.CharField(max_length=70,null=True, blank=True)
     valor_venda = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
