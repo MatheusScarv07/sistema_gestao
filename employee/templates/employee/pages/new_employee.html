@@ -1,0 +1,36 @@
+{% include "employee/partials/head.html" %}
+<body>
+    {% include "employee/partials/header.html" %}
+
+    <main>
+        <div>
+            <h1>opa</h1>  <!-- Verifique se isso está correto -->
+            <a href="{% url 'employee_home' %}"><button>Painel</button></a>
+            <a href="{% url 'new_employee' %}"><button>Novo Funcionário</button></a>
+
+
+            <a href="{% url 'search_employee' %}">
+                <button>Consultar Funcionário</button></a>
+
+        </div>
+
+        <div>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="text" placeholder="Nome do funcionário" name="name" required>
+                <input type="text" placeholder="Cargo do funcionário" name="cargo" required>
+                <label for="status">Ativo</label>
+                <input type="checkbox" name="status">
+            
+                <button type="submit">Salvar</button>
+            </form>
+            
+            
+        </div>
+
+       
+        
+    </main>
+    <footer>footer aqui</footer>
+</body>
+</html>
