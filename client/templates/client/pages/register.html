@@ -1,35 +1,44 @@
+{% load static %}
 {% include "client/partials/head.html" %}
 <body>
-
 
     {% include "client/partials/header.html" %}
 
     <main>
-      <div class="content">
-        <a href="/client"><button>Voltar</button></a>
-          <h1>NEW CLIENT</h1>
-          <form action="">
-            <input type="text" placeholder="name client" name="name">
-            <input type="text" placeholder="name fantasia" name="name">
-            <input type="text" placeholder="cpf client" name="name">
-            <input type="text" placeholder="cnpj client" name="name">
-            <input type="text" placeholder="rg client" name="name">
-            <input type="text" placeholder="IE" name="name">
-            <input type="text" placeholder="phone" name="name">
-            <input type="text" placeholder="cell phone" name="name">
-            <input type="text" placeholder="email" name="name">
-            <input type="text" placeholder="address" name="name">
-            <input type="text" placeholder="number" name="name">
-            <input type="text" placeholder="complement" name="name">
-            <input type="text" placeholder="neighborhood" name="name">
-            <input type="text" placeholder="city" name="name">
-            <input type="text" placeholder="state" name="name">
-            
-            <button>Save</button>
-          </form>
-      </div>
-       <footer>footer aqui</footer>
+        <div class="content">
+            <a href="/client"><button>Voltar</button></a>
+            <h1>NEW CLIENT</h1>
+            <form action="client/new/cadastro" method='post'>
+                <input type="text" placeholder="Name of client" name="name">
+                
+                <select name="option_cpf_or_cnpj" id="">
+                    <option value="CPF">CPF</option>
+                    <option value="CNPJ">CNPJ</option>
+                </select>
+                
+                <input type="text" placeholder="CPF or CNPJ" name="cpf_cnpj">
+                <input type="text" placeholder="RG of client" name="rg">
+                <input type="text" placeholder="Phone number" name="telefone">
+                <input type="email" placeholder="Email" name="email">
+                <input type="text" placeholder="CEP" name="cep" id="cep" onblur="fetchEnderecoData(this.value)">
+                <input type="text" placeholder="Address" name="endereco" id="rua">
+                <input type="text" placeholder="Number" name="numero">
+                <input type="text" placeholder="Complement" name="complemento">
+                
+                <!-- Adicionando onblur para preencher o endereço automaticamente -->
+                
+                
+                <input type="text" placeholder="Neighborhood" name="bairro" id="bairro">
+                <input type="text" placeholder="City" name="cidade" id="cidade">
+                <input type="text" placeholder="State" name="estado" id="estado">
+                
+                <button>Save</button>
+            </form>
+        </div>
+        <footer>Footer aqui</footer>
     </main>
-    
+
+    <!-- Referência ao script JS que lida com o preenchimento dos campos de endereço -->
+    <script src="{% static 'client/js/client.js' %}"></script>
 </body>
 </html>

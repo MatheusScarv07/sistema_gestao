@@ -13,7 +13,8 @@ urlpatterns = [
     path('', include('nfe.urls')),
     path('', include('employee.urls')),
     path('', include('receive.urls')),
-    path('', include('payment.urls'))
+    path('', include('payment.urls')),
+    path('', include('supplier.urls'))
     
     
 ]

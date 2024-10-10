@@ -5,7 +5,7 @@ class ControlClient:
         # Implemente o método para registrar um cliente
         pass
     
-    def get_all(self):
+    def get_all():
         try:
             clients = Client.objects.all().order_by('nome')
             clients_list = [self._model_to_dict(client) for client in clients]
@@ -36,3 +36,35 @@ class ControlClient:
         Converte um objeto de modelo Django para um dicionário.
         """
         return {field.name: getattr(obj, field.name) for field in obj._meta.fields}
+    
+    def get_estados(self):
+        estados =[
+            ('ac', 'Acre'),
+            ('al', 'Alagoas'),
+            ('ap', 'Amapá'),
+            ('am', 'Amazonas'),
+            ('ba', 'Bahia'),
+            ('ce', 'Ceará'),
+            ('df', 'Distrito Federal'),
+            ('es', 'Espírito Santo'),
+            ('go', 'Goiás'),
+            ('ma', 'Maranhão'),
+            ('mt', 'Mato Grosso'),
+            ('ms', 'Mato Grosso do Sul'),
+            ('mg', 'Minas Gerais'),
+            ('pa', 'Pará'),
+            ('pb', 'Paraíba'),
+            ('pr', 'Paraná'),
+            ('pe', 'Pernambuco'),
+            ('pi', 'Piauí'),
+            ('rj', 'Rio de Janeiro'),
+            ('rn', 'Rio Grande do Norte'),
+            ('rs', 'Rio Grande do Sul'),
+            ('ro', 'Rondônia'),
+            ('rr', 'Roraima'),
+            ('sc', 'Santa Catarina'),
+            ('sp', 'São Paulo'),
+            ('se', 'Sergipe'),
+            ('to', 'Tocantins')
+]
+        return estados
