@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'sale',
     'employee',
     'supplier',
-    'nfe'
+    'nfe',
+    'payment',
+    'receive'
 ]
 
 MIDDLEWARE = [

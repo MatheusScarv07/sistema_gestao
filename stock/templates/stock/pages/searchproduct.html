@@ -1,48 +1,31 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Products</title>
-</head>
+{% include "stock/partials/head.html" %}
 <body>
-  <header>
+    {% include "stock/partials/header.html" %}
 
-  </header>
+    <main>
+        <div class="content">
+            <h1>Editar Produto</h1>
 
-  <main>
-    <input type="text" placeholder="nome-product" name="name">
-    <input type="text"  placeholder="id-product" name="name">
-    <input type="text"  placeholder="nome-supplier" name="name">
-    <input type="text"  placeholder="valor-product" name="name">
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="text" value="{{ produto.nome }}" name="name-product">
+                <input type="text" value="{{ produto.categoria }}" name="category">
+                <input type="text" value="{{ produto.descricao }}" name="description">
+                <input type="text" value="{{ produto.valor_venda }}" name="sale-price">
+                <input type="text" value="{{ produto.valor_custo }}" name="cost-price">
+                <input type="text" value="{{ produto.estoque }}" name="quantity-in-stock">
+                <input type="text" value="{{ produto.quantidade_minima_estoque }}" name="minimum-stock">
+                <input type="text" value="{{ produto.unidade_medida }}" name="unit-of-measure">
+                <input type="text" value="{{ produto.localizacao_estoque }}" name="location-in-stock">
+                <input type="text" value="{{ produto.status_produto }}" name="status-product">
+                <input type="text" value="{{ produto.garantia }}" name="guarantee">
+                <input type="text" value="{{ produto.observacao_adicional }}" name="additional-observations">
 
-      <table>
-        
-          <thead>
-              <tr>
-                  <th>Codigo</th>
-                  <th>Nome</th>
-                  <th>Descricao</th>
-                  <th>Quantidade</th>
-                  <th>Valor</th>
-              </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>123</td>
-              <td>caneta azul</td>
-              <td>manoel gomes</td>
-              <td>100</td>
-              <td>R$10.00</td>
-            </tr>
-          </tbody>
-      </table>
+                <button type="submit">Salvar Alterações</button>
+            </form>
+        </div>
+    </main>
 
-  </main>
-
-  <footer>
-
-  </footer>
-  
+    <footer></footer>
 </body>
 </html>

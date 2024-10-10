@@ -1,0 +1,48 @@
+{% include "stock/partials/head.html" %}
+<body>
+    {% include "stock/partials/header.html" %}
+    
+    <main>
+        <h1>Consultar Estoque</h1>
+
+        <div>
+            <a href="{% url 'home' %}"><button type="button">Painel</button></a>
+            <a href="{% url 'new_product' %}"><button type="button">Novo Produto</button></a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Quantidade</th>
+                    <th>Valor de Venda</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for produto in produtos %}
+                <tr>
+                    <td>{{ produto.id }}</td>
+                    <td>{{ produto.nome }}</td>
+                    <td>{{ produto.descricao }}</td>
+                    <td>{{ produto.estoque }}</td>
+                    <td>R${{ produto.valor_venda|floatformat:2 }}</td>
+                    <td>
+                        <a href="{% url 'editar_produto' produto.id %}"><button type="button">Editar</button></a>
+                        
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">Nenhum produto encontrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+
+    <footer></footer>
+</body>
+</html>

@@ -1,0 +1,70 @@
+{% include "stock/partials/head.html" %}
+<body>
+
+    {% include "stock/partials/header.html" %}
+
+    <main>
+        <div class="content">
+            <h1>NEW PRODUCT</h1>
+
+            <div class="sub_menu">
+                <a href="{% url 'home' %}"><button type="button">Painel</button></a>
+                <a href="{% url 'product' %}"><button>Consultar Estoque</button></a>
+            </div>
+
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <p class="message {{ message.tags }}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form action="{% url 'new_product' %}" method="post">
+                {% csrf_token %}
+                <input type="text" placeholder="name-product" name="name-product">
+                <input type="text" placeholder="id-product" name="id-product">
+                <input type="text" placeholder="category" name="category">
+                <input type="text" placeholder="description" name="description">
+                <input type="text" placeholder="sale-price" name="sale-price">
+                <input type="text" placeholder="cost-price" name="cost-price">
+                <input type="text" placeholder="quantity-in-stock" name="quantity-in-stock">
+                <input type="text" placeholder="minimum-stock" name="minimum-stock">
+                <input type="text" placeholder="unit-of-measure" name="unit-of-measure">
+                <input type="text" placeholder="supplier" name="supplier">
+                <input type="text" placeholder="id-supplier" name="id-supplier">
+                <input type="text" placeholder="location-in-stock" name="location-in-stock">
+                <input type="text" placeholder="tax-code" name="tax-code">
+                <input type="text" placeholder="ICMS-IP-ETC" name="ICMS-IP-ETC">
+                <input type="text" placeholder="status-product" name="status-product">
+                <input type="text" placeholder="guarantee" name="guarantee">
+                <input type="text" placeholder="expiration-date" name="expiration-date">
+                <input type="text" placeholder="additional-observations" name="additional-observations">
+                
+                <button type="submit">Salvar</button>
+            </form>
+
+            {% if produto %}
+                <div class="produto-detalhes">
+                    <h2>Produto Cadastrado</h2>
+                    <p><strong>ID:</strong> {{ produto.id }}</p>
+                    <p><strong>Nome:</strong> {{ produto.nome }}</p>
+                    <p><strong>Categoria:</strong> {{ produto.categoria }}</p>
+                    <p><strong>Valor de Custo:</strong> {{ produto.valor_custo }}</p>
+                    <p><strong>Valor de Venda:</strong> {{ produto.valor_venda }}</p>
+                    <p><strong>Estoque:</strong> {{ produto.estoque }}</p>
+                    <p><strong>Quantidade Mínima no Estoque:</strong> {{ produto.quantidade_minima_estoque }}</p>
+                    <p><strong>Descrição:</strong> {{ produto.descricao }}</p>
+                    <p><strong>Localização no Estoque:</strong> {{ produto.localizacao_estoque }}</p>
+                    <p><strong>Status:</strong> {{ produto.status_produto }}</p>
+                    <p><strong>Unidade de Medida:</strong> {{ produto.unidade_medida }}</p>
+                    <p><strong>Garantia:</strong> {{ produto.garantia }}</p>
+                    <p><strong>Observações Adicionais:</strong> {{ produto.observacao_adicional }}</p>
+                </div>
+            {% endif %}
+        </div>
+        <footer>rodape</footer>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+{% include "employee/partials/head.html" %}
+<body>
+    {% include "employee/partials/header.html" %}
+
+    <main>
+        <div>
+            <h1>Consultar Funcionários</h1>
+            <form method="GET">
+                <input type="text" placeholder="Nome do funcionário" name="name" value="{{ request.GET.name }}">
+                <input type="text" placeholder="Cargo do funcionário" name="cargo" value="{{ request.GET.cargo }}">
+                <button type="submit">Buscar</button>
+            </form>
+        </div>
+
+        <div>
+            <h2>Funcionários Cadastrados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Cargo</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employee in employees %}
+                    <tr>
+                        <td>{{ employee.nome }}</td>
+                        <td>{{ employee.cargo }}</td>
+                        <td>{{ employee.status|yesno:"Ativo,Inativo" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">Nenhum funcionário encontrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <footer>footer aqui</footer>
+</body>
+</html>
