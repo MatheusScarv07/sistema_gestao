@@ -1,0 +1,31 @@
+{% load static %}
+{% include "supplier/partials/head.html" %}
+<body>
+    {% include "supplier/partials/header.html" %}
+    <main>
+        <div class="content">
+            <a href="/supplier"><button>Voltar</button></a>
+            <h1>NEW fornecedor</h1>
+            <form method="POST" action="/supplier/register_new">
+                {% csrf_token %}
+                <input type="text" placeholder="CNPJ" name="cpf_cnpj" id='cnpj' onchange="fetchSupplierData(this.value)" >
+                <input type="text" placeholder="Razão Social" name="name" id="razao_social">
+                <input type="text" placeholder="Nome Fantasia" name="nome_fantasia" id="nome_fantasia">
+                <input type="email" placeholder="Email" name="email" id='email'>
+                <input type="text" placeholder="Telefone" name="telefone" id='telefone'>
+                <input type="text" placeholder="Endereço" name="endereco" id='endereco'>
+                <input type="text" placeholder="Número" name="numero" id='numero'>
+                <input type="text" placeholder="Complemento" name="complemento" id='complemento'>
+                <input type="text" placeholder="Bairro" name="bairro" id='bairro'>
+                <input type="text" placeholder="Cidade" name="cidade" id="cidade">
+                <input type="text" placeholder="CEP" name="cep" id="cep">
+                <input type="text" placeholder="Estado" name="estado" id="estado">
+                
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+        <footer>footer aqui</footer>
+    </main>
+    <script src="{% static 'supplier/js/supplier.js' %}"></script>
+</body>
+</html>

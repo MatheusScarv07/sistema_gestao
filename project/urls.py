@@ -10,6 +10,7 @@ urlpatterns = [
     path('', include('stock.urls')),
     path('', include('budget.urls')),
     path('', include('sale.urls')),
-    path('', include('nfe.urls'))
+    path('', include('nfe.urls')),
+    path('', include('supplier.urls'))
     
 ]
