@@ -3,6 +3,11 @@
     {% include "employee/partials/header.html" %}
 
     <main>
+
+        <div>
+            <a href="{% url 'employee_home' %}"><button>Painel</button></a>
+            <a href="{% url 'new_employee' %}"><button>Novo Funcionário</button></a>
+        </div>
         <div>
             <h1>Consultar Funcionários</h1>
             <form method="GET">

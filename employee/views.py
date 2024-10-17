@@ -1,7 +1,6 @@
-# employee/views.py
-
 from django.shortcuts import render,redirect
 from .models import Employee
+
 
 def home(request):
     return render(request, 'employee/pages/home.html')  # Página inicial
