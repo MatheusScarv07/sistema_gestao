@@ -1,0 +1,61 @@
+{% include "payment/partials/head.html" %}
+<body>
+  {% include "payment/partials/header.html" %}
+  <main>
+    <div class="content">
+      <div class="sub_menu">
+        <a href="{% url 'payment:home' %}"><button>Painel</button></a>
+        <a href="{% url 'payment:new_payment' %}"><button>Nova Pagamento</button></a>
+      </div>
+
+      <h1>Consultar Pagamentos</h1>
+
+      <form method="GET" action="{% url 'payment:search_payment' %}">
+        <label for="num_nota">Número da Nota:</label>
+        <input type="text" id="num_nota" name="num_nota" maxlength="50">
+
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" maxlength="70">
+
+        <label for="cnpj">CNPJ:</label>
+        <input type="text" id="cnpj" name="cnpj" maxlength="14">
+
+        <label for="data_venda">Data da Venda:</label>
+        <input type="date" id="data_venda" name="data_venda">
+
+        <button type="submit">Pesquisar</button>
+      </form>
+
+      <div class="resultados">
+        <h2>Resultados da Pesquisa</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Número da Nota</th>
+              <th>Nome</th>
+              <th>CNPJ</th>
+              <th>Data de Venda</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for pagamento in pagamentos %}
+              <tr>
+                <td>{{ pagamento.num_nota }}</td>
+                <td>{{ pagamento.nome }}</td>
+                <td>{{ pagamento.cnpj }}</td>
+                <td>{{ pagamento.data_venda }}</td>
+                <td>R$ {{ pagamento.valor }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="5">Nenhum pagamento encontrado.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <footer>footer</footer>
+  </main>
+</body>

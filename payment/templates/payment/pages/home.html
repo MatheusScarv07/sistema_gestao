@@ -1,0 +1,22 @@
+{% include "payment/partials/head.html" %}
+<body>
+  {% include "payment/partials/header.html" %}
+  <main>
+    <div class="content">
+      <div class="sub_menu">
+        <a href="{% url 'payment:home' %}"><button>Painel</button></a>
+        <a href="{% url 'payment:new_payment' %}"><button>Nova Pagamento</button></a>
+        <a href="{% url 'payment:search_payment' %}"><button>Consultar Pagamento</button></a>
+      </div>
+      <div>
+        <div class="card_datas">
+            <p>Aqui ficarão os dados de pagamento</p>
+            <p>Um card com informações</p>
+            <p>Como valor de pagamento</p>
+            <p>Quantidade vendida no mês</p>
+        </div>
+      </div>
+    </div>
+    <footer>footer</footer>
+  </main>
+</body>
