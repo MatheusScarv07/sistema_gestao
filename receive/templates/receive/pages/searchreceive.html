@@ -1,0 +1,39 @@
+{% include "receive/partials/head.html" %}
+<body>
+  {% include "receive/partials/header.html" %}
+  <main>
+    <div class="sub_menu">
+      <a href="/receive"><button>Painel</button></a>
+      <a href="/receive/searchreceive"><button>Consultar Vendas</button></a>
+    </div>
+    <h1>Buscar Devedores</h1>
+
+    <form action="/receive/filtrar_vendas/" method='post'>
+      <input type="date" name="date_inicial" id="">
+      <input type="date" name="date_final" id="">
+      <select name="cliente" id="">
+        <option value="">cliente</option>
+        {% for cliente in clientes  %}
+        <option value="{{cliente.id}}">{{cliente.nome}}</option>
+        {% endfor %}
+      </select>
+      <input type="text" placeholder="cpf" name="cpf">
+      <input type="text" placeholder="number sale" name="number_sale">
+      
+
+      <button type="submit">Filtrar</button>
+    </form>
+    <div>
+      {% for receive in receives %}
+      <a href="/sale/info/{{receive.num_sale}}"><p>{{receive.num_sale}}</p></a>
+      <p>{{receive.data_venda}}</p>
+      <p>{{receive.cliente}}</p>
+      <p>{{receive.valor}}</p>
+      {% endfor %}
+    </div>
+  </main>
+
+  <footer></footer>
+  
+</body>
+</html>

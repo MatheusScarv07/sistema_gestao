@@ -54,7 +54,7 @@ def search_budget_filter(request):
 
 @csrf_exempt
 def new_budget(request):
-    clients = get_clients()
+    clients = Client.objects.all()
     carts = CartTempBudget.objects.all()
     button_enviar = False
     response = ''
@@ -113,7 +113,7 @@ def enviar_orcamento(request):
             )
             info.save()
             CartTempBudget.objects.all().delete()
-            clients = get_clients()
+            clients = Client.objects.all()
             carts = CartTempBudget.objects.all()
             button_enviar = False
             response = ''

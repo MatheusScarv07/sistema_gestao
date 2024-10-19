@@ -1,9 +1,9 @@
 from django.urls import path
-from .views import home, page_register, get_dados, register
+from .views import home, page_register, register, details_client
 
 urlpatterns = [
     path('supplier/', home),
     path('supplier/register/', page_register),
-    path('supplier/get_dados/<str:cnpj>/', get_dados, name='get_endereco'),
     path('supplier/register_new', register ),
+    path('supplier/supplier/details_supplier/<int:id>', details_client)
 ]

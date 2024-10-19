@@ -17,7 +17,8 @@ class Sale(models.Model):
     valor_total = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
-        return self.cliente
+        nome = str(self.cliente)
+        return nome
     
 class SaleInfo(models.Model):
     num_sale = models.IntegerField(null=True)

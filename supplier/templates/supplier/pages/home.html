@@ -16,7 +16,7 @@
           </form>
         </div>
           <div>
-            <h2>Clientes</h2>
+            <h2>Fornecedores</h2>
             <table>
               <thead>
                 <tr>
@@ -26,11 +26,11 @@
                 </tr>
               </thead>
               <tbody>
-                {% for cliente in clientes%}
+                {% for fornecedor in fornecedores%}
                 <tr>
-                  <td><a href="/client/{{cliente.id}}"><strong>{{cliente.nome}}</strong></a></td>
-                  <td>{{cliente.cpf_cnpj}}</td>
-                  <td>{{cliente.telefone}}</td>
+                  <td><a href="supplier/details_supplier/{{fornecedor.id}}"><strong>{{fornecedor.nome}}</strong></a></td>
+                  <td>{{fornecedor.cnpj}}</td>
+                  <td>{{fornecedor.contato}}</td>
                 </tr>
                 {% endfor %}
               </tbody>

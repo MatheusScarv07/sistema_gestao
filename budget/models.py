@@ -17,7 +17,8 @@ class Budget(models.Model):
     quantidade = models.IntegerField(null=True, blank=True)
     valor_total = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
-
+    def __str__(self):
+        return self.cliente.nome
 
 
 class BudgetInfo(models.Model):
@@ -29,6 +30,9 @@ class BudgetInfo(models.Model):
 
     vendedor = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True)
 
+    def __str__(self):
+        return self.cliente.nome
+    
    
 class CartTempBudget(models.Model):
     id_cliente = models.IntegerField(null=True, blank=True)
