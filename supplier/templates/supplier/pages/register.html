@@ -8,7 +8,7 @@
             <h1>NEW fornecedor</h1>
             <form method="POST" action="/supplier/register_new">
                 {% csrf_token %}
-                <input type="text" placeholder="CNPJ" name="cpf_cnpj" id='cnpj' onchange="fetchSupplierData(this.value)" >
+                <input type="text" placeholder="CNPJ" name="cpf_cnpj" id='cnpj' >
                 <input type="text" placeholder="Razão Social" name="name" id="razao_social">
                 <input type="text" placeholder="Nome Fantasia" name="nome_fantasia" id="nome_fantasia">
                 <input type="email" placeholder="Email" name="email" id='email'>

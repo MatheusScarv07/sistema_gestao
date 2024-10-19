@@ -6,7 +6,10 @@ from brasilapy import BrasilAPI
 
 # Create your views here.
 def home(request):
-    return render(request, 'supplier/pages/home.html')
+    fornecedores = Supplier.objects.all()
+    return render(request, 'supplier/pages/home.html', context={
+        'fornecedores': fornecedores
+    })
 
 def page_register(request):
     return render (request, 'supplier/pages/register.html')
@@ -41,31 +44,37 @@ def register(request):
         fornecedor.save()
     return render(request, 'supplier/pages/home.html')
 
-def get_dados(request, cnpj):
+""" def get_dados(request, cnpj):
     try:
         api = BrasilAPI()
-        empresa = api.get_cnpj(cnpj)
-        
+        empresa = f"https://brasilapi.com.br/api/cnpj/v1/{cnpj}"
+        print(empresa)
         
         if not empresa:
             return JsonResponse({'error': 'Dados não encontrados'}, status=404)
 
         # Retorna os dados da empresa como JSON
         empresa_data = {
-            'razao_social': empresa.razao_social,
-            'nome_fantasia': empresa.nome_fantasia,
-            'logradouro': empresa.logradouro,
-            'numero': empresa.numero,
-            'complemento': empresa.complemento,
-            'bairro': empresa.bairro,
-            'cep': empresa.cep,
-            'uf': empresa.uf,
-            'municipio': empresa.municipio,
-            'ddd_telefone_1': empresa.ddd_telefone_1
+            'razao_social': empresa[0]['razao_social'],
+            'nome_fantasia': empresa["nome_fantasia"],
+            'logradouro': empresa["logradouro"],
+            'numero': empresa["numero"],
+            'complemento': empresa['complemento'],
+            'bairro': empresa['bairro'],
+            'cep': empresa['cep'],
+            'uf': empresa['uf'],
+            'municipio': empresa['municipio'],
+            'ddd_telefone_1': empresa['ddd_telefone_1']
         }
         print(empresa_data)
         return JsonResponse(empresa_data)
 
     except Exception as e:
         print(f"Erro: {e.__class__.__name__} - {e}")  # Tipo de erro e mensagem
-        return JsonResponse({'error': 'Ocorreu um erro inesperado'}, status=500)
+        return JsonResponse({'error': 'Ocorreu um erro inesperado'}, status=500) """
+
+def details_client(request, id):
+    data = Supplier.objects.get(id=id)
+    return render(request, 'supplier/pages/details_supplier.html', context={
+        'supplier': data
+    })

@@ -1,0 +1,117 @@
+{% include "receive/partials/head.html" %}
+<body>
+  
+  {% include "receive/partials/header.html" %}
+  <main>
+    <div class="content">
+      <div class="sub_menu">
+        <a href="/receive"><button>Painel</button></a>
+        <a href="/receive/searchreceive"><button>Consultar caloteiros</button></a>
+      </div>
+      <div>
+        <div>
+        </div>
+        <form action="{% url "make_payment" %}" method="post">
+          {% csrf_token %}
+          <h3>Dados da venda</h3>
+          <input type="hidden" value="{{num_venda}}" name="num_venda">
+          <p id="valor_venda">{{valor}}</p> <!-- Mostra o valor total da venda -->
+          
+          <!-- Forma de pagamento 1 -->
+          <div class="card_datas">
+            <label for="type_payment_1">Forma de Pagamento 1:</label>
+            <select name="type_payment_1" id="type_payment_1">
+              <option value="">Selecione o Tipo de pagamento</option>
+              {% for tipo_pagamento in tipos_pagamento %}
+                <option value="{{tipo_pagamento.id}}">{{tipo_pagamento.nome}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label for="valor_1">Valor 1:</label>
+            <input type="text" name="valor_1" id="valor_1">
+          </div>
+        
+          <!-- Botão para adicionar uma segunda forma de pagamento -->
+          <button type="button" id="add_payment">Adicionar outra forma de pagamento</button>
+        
+          <!-- Campos para a segunda forma de pagamento, inicialmente ocultos -->
+          <div id="second_payment" style="display: none;">
+            <div class="card_datas">
+              <label for="type_payment_2">Forma de Pagamento 2:</label>
+              <select name="type_payment_2" id="type_payment_2">
+                <option value="">Selecione o Tipo de pagamento</option>
+                {% for tipo_pagamento in tipos_pagamento %}
+                  <option value="{{tipo_pagamento.id}}">{{tipo_pagamento.nome}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div>
+              <label for="valor_2">Valor 2:</label>
+              <input type="text" name="valor_2" id="valor_2">
+            </div>
+          </div>
+          
+          <button type="submit" id="submit_btn">Enviar</button>
+        </form>
+      </div>
+    </div>
+    <footer>footer</footer>
+  </main>
+
+  <script>
+    document.getElementById('add_payment').addEventListener('click', function() {
+      // Exibe os campos da segunda forma de pagamento
+      document.getElementById('second_payment').style.display = 'block';
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+      const valorVenda = parseFloat(document.getElementById('valor_venda').innerText);
+      const valor1Input = document.getElementById('valor_1');
+      const valor2Input = document.getElementById('valor_2');
+      const secondPaymentSection = document.getElementById('second_payment');
+      const addPaymentButton = document.getElementById('add_payment');
+      const submitButton = document.getElementById('submit_btn');
+      
+      // Evento para mostrar o segundo campo de pagamento
+      addPaymentButton.addEventListener('click', function () {
+        secondPaymentSection.style.display = 'block';
+        // Preenche automaticamente o valor restante no segundo campo de pagamento
+        const valor1 = parseFloat(valor1Input.value) || 0;
+        if (valor1 < valorVenda) {
+          valor2Input.value = (valorVenda - valor1).toFixed(2); // Preenche o campo 2 com o valor restante
+        }
+      });
+    
+      // Função de validação para garantir que a soma não ultrapasse o valor da venda
+      function validarValores() {
+        const valor1 = parseFloat(valor1Input.value) || 0;
+        const valor2 = parseFloat(valor2Input.value) || 0;
+        const somaValores = valor1 + valor2;
+    
+        // Se o valor 1 for maior ou igual ao valor de venda, não precisa de segundo pagamento
+        if (valor1 >= valorVenda) {
+          valor2Input.value = ''; // Limpa o valor 2
+          secondPaymentSection.style.display = 'none'; // Esconde a segunda forma de pagamento
+        } else if (somaValores > valorVenda) {
+          alert('A soma dos valores de pagamento não pode ser maior que o valor da venda!');
+          submitButton.disabled = true; // Desativa o botão de envio se a soma for maior
+        } else {
+          submitButton.disabled = false; // Ativa o botão de envio se a soma for válida
+        }
+      }
+    
+      // Eventos para validar os campos de pagamento à medida que o usuário digita
+      valor1Input.addEventListener('input', function () {
+        validarValores();
+        // Preenche o valor 2 com o valor restante automaticamente
+        const valor1 = parseFloat(valor1Input.value) || 0;
+        if (valor1 < valorVenda && secondPaymentSection.style.display === 'block') {
+          valor2Input.value = (valorVenda - valor1).toFixed(2);
+        }
+      });
+      
+      valor2Input.addEventListener('input', validarValores);
+    });
+  </script>
+</body>
+</html>

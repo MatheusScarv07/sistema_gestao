@@ -1,4 +1,4 @@
-function fetchSupplierData(cnpj) {
+/* function fetchSupplierData(cnpj) {
     // Faz uma requisição para obter os dados do CNPJ
     fetch(`/supplier/get_dados/${cnpj}/`)
         .then(response => response.json())
@@ -30,4 +30,4 @@ document.getElementById('cnpj').addEventListener('blur', function() {
     if (cnpj) {
         fetchSupplierData(cnpj);
     }
-});
+}); */

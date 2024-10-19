@@ -1,7 +1,6 @@
-from client.controler.client_control import ControlClient
-
+from client.models import Client
 
 def get_clients():
-    controler_cliente = ControlClient()
-    clients = controler_cliente.get_all()
+    controler_cliente = Client()
+    clients = controler_cliente.objects.all()
     return clients
