@@ -1,0 +1,62 @@
+{% include "employee/partials/head.html" %}
+<body>
+    {% include "employee/partials/header.html" %}
+
+
+
+    <main>
+        <div>
+            <a href="{% url 'home_payment' %}"><button>Painel</button></a>
+            <a href="{% url 'new_payment' %}"><button>Cadastrar Pagamento</button></a>
+        </div>
+    
+
+    
+
+   
+
+        <title>Lista de Pagamentos</title>
+
+<body>
+    
+
+    <div>
+        <h1>Consultar Boletos</h1>
+        <form method="GET">
+            <label for="fornecedor">Fornecedor:</label>
+            <input type="text" id="fornecedor" name="fornecedor" value="{{ request.GET.fornecedor }}">
+    
+            <label for="numero_nota">Número da Nota:</label>
+            <input type="text" id="numero_nota" name="numero_nota" value="{{ request.GET.numero_nota }}">
+    
+            <label for="data_emissao">Data de Emissão:</label>
+            <input type="date" id="data_emissao" name="data_emissao" value="{{ request.GET.data_emissao }}">
+    
+            <button type="submit">Buscar</button>
+        </form>
+    </div>
+      
+        <tbody>
+            {% for pagamento in pagamentos %}
+            <tr>
+                <td>{{ pagamento.fornecedor.nome }}</td> <!-- Substitua 'nome' pelo campo correto no modelo Supplier -->
+                <td>{{ pagamento.data_emissao }}</td>
+                <td>{{ pagamento.numero_nota }}</td>
+                <td>{{ pagamento.valor_boleto }}</td>
+                <td>{{ pagamento.data_vencimento }}</td>
+                <td>{{ pagamento.data_entrada }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">Nenhum pagamento encontrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>
+    </main>
+    <footer>footer aqui</footer>
+</body>
+</html>

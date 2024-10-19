@@ -1,3 +1,4 @@
+
 from django.db import models
 from client.models import Client
 from employee.models import Employee
@@ -26,5 +27,6 @@ class PaymentHistory(models.Model):
     cpf_cnpj = models.CharField(max_length=14, null=True)
     type = models.ForeignKey(PaymentType, on_delete=models.CASCADE)
     valor = models.FloatField(null=True)
+
 
 
