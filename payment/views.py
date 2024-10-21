@@ -15,14 +15,16 @@ def new_payment(request):
         # Recuperar dados do formulário
         num_nota = request.POST.get('num_nota')
         nome = request.POST.get('nome')
-        fornecedor = Supplier.objects.get(cnpj=nome)
+        fornecedor = request.POST.get('fornecedor')
         vencimento = request.POST.get('vencimento')
         data_emissao = request.POST.get('data_emissao')
         valor = request.POST.get('valor')
 
+        dados_fornecedor = Supplier.objects.get(cnpj=fornecedor)
+
         # Criar novo objeto Pagamento
         pay.objects.create(
-            fornecedor = fornecedor,
+            fornecedor = dados_fornecedor,
             data_emissao = data_emissao,
             numero_nota=num_nota,
             valor_boleto=valor,
@@ -33,7 +35,7 @@ def new_payment(request):
         )
 
         # Redirecionar para a página de sucesso ou outra página
-        return redirect('payment:home')  # Use o namespace aqui
+        return redirect('new_payment')  # Use o namespace aqui
 
     # Renderizar o template com o formulário para GET request
     return render (request, 'payment/pages/new_payment.html',context={
