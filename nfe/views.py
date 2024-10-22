@@ -45,17 +45,24 @@ def cart(request):
         fornecedor_id = request.POST.get('fornecedor')
         data_emissao = request.POST.get('vendedor')
         numero_nota = request.POST.get('numero_nota')
+        valor_nota = request.POST.get('valor_total_nfe')
+        boleto = request.POST.get('boleto')
         produto = request.POST.get('id_produto')
         data_emissao = request.POST.get('data_emissao')
         valor_unitario = float(request.POST.get('valor'))
         quantidade = float(request.POST.get('Qntde'))
         valor_total = float(request.POST.get('valor_total'))
         data_entrada = datetime.now()
-
+        if boleto == 'Sim':
+            info_bol = True
+        else:
+            info_bol = False
         # Salva o ID do cliente e vendedor na sessão
         request.session['fornecedor_id'] = fornecedor_id
         request.session['numero_nota'] = numero_nota
         request.session['data_emissao'] = data_emissao
+        request.session['boleto'] = boleto
+        request.session['valor_nota'] = valor_nota
 
         try:
             # Busca cliente e vendedor
@@ -102,6 +109,7 @@ def cart(request):
                 'button_enviar': button_enviar,
                 'num_nota': numero_nota,
                 "data_emi": data_emi,
+                'valor_total_nota': valor_nota
             }
         )
     else:
@@ -149,6 +157,8 @@ def efetuar_venda(request):
         fornecedor_ = Supplier.objects.get(id = request.session.get('fornecedor_id') )
         numero_nota_ = request.session.get('numero_nota')
         data_emissao_ = request.session.get('data_emissao')
+        boleto = request.session.get('boleto')
+        valor_nfe = request.session.get('valor_nota')
         valor = []
         for produto in carrinho:
             data = datetime.now()
@@ -174,7 +184,8 @@ def efetuar_venda(request):
             data_emissao = data_emissao_,
             numero_nota = numero_nota_,
             quantidade_itens = len(valor),
-            valor_total = valor_nota
+            boleto = boleto,
+            valor_total = valor_nfe
         )
         info.save()
         NFECartTemp.objects.all().delete()
@@ -185,12 +196,15 @@ def efetuar_venda(request):
         request.session.pop('numero_nota')
         request.session.pop('fornecedor_id')
         request.session.pop('data_emissao')
-        return render(request, 'sales/pages/sales.html', context={
-            'clientes': fornecedores,
-            'cart': carts,
-            'button_enviar': button_enviar,
-            'response': response
-        })      
+        if boleto == 'Sim':
+            return render('new_payment', numero_nota_)
+        else:
+            return render(request, 'sales/pages/sales.html', context={
+                'clientes': fornecedores,
+                'cart': carts,
+                'button_enviar': button_enviar,
+                'response': response
+            })      
     except Exception as e:
         # Handle exceptions appropriately, e.g., return an error response
         return HttpResponseBadRequest(f"An error occurred: {e}")
