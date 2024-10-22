@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
+from django.db.models.functions import ExtractMonth, ExtractYear
 from sale.controler.clients import get_clients
 from sale.controler.filter_vendas import obter_vendas_filtradas
 from sale.controler.cart import cart_products
@@ -8,6 +9,7 @@ from stock.models import Stock
 from client.models import Client
 from employee.models import Employee
 from sale.models import Sale
+from receive.models import Receive
 from django.views.decorators.csrf import csrf_exempt
 from budget.models import Budget, BudgetInfo
 import random
@@ -16,10 +18,89 @@ from datetime import datetime
 import json
 
 # Create your views here.
-
+def formatar_moeda(valor):
+    return f"R$ {valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 def home (request):
-    return render(request, 'sales/pages/home.html')
+    data = datetime.now()
+    mes = data.month
+    ano = data.year
+    vendas_mes_ano = SaleInfo.objects.annotate(mes=ExtractMonth('data_venda'), ano=ExtractYear('data_venda')).filter(mes=mes, ano=ano)
+    valor_a_receber = Receive.objects.annotate(mes=ExtractMonth('data_venda'), ano=ExtractYear('data_venda')).filter(mes=mes, ano=ano, status='Pendente')
+    valor_recebido = Receive.objects.annotate(mes=ExtractMonth('data_venda'), ano=ExtractYear('data_venda')).filter(mes=mes, ano=ano, status='Pago')
+    #loop sobre os valores para pegar os valores e armazenar em um array 
+    valor_vendido = [venda.valor for venda in vendas_mes_ano]
+    valores_a_receber = [venda.valor for venda in valor_a_receber]
+    valores_recebidos = [venda.valor for venda in valor_recebido]
+    # soma os valores qeu estão dentro do array para definir os valores
+    soma_vendas = sum(valor_vendido)
+    soma_pendentes = sum(valores_a_receber)
+    soma_recebidos = sum(valores_recebidos)
+    #Formata os valores para melhor experiencia do usuario, formatando em formato de R$
+    venda_mes = formatar_moeda(soma_vendas)
+    a_receber = formatar_moeda(soma_pendentes)
+    recebidos = formatar_moeda(soma_recebidos)
+    # pega a quantidade de cada venda
+    quantidade_vendas = len(valor_vendido)
+
+    #pagamentos por tipo
+    pagamentos = Receive.objects.annotate(mes=ExtractMonth('data_venda'), ano=ExtractYear('data_venda')).filter(mes=mes, ano=ano)
+    a_prazo = []
+    debito = []
+    credito = []
+    pix = []
+    dinheiro =[]
+    for iten in pagamentos:
+        if iten.tipo_pagamento.nome == 'A Prazo':
+            a_prazo.append(iten.valor)
+        if iten.tipo_pagamento.nome == 'Crédito':
+            credito.append(iten.valor)
+        if iten.tipo_pagamento.nome == 'Débito':
+            debito.append(iten.valor)
+        if iten.tipo_pagamento.nome == 'PIX':
+            pix.append(iten.valor)
+        if iten.tipo_pagamento.nome == 'dinheiro':
+            dinheiro.append(iten.valor)
+
+    soma_prazo = sum(a_prazo)
+    soma_debito = sum(debito)
+    soma_credito = sum(credito)
+    soma_pix = sum(pix)
+    soma_dinheiro = sum(dinheiro)
+
+    valor_prazo = formatar_moeda(soma_prazo)
+    quantidade_prazo = len(a_prazo)
+
+    valor_debito = formatar_moeda(soma_debito)
+    quantidade_debito = len(debito)
+
+    valor_credito = formatar_moeda(soma_credito)
+    quantidade_credito = len(credito)
+
+    valor_pix = formatar_moeda(soma_pix)
+    quantidade_pix = len(pix)
+
+    valor_dinheiro = formatar_moeda(soma_dinheiro)
+    quantidade_dinheiro = len(dinheiro)
+
+    return render(request, 'sales/pages/home.html', context={
+        'Vendas_do_mes': venda_mes,
+        'quantidade_vendas': quantidade_vendas,
+        'a_receber': a_receber,
+        'caixa': recebidos,
+        'valor_prazo': valor_prazo,
+        'quantidade_prazo': quantidade_prazo,
+        'valor_credito': valor_credito,
+        'qunatidade_credito': quantidade_credito,
+        'valor_debito': valor_debito,
+        'quantidade_debito': quantidade_debito,
+        'valor_pix': valor_pix,
+        'quantidade_pix': quantidade_pix,
+        'valor_dinheiro': valor_dinheiro,
+        'quantidade_dinheiro': quantidade_dinheiro
+    })
+
+
 @csrf_exempt
 def new_sale(request):
     clients = Client.objects.all()

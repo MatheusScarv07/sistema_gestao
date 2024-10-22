@@ -61,7 +61,10 @@ def makePayment(request):
             id_pagamento2 = int(type_payment_2)
         tipo_pagamento_1 = PaymentType.objects.filter(id=id_pagamento1).first()
         tipo_pagamento_2 = PaymentType.objects.filter(id=id_pagamento2).first() if type_payment_2 else None
-
+        if tipo_pagamento_1.nome == 'A Prazo' or tipo_pagamento_2 == 'A Prazo':
+            status = 'Pendente'
+        else:
+            status ='Pago'
         if not tipo_pagamento_1:
             return HttpResponseBadRequest("Tipo de pagamento 1 inválido ou não encontrado.")
 
@@ -73,7 +76,7 @@ def makePayment(request):
             cliente=venda.cliente,
             cpf_cnpj=venda.cpf_cnpj,
             tipo_pagamento=tipo_pagamento_1,
-            status="Pendente" if tipo_pagamento_1.id == 1 else "Pago",
+            status= status,
             valor=float(valor_1)
         )
         payment.save()
