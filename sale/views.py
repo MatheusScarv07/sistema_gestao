@@ -8,6 +8,7 @@ from stock.models import Stock
 from client.models import Client
 from employee.models import Employee
 from sale.models import Sale
+from receive.models import PaymentHistory
 from django.views.decorators.csrf import csrf_exempt
 from budget.models import Budget, BudgetInfo
 import random
@@ -292,6 +293,7 @@ def searchsales(request):
 def search_sale_by_number(request, num_venda):
     try:
         products = Sale.objects.filter(num_sale = num_venda)
+        paymentes =  PaymentHistory.objects.filter(num_sale = num_venda)
         for produto in products:
             nome = produto.cliente
         return render(
@@ -300,7 +302,8 @@ def search_sale_by_number(request, num_venda):
             context={
                 'products': products,
                 'nome': nome,
-                'num_venda': num_venda
+                'num_venda': num_venda,
+                'pagamentos': paymentes
             }
         )
     except Exception as e:

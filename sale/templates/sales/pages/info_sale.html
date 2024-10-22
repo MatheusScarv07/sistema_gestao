@@ -18,6 +18,27 @@
       <p>{{produto.valor_total}}</p>
       {% endfor %}
     </div>
+    <div>
+      <h3>Historico de pagamento</h3>
+      
+      <table>
+        <thead>
+          <th>Data</th>
+          <th>Tipo pagamento</th>
+          <th>Valor</th>
+        </thead>
+        <tbody>
+          {% for pagamento in pagamentos  %}
+          <tr>
+            <td>{{pagamento.data}}</td>
+            <td>{{pagamento.type}}</td>
+            <td>{{pagamento.valor}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      
+    </div>
   </main>
 
   <footer></footer>

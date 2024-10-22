@@ -12,36 +12,53 @@
       </div>
       <h1>NEW nfe</h1>
       <form action="/nfe/salvar-carrinho/" method="post">
-        <!-- Select para Cliente -->
-<!-- Select para Cliente -->
-<select name="fornecedor" id="fornecedor">
-  <!-- Opção padrão -->
-  <option value="" disabled {% if not selected_cliente %}selected{% endif %}>Selecione o Cliente</option>
-  
-  <!-- Iteração sobre os clientes -->
-  {% for fornecedor in fornecedores %}
-      <option value="{{ fornecedor.id }}" {% if selected_fornecedor and fornecedor.id == selected_fornecedor.id %}selected{% endif %}>
-          {{ fornecedor.nome }}
-      </option>
-  {% endfor %}
-</select>
-        {% if num_nota %}
-          <input type="text" placeholder="Numero da nota" name="numero_nota" value="{{num_nota}}">
-        {%else%}
-          <input type="text" placeholder="Numero da nota" name="numero_nota">
-        {% endif %}
-        {% if data_emi %}
+        <!-- div com os dados da nota -->
+         <div>
+          <select name="fornecedor" id="fornecedor">
+            <!-- Opção padrão -->
+            <option value="" disabled {% if not selected_cliente %}selected{% endif %}>Selecione o Cliente</option>
+            
+            <!-- Iteração sobre os clientes -->
+            {% for fornecedor in fornecedores %}
+                <option value="{{ fornecedor.id }}" {% if selected_fornecedor and fornecedor.id == selected_fornecedor.id %}selected{% endif %}>
+                    {{ fornecedor.nome }}
+                </option>
+            {% endfor %}
+          </select>
+                  {% if num_nota %}
+                    <input type="text" placeholder="Numero da nota" name="numero_nota" value="{{num_nota}}">
+                  {%else%}
+                    <input type="text" placeholder="Numero da nota" name="numero_nota">
+                  {% endif %}
+                  {% if data_emi %}
+                  
+                  <input type="text" name='data_emissao' value='{{data_emi}}'>
+                  {%else%}
+                  <input type="date" name="data_emissao" id="">
+                  {% endif %}
+                  {% if valor_nfe %}
+                  <input type="text" name='valor_total_nfe' value={{valor_total_nota}} placeholder='Valor total da nota'>
+                  {% else %}
+                  <input type="text" name='valor_total_nfe' placeholder='Valor total da nota'>
+                  {% endif %}
+                  {% if boleto %}
+                  <input type="text" name='boleto' value={{boleto}} placeholder='Valor total da nota'>
+                  {% else %}
+                  <select name="boleto" id="">
+                    <option value="Sim">Sim</option>
+                    <option value="Não">Não</option>
+                  </select>
+                  {% endif %}
+         </div>
+<!-- div com produtos -->
+ <div>
+  <input name="id_produto" type="text" id="product_id" placeholder="ID do produto" onchange="fetchProductData(document.getElementById('product_id').value)">
+  <input name="name" type="text" id="product_name" placeholder="Nome do produto" readonly>
+  <input name="Qntde" type="text" id="quantity" placeholder="Quantidade" onchange="price_finally()">
+  <input name="valor" type="text" id="unit_price" placeholder="Preço Unitário" onchange="price_finally()">
+  <input name="valor_total" type="text" id="total_price" placeholder="Preço Total" readonly>
+ </div>
         
-        <input type="text" name='data_emissao' value='{{data_emi}}'>
-        {%else%}
-        <input type="date" name="data_emissao" id="">
-        {% endif %}
-        
-        <input name="id_produto" type="text" id="product_id" placeholder="ID do produto" onchange="fetchProductData(document.getElementById('product_id').value)">
-        <input name="name" type="text" id="product_name" placeholder="Nome do produto" readonly>
-        <input name="Qntde" type="text" id="quantity" placeholder="Quantidade" onchange="price_finally()">
-        <input name="valor" type="text" id="unit_price" placeholder="Preço Unitário" onchange="price_finally()">
-        <input name="valor_total" type="text" id="total_price" placeholder="Preço Total" readonly>
         <button type="submit">ADD Produto</button>
       </form>
       <p>{{response}}</p>
