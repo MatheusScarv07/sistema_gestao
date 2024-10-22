@@ -18,6 +18,10 @@ response = ''
 
 
 
+from django.shortcuts import redirect
+from django.contrib import messages
+from django.urls import reverse  # Para gerar URLs dinâmicas
+
 def cadastrar_produto(request):
     if request.method == "POST":
         id = request.POST.get('id-product')
@@ -44,7 +48,7 @@ def cadastrar_produto(request):
         # Verifica se já existe um produto com o mesmo ID
         if Stock.objects.filter(id=id).exists():
             messages.error(request, 'Erro: Já existe um produto com o ID informado.')
-            return render(request, 'stock/pages/new_product.html')
+            return redirect(reverse('new_product'))  # Redireciona para a mesma página após erro
 
         produto = Stock.objects.create(
             id=id,
@@ -64,9 +68,10 @@ def cadastrar_produto(request):
         )
 
         messages.success(request, 'Produto cadastrado com sucesso!')
-        return render(request, 'stock/pages/new_product.html', {'produto': produto})
+        return redirect(reverse('new_product'))  # Redireciona para a página de cadastro
 
     return render(request, 'stock/pages/new_product.html')
+
 
 
  

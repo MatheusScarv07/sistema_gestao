@@ -6,6 +6,13 @@
     {% include "budget/partials/header.html" %}
  
    <main>
+    <div class="sub_menu">
+      <div class="sub_menu">
+        <a href="/budget"><button>Painel</button></a>
+        <a href="/budget/new_budget/"><button>Novo Orcamento</button></a>
+      </div>
+    </div>
+    <h1>Search Budget</h1>
     <div class="content">
         <form action="/budget/filtrar_budget/" method='post'>
             <input type="date" name="date_inicial" id="">
