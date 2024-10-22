@@ -52,13 +52,16 @@ def makePayment(request):
         # Verificando se o valor 1 foi fornecido e é válido
         if not valor_1 or not valor_1.replace('.', '', 1).isdigit() or float(valor_1) <= 0:
             return HttpResponseBadRequest("Valor 1 inválido ou ausente.")
-
-        # Convertendo os tipos de pagamento
-        id_pagamento1 = type_payment_1
-        tipo_pagamento_1 = PaymentType.objects.filter(nome=id_pagamento1).first()
-        tipo_pagamento_2 = PaymentType.objects.filter(nome=type_payment_2).first() if type_payment_2 else None
-        
-        # Validando o tipo de pagamento 1
+        # Pegando os tipos de pagamento
+        id_pagamento1 = int(type_payment_1)
+        if type_payment_2:
+            id_pagamento2 = int(type_payment_2)
+        tipo_pagamento_1 = PaymentType.objects.filter(id=id_pagamento1).first()
+        tipo_pagamento_2 = PaymentType.objects.filter(id=id_pagamento2).first() if type_payment_2 else None
+        if tipo_pagamento_1.nome == 'A Prazo' or tipo_pagamento_2 == 'A Prazo':
+            status = 'Pendente'
+        else:
+            status ='Pago'
         if not tipo_pagamento_1:
             return HttpResponseBadRequest("Tipo de pagamento 1 inválido ou não encontrado.")
 
@@ -73,8 +76,8 @@ def makePayment(request):
             cliente=venda.cliente,
             cpf_cnpj=venda.cpf_cnpj,
             tipo_pagamento=tipo_pagamento_1,
-            status=status,
-            valor=float(venda.valor)
+            status= status,
+            valor=float(valor_1)
         )
         payment.save()
 

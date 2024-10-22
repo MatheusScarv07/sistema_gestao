@@ -1,3 +1,4 @@
+{% load l10n %}
 {% include "sales/partials/head.html" %}
 <body>
   
@@ -11,11 +12,61 @@
       </div>
       <div>
         <div class="card_datas">
-            <p>AQui Ficara dados de vendas</p>
-            <p>um card com informaçoes</p>
-            <p>como valor de venda</p>
-            <p>quantidade vendida no mes</p>
+            <h3>Valor vendido no mes</h3>
+            <h4>{{Vendas_do_mes}}</h4>
         </div>
+        <div class="card_datas">
+          <h3>Quantidade de Vendas</h3>
+          <h4>{{quantidade_vendas}}</h4>
+      </div>
+      <div class="card_datas">
+        <h3>Valor a Receber</h3>
+        <h4>{{a_receber}}</h4>
+        
+    </div>
+    <div class="card_datas">
+      <h3>Valor a Recebido</h3>
+      <h4>{{caixa}}</h4>
+  </div>
+  <div class="card_datas">
+    <h3>Tipos de Pagamento</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Tipo</th>
+          <th>Quantidade</th>
+          <th>Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>A Prazo</td>
+          <td>{{quantidade_prazo}}</td>
+          <td>{{valor_prazo}}</td>
+        </tr>
+        <tr>
+          <td>Débito</td>
+          <td>{{quantidade_debito}}</td>
+          <td>{{valor_debito}}</td>
+        </tr>
+        <tr>
+          <td>Crédito</td>
+          <td>{{qunatidade_credito}}</td>
+          <td>{{valor_credito}}</td>
+        </tr>
+        <tr>
+          <td>Pix</td>
+          <td>{{quantidade_pix}}</td>
+          <td>{{valor_pix}}</td>
+        </tr>
+        <tr>
+          <td>Dinheiro</td>
+          <td>{{quantidade_dinheiro}}</td>
+          <td>{{valor_dinheiro}}</td>
+        </tr>
+      </tbody>
+    </table>
+</div>
       </div>
     </div>
     <footer>footer</footer>
