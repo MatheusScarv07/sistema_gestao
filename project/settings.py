@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'supplier',
     'nfe',
     'payment',
-    'receive'
+    'receive',
+    'login'
 ]
 
 MIDDLEWARE = [
