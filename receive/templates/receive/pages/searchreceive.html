@@ -25,7 +25,7 @@
     </form>
     <div>
       {% for receive in receives %}
-      <a href="/sale/info/{{receive.num_sale}}"><p>{{receive.num_sale}}</p></a>
+      <a href="/sale/info/{{receive.num_sale.num_sale}}"><p>{{receive.num_sale.num_sale}}</p></a>
       <p>{{receive.data_venda}}</p>
       <p>{{receive.cliente}}</p>
       <p>{{receive.valor}}</p>

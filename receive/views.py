@@ -34,7 +34,7 @@ def makePayment(request):
         num_venda = request.POST.get('num_venda')
         
         # Verificando se 'num_venda' foi fornecido e se é um número válido
-        if num_venda is None or not num_venda.isdigit():
+        if not num_venda or not num_venda.isdigit():
             return HttpResponseBadRequest("Número da venda inválido ou ausente.")
         
         numInt = int(num_venda)
@@ -43,18 +43,15 @@ def makePayment(request):
         if venda is None:
             return HttpResponseBadRequest("Venda não encontrada.")
         
-        # Para depuração
-        
         # Pegando os valores do formulário
         type_payment_1 = request.POST.get('type_payment_1')
         valor_1 = request.POST.get('valor_1')
         type_payment_2 = request.POST.get('type_payment_2', None)  # Opcional
         valor_2 = request.POST.get('valor_2', None)  # Opcional
 
-        # Verificando se o valor 1 foi fornecido
-        if valor_1 is None or not valor_1.replace('.', '', 1).isdigit():
+        # Verificando se o valor 1 foi fornecido e é válido
+        if not valor_1 or not valor_1.replace('.', '', 1).isdigit() or float(valor_1) <= 0:
             return HttpResponseBadRequest("Valor 1 inválido ou ausente.")
-
         # Pegando os tipos de pagamento
         id_pagamento1 = int(type_payment_1)
         if type_payment_2:
@@ -68,7 +65,10 @@ def makePayment(request):
         if not tipo_pagamento_1:
             return HttpResponseBadRequest("Tipo de pagamento 1 inválido ou não encontrado.")
 
-        # Criando a nova venda
+        # Definindo o status de pagamento baseado nos tipos de pagamento
+        status = 'Pendente' if tipo_pagamento_1.nome == 'A Prazo' else 'Pago'
+        
+        # Criando o registro de pagamento
         payment = Receive(
             data=datetime.now(),
             num_sale=venda,
@@ -81,47 +81,31 @@ def makePayment(request):
         )
         payment.save()
 
-        # Verificando o pagamento secundário opcional
+        # Verificando o pagamento secundário opcional e validando seu valor
         if type_payment_2 and valor_2:
-            if not valor_2.replace('.', '', 1).isdigit():
+            if not valor_2.replace('.', '', 1).isdigit() or float(valor_2) <= 0:
                 return HttpResponseBadRequest("Valor 2 inválido.")
-            
-            payment_2 = Receive(
-                data=datetime.now(),
-                num_sale=venda,
-                data_venda=venda.data_venda,
-                cliente=venda.cliente,
-                cpf_cnpj=venda.cpf_cnpj,
-                tipo_pagamento=tipo_pagamento_2,
-                status="Pendente" if tipo_pagamento_2.id == 1 else "Pago",
-                valor=float(valor_2)
-            )
-            payment_2.save()
-
-        # Salvando histórico de pagamentos
-        if tipo_pagamento_1 and tipo_pagamento_1.id != 1:
+        
+        # Função auxiliar para salvar o histórico de pagamentos
+        def salvar_historico_pagamento(tipo_pagamento, valor):
             historico = PaymentHistory(
                 data=datetime.now(),
                 num_sale=venda,
                 data_venda=venda.data_venda,
                 cliente=venda.cliente,
                 cpf_cnpj=venda.cpf_cnpj,
-                type=tipo_pagamento_1,
-                valor=float(valor_1),
+                type=tipo_pagamento,
+                valor=float(valor),
             )
             historico.save()
 
+        # Salvando o histórico de pagamento principal
+        if tipo_pagamento_1.id != 1:
+            salvar_historico_pagamento(tipo_pagamento_1, valor_1)
+
+        # Salvando o histórico de pagamento secundário, se aplicável
         if tipo_pagamento_2 and tipo_pagamento_2.id != 1:
-            historico_2 = PaymentHistory(
-                data=datetime.now(),
-                num_sale=venda,
-                data_venda=venda.data_venda,
-                cliente=venda.cliente,
-                cpf_cnpj=venda.cpf_cnpj,
-                type=tipo_pagamento_2,
-                valor=float(valor_2),
-            )
-            historico_2.save()
+            salvar_historico_pagamento(tipo_pagamento_2, valor_2)
 
     return redirect('new_sale')
 
@@ -132,6 +116,8 @@ def search_receive(request):
   try: 
         receives = Receive.objects.filter(status="Pendente")
         clientes = Client.objects.all()
+        for receive in receives:
+            print(receive.num_sale.num_sale)
         return render(request, 'receive/pages/searchreceive.html', context={
             'receives': receives,
             'clientes': clientes,
