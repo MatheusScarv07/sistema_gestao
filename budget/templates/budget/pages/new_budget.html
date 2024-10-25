@@ -1,91 +1,189 @@
 {% include "budget/partials/head.html" %}
 
-
-
 {% load static %}
-
+<link rel="stylesheet" href="{% static 'budget/css/container.css' %}">
 <body>
-  
   {% include "global/partials/header.html" %}
   <main>
     <div class="content">
       <div class="sub_menu">
-        <div class="sub_menu">
-          <a href="/budget"><button>Painel</button></a>
-          
-          <a href="/budget/search_budget/"><button>Consultar Orcamentos</button></a>
+        <a href="/budget"><button>Painel</button></a>
+        <a href="/budget/search_budget/"><button>Consultar Orçamentos</button></a>
+      </div>
+      
+      <h1>Novo Orçamento</h1>
+      
+      <!-- Formulário principal -->
+      <form action="/budget/salvar-carrinho/" method="post">
+        {% csrf_token %}
+        <div class="dados-orcamento">
+            <!-- Área do Cliente -->
+        <fieldset class='area-cliente'>
+          <div class="teste"></div>
+          <legend>Cliente</legend>
+          <select name="cliente" id="cliente">
+            <option value="" disabled {% if not selected_cliente %}selected{% endif %}>Selecione o Cliente</option>
+            {% for cliente in clientes %}
+              <option value="{{ cliente.id }}" {% if selected_cliente and cliente.id == selected_cliente.id %}selected{% endif %}>
+                  {{ cliente.nome }}
+              </option>
+            {% endfor %}
+          </select>
+        </fieldset>
+
+        <!-- Área do Vendedor -->
+        <fieldset class="area-vendedor">
+          <legend>Vendedor</legend>
+          <select name="vendedor" id="vendedor">
+            <option value="" disabled {% if not selected_vendedor %}selected{% endif %}>Selecione o Vendedor</option>
+            {% for vendedor in vendedores %}
+              <option value="{{ vendedor.id }}" {% if selected_vendedor and vendedor.id == selected_vendedor.id %}selected{% endif %}>
+                  {{ vendedor.nome }}
+              </option>
+            {% endfor %}
+          </select>
+        </fieldset>
         </div>
         
-      </div>
-      <h1>NEW BUDGET</h1>
-      <form action="/budget/salvar-carrinho/" method="post">
-        <!-- Select para Cliente -->
-<!-- Select para Cliente -->
-<select name="cliente" id="cliente">
-  <!-- Opção padrão -->
-  <option value="" disabled {% if not selected_cliente %}selected{% endif %}>Selecione o Cliente</option>
-  
-  <!-- Iteração sobre os clientes -->
-  {% for cliente in clientes %}
-      <option value="{{ cliente.id }}" {% if selected_cliente and cliente.id == selected_cliente.id %}selected{% endif %}>
-          {{ cliente.nome }}
-      </option>
-  {% endfor %}
-</select>
-
-<!-- Select para Vendedor -->
-<select name="vendedor" id="vendedor">
-  <!-- Opção padrão -->
-  <option value="" disabled {% if not selected_vendedor %}selected{% endif %}>Selecione o Vendedor</option>
-  
-  <!-- Iteração sobre os vendedores -->
-  {% for vendedor in vendedores %}
-      <option value="{{ vendedor.id }}" {% if selected_vendedor and vendedor.id == selected_vendedor.id %}selected{% endif %}>
-          {{ vendedor.nome }}
-      </option>
-  {% endfor %}
-</select>
-        <input name="id_produto" type="text" id="product_id" placeholder="ID do produto" onchange="fetchProductData(document.getElementById('product_id').value)">
-        <input name="Qntde" type="text" id="quantity" placeholder="Quantidade" onchange="price_finally()">
-        <input name="name" type="text" id="product_name" placeholder="Nome do produto" readonly>
-        <input name="valor" type="text" id="unit_price" placeholder="Preço Unitário" readonly onchange="price_finally()">
-        <input name="valor_total" type="text" id="total_price" placeholder="Preço Total" readonly>
-        <button type="submit">ADD Produto</button>
+        
+        
+        
+        <!-- Adicionar Produto -->
+        <fieldset class="carrinho">
+          <legend>Adicionar Produto</legend>
+          <input name="id_produto" type="text" id="product_id" placeholder="ID do produto" onchange="fetchProductData(this.value)">
+          <input name="Qntde" type="text" id="quantity" placeholder="Quantidade" onchange="price_finally()">
+          <input name="name" type="text" id="product_name" placeholder="Nome do produto" readonly>
+          <input name="valor" type="text" id="unit_price" placeholder="Preço Unitário" readonly onchange="price_finally()">
+          <input name="valor_total" type="text" id="total_price" placeholder="Preço Total" readonly>
+          <button type="submit">ADD Produto</button>
+        </fieldset>
       </form>
-      <p>{{response}}</p>
-<h2>Carrinho Salvo</h2>
-<table id="tabela-carrinho">
-  <thead>
-    <tr>
-      <th>Produto</th>
-      <th>Quantidade</th>
-      <th>Valor Unitário</th>
-      <th>Valor Total</th>
-      <th>Option</th>
-    </tr>
-  </thead>
-  <tbody id="dados">
-    {% for item in cart  %}
-    <tr>
-      <td>{{item.name_product}}</td>
-      <td>{{item.quantidade}}</td>
-      <td>{{item.valor_uni}}</td>
-      <td>{{item.valor_total}}</td>
-      <td><a href="{% url 'excluir_produto' item.id %}">excluir</a></td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
       
+      <!-- Mensagem de resposta -->
+      <div class="response-message">{{ response }}</div>
+      
+      <!-- Carrinho -->
+      <fieldset class="infos">
+        <legend>Carrinho</legend>
+        <table id="tabela-carrinho">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Quantidade</th>
+              <th>Valor Unitário</th>
+              <th>Valor Total</th>
+              <th>Opção</th>
+            </tr>
+          </thead>
+          <tbody id="dados">
+            {% for item in cart %}
+              <tr>
+                <td>{{ item.name_product }}</td>
+                <td>{{ item.quantidade }}</td>
+                <td>{{ item.valor_uni }}</td>
+                <td>{{ item.valor_total }}</td>
+                <td><a href="{% url 'excluir_produto' item.id %}">Excluir</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </fieldset>
+      
+      <!-- Opções de envio -->
       <form action="/budget/enviar_orcamento/" method="post">
+        {% csrf_token %}
         {% if button_enviar %}
-         <button button type="submit">Enviar Orçamento</button>
-            {% endif %}
+          <button type="submit">Enviar Orçamento</button>
+        {% endif %}
       </form>
     </div>
+    
     <footer>Assinatura</footer>
   </main>
-  <script src="{% static 'sale/js/sales.js' %}"></script>
+  <style>
+    .content {
+      width: 85vw;
+      height: 95vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+    }
+    .dados-orcamento{
+      display: flex;
+      gap: 1em;
+    }
+  .area-cliente{
+      padding: 20px;
+      width: 90%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 10px;
+      border: 2px solid black;
+  }
+  .area-cliente select{
+    width: 80%;
+    height: 3em;
+  }
+  .area-vendedor{
+    padding: 20px;
+      width: 90%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 10px;
+      border: 2px solid black;
+  }
+
+  .area-vendedor select{
+    width: 80%;
+    height: 3em;
+  }
+  .response-message {
+      color: green; /* ou red para erros */
+      font-weight: bold;
+  }
+  .carrinho{
+      padding: 20px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1em;
+      border-radius: 10px;
+      border: 2px solid black;
+      margin-bottom: 3em;
+      margin-top: 2em;
+  }
+
+  .infos{
+    padding: 20px;
+      width: 90%;
+
+      border-radius: 10px;
+      border: 2px solid black;
+      margin-bottom: 3em;
+      margin-top: 2em;
+  }
+  #tabela-carrinho th, #tabela-carrinho td {
+      padding: 8px;
+      text-align: center;
+  }
+  
+  
+  </style>
+  <script>
+    $(document).ready(function() {
+        $('#cliente').select2();
+        $('#vendedor').select2();
+    });
+  </script>
+  
+  <script src="{% static 'budget/js/new_budget.js' %}"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </body>
 </html>
-

@@ -1,4 +1,6 @@
 .content{
     width: 85vw;
     height: 95vh;
+    background-image: url("{% static 'img/logo.png' %}");
+    background-size: cover;
 }

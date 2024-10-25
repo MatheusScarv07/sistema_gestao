@@ -1,4 +1,19 @@
-.content{
+.content {
     width: 85vw;
     height: 95vh;
+    
 }
+.area-cliente{
+    padding: 20px;
+    width: 90%;
+}
+.response-message {
+    color: green; /* ou red para erros */
+    font-weight: bold;
+}
+
+#tabela-carrinho th, #tabela-carrinho td {
+    padding: 8px;
+    text-align: center;
+}
+
