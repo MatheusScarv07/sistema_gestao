@@ -201,3 +201,46 @@ def cart(request):
         )
     else:
         return JsonResponse({'error': 'Método não permitido'}, status=405)
+    
+
+
+
+@csrf_exempt
+def excluir_produto(request, id):
+    try:
+        produto = CartTempBudget.objects.get(id=id)
+        produto.delete()
+
+        # Obtenha os dados necessários para renderizar a página do carrinho
+        cliente_id = request.session.get('cliente_id')
+        vendedor_id = request.session.get('vendedor_id')
+
+        if cliente_id and vendedor_id:
+            try:
+                cliente = Client.objects.get(id=cliente_id)
+                vendedor = Employee.objects.get(id=vendedor_id)
+                clientes = Client.objects.all()
+                vendedores = Employee.objects.all()
+                carts = CartTempBudget.objects.all()
+                return render(
+                    request,
+                    'budget/pages/new_budget.html',
+                    context={
+                        'clientes': clientes,  # A lista completa de clientes
+                        'vendedores': vendedores,  # A lista completa de vendedores
+                        'cart': carts,
+                        'response': 'Produto excluído com sucesso',
+                        'button_enviar': True,
+                        'selected_cliente': cliente,  # O cliente selecionado
+                        'selected_vendedor': vendedor,  # O vendedor selecionado
+                    }
+                )
+            except Client.DoesNotExist:
+                return render(request, 'sales/pages/sales.html', {'response': 'Cliente não encontrado'})
+            except Employee.DoesNotExist:
+                return render(request, 'sales/pages/sales.html', {'response': 'Vendedor não encontrado'})
+        else:
+            return redirect('sale/salvar-carrinho/')
+
+    except CartTemp.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Produto não encontrado'})

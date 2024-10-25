@@ -133,6 +133,8 @@ STATICFILES_DIRS = [
     BASE_DIR / "client/static",
     BASE_DIR / "main/static",
     BASE_DIR / 'sale/static',
+    BASE_DIR / 'static',
+    BASE_DIR / "budget/static",
     
 ]
 
