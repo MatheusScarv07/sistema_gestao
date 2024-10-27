@@ -9,5 +9,5 @@ urlpatterns = [
     path('budget/enviar_orcamento/',enviar_orcamento),
     path('budget/filtrar_budget/',search_budget_filter ),
     path('budget/salvar-carrinho/', cart),
-    path('budget/excluir_produto/<int:id>/', excluir_produto, name='excluir_produto'),
+    path('budget/excluir_produto/<int:id>', excluir_produto),
 ]

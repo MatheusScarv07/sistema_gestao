@@ -33,3 +33,18 @@ function fetchProductData(productId) {
         })
         .catch(error => console.error('Error:', error)); // Tratamento de erros
   }
+
+  function formatarMoeda(valor) {
+    return `R$ ${valor.toFixed(2).replace(",", "X").replace(".", ",").replace("X", ".")}`;
+}
+
+// Seleciona todos os elementos <td> com o atributo data-valor
+const tdsValoresTotais = document.querySelectorAll('td[data-valor]');
+
+tdsValoresTotais.forEach(td => {
+    // Obtém o valor do data-valor e o converte em número
+    const valorTotal = parseFloat(td.getAttribute("data-valor"));
+    
+    // Formata o valor e substitui o conteúdo do <td>
+    td.textContent = formatarMoeda(valorTotal);
+});

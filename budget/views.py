@@ -1,4 +1,4 @@
-from django.shortcuts import render 
+from django.shortcuts import render, redirect
 from random import randint
 from django.http import HttpResponseBadRequest,JsonResponse
 from datetime import datetime
@@ -242,5 +242,5 @@ def excluir_produto(request, id):
         else:
             return redirect('sale/salvar-carrinho/')
 
-    except CartTemp.DoesNotExist:
+    except CartTempBudget.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Produto não encontrado'})
