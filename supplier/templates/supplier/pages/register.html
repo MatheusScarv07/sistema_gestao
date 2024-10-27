@@ -5,7 +5,9 @@
     <main>
         <div class="content">
             <a href="/supplier"><button>Voltar</button></a>
+
             <h1>NEW fornecedor</h1>
+
             <form method="POST" action="/supplier/register_new">
                 {% csrf_token %}
                 <input type="text" placeholder="CNPJ" name="cpf_cnpj" id='cnpj' >
@@ -24,8 +26,67 @@
                 <button type="submit">Enviar</button>
             </form>
         </div>
+        <div class="footer">
         <footer>footer aqui</footer>
+    </div>
     </main>
+
+    <style>
+        .content {
+            width: 85vw;
+            height: 95vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1em;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            height: 70vh;
+            width: 90%;
+            padding: 10px;
+            border: 2px solid black;
+            border-radius: 10px;
+            gap: 1em;
+            align-items: center;
+        }
+
+        form input, form select {
+            width: 70%;
+            height: 1.5em;
+            padding: 0.5em;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        form button {
+            padding: 0.7em 1.5em;
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 0.5em;
+        }
+
+        .footer{
+            margin-top: 0px;
+            height: 1px;
+            padding-top: 0px;
+
+        }
+    </style>
     <script src="{% static 'supplier/js/supplier.js' %}"></script>
 </body>
 </html>

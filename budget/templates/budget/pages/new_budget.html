@@ -19,7 +19,7 @@
         <div class="dados-orcamento">
             <!-- Área do Cliente -->
         <fieldset class='area-cliente'>
-          <div class="teste"></div>
+          
           <legend>Cliente</legend>
           <select name="cliente" id="cliente">
             <option value="" disabled {% if not selected_cliente %}selected{% endif %}>Selecione o Cliente</option>
@@ -124,8 +124,9 @@
        </div>
       
     </div>
-    
+    <div class="footer">
     <footer>Assinatura</footer>
+    </div>
   </main>
   <style>
    
@@ -257,6 +258,15 @@
     justify-content: center;
     gap: 1em;
   }
+
+  
+  .footer{
+    margin-top: 0px;
+    height: 1px;
+    padding-top: 0px;
+
+}
+
   </style>
   <script>
     $(document).ready(function() {
