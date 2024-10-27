@@ -7,11 +7,13 @@
     <main>
         <div class="content">
             <a href="/client"><button>Voltar</button></a>
+
             <h1>NEW CLIENT</h1>
-            <form action="client/new/cadastro" method='post'>
+
+            <form action="client/new/cadastro" method="post">
                 <input type="text" placeholder="Name of client" name="name">
                 
-                <select name="option_cpf_or_cnpj" id="">
+                <select name="option_cpf_or_cnpj">
                     <option value="CPF">CPF</option>
                     <option value="CNPJ">CNPJ</option>
                 </select>
@@ -25,20 +27,78 @@
                 <input type="text" placeholder="Number" name="numero">
                 <input type="text" placeholder="Complement" name="complemento">
                 
-                <!-- Adicionando onblur para preencher o endereço automaticamente -->
-                
-                
                 <input type="text" placeholder="Neighborhood" name="bairro" id="bairro">
                 <input type="text" placeholder="City" name="cidade" id="cidade">
                 <input type="text" placeholder="State" name="estado" id="estado">
                 
                 <button>Save</button>
             </form>
+
         </div>
+
+        <div class="footer">
+        
         <footer>Footer aqui</footer>
+    </div>
     </main>
 
-    <!-- Referência ao script JS que lida com o preenchimento dos campos de endereço -->
+    <style>
+        .content {
+            width: 85vw;
+            height: 95vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1em;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            height: 70vh;
+            width: 90%;
+            padding: 10px;
+            border: 2px solid black;
+            border-radius: 10px;
+            gap: 1em;
+            align-items: center;
+        }
+
+        form input, form select {
+            width: 70%;
+            height: 1.5em;
+            padding: 0.5em;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        form button {
+            padding: 0.7em 1.5em;
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 0.5em;
+        }
+
+        .footer{
+            margin-top: 0px;
+            height: 1px;
+            padding-top: 0px;
+
+        }
+    </style>
+
     <script src="{% static 'client/js/client.js' %}"></script>
 </body>
 </html>
