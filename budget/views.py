@@ -9,6 +9,11 @@ from employee.models import Employee
 from budget.models import Budget, CartTempBudget, BudgetInfo
 from stock.models import Stock
 from sale.controler.clients import get_clients
+from django.template.loader import render_to_string
+from django.http import HttpResponse
+from weasyprint import HTML
+import tempfile
+from twilio.rest import Client as TwilioClient
 
 
 
@@ -244,3 +249,43 @@ def excluir_produto(request, id):
 
     except CartTempBudget.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Produto não encontrado'})
+
+
+
+@csrf_exempt
+def gerar_relatorio(request):
+    # Carrega os dados necessários para o relatório
+    context = {
+        'dados_orcamento': 'Dados do orçamento aqui'  # Atualize com os dados reais do orçamento
+    }
+    html_string = render_to_string('budget/relatorio.html', context)
+    html = HTML(string=html_string)
+    
+    # Gera o PDF e retorna uma resposta
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as output:
+        html.write_pdf(output)
+        pdf_file_path = output.name
+
+    # Renderiza o template do relatório com o botão de envio para WhatsApp
+    return render(request, 'budget/relatorio.html', {'pdf_file_path': pdf_file_path})
+
+
+
+
+@csrf_exempt
+def enviar_whatsapp(request):
+    pdf_file_path = request.POST.get('pdf_file_path')
+    recipient_number = 'whatsapp:+55SEUNÚMERO'  # Substitua com o número de destino
+
+    account_sid = 'YOUR_TWILIO_ACCOUNT_SID'
+    auth_token = 'YOUR_TWILIO_AUTH_TOKEN'
+    client = Client(account_sid, auth_token)
+    
+    message = client.messages.create(
+        from_='whatsapp:+14155238886',  # Número do Twilio para WhatsApp
+        body='Segue o relatório em PDF.',
+        media_url=[pdf_file_path],
+        to=recipient_number
+    )
+    
+    return HttpResponse(f"PDF enviado via WhatsApp com sucesso. ID da mensagem: {message.sid}")
