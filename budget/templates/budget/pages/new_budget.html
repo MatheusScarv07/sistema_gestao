@@ -12,7 +12,14 @@
       </div>
       
       <h1>Novo Orçamento</h1>
+
       
+      <form class="form_button" action="/budget/gerar-relatorio/" method="post">
+        {% csrf_token %}
+        <button class="enviar" type="submit">Gerar Relatório</button>
+    </form>
+
+
       <!-- Formulário principal -->
       <form action="/budget/salvar-carrinho/" method="post">
         {% csrf_token %}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório de Orçamento</title>
+</head>
+<body>
+    <h1>Relatório de Orçamento</h1>
+    <p>Conteúdo do relatório...</p>
+
+    <!-- Botão para enviar relatório pelo WhatsApp -->
+    <form action="/budget/enviar_whatsapp/" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="pdf_file_path" value="{{ pdf_file_path }}">
+        <button type="submit">Enviar pelo WhatsApp</button>
+    </form>
+
+    <!-- Link para voltar ao novo orçamento -->
+    <a href="/budget/new_budget/"><button>Voltar ao Novo Orçamento</button></a>
+</body>
+</html>
