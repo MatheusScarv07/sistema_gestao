@@ -10,66 +10,139 @@
         <a href="/sale/new-sale"><button>Nova Venda</button></a>
         <a href="/sales/searchsales"><button>Consultar Vendas</button></a>
       </div>
-      <div>
+      
+      <h1>Resumo de Vendas</h1>
+      
+      <div class="sales-summary">
         <div class="card_datas">
-            <h3>Valor vendido no mes</h3>
-            <h4>{{Vendas_do_mes}}</h4>
+          <h3>Valor vendido no mês</h3>
+          <h4>{{ Vendas_do_mes }}</h4>
         </div>
         <div class="card_datas">
           <h3>Quantidade de Vendas</h3>
-          <h4>{{quantidade_vendas}}</h4>
+          <h4>{{ quantidade_vendas }}</h4>
+        </div>
+        <div class="card_datas">
+          <h3>Valor a Receber</h3>
+          <h4>{{ a_receber }}</h4>
+        </div>
+        <div class="card_datas">
+          <h3>Valor a Receber</h3>
+          <h4>{{ caixa }}</h4>
+        </div>
       </div>
-      <div class="card_datas">
-        <h3>Valor a Receber</h3>
-        <h4>{{a_receber}}</h4>
-        
-    </div>
-    <div class="card_datas">
-      <h3>Valor a Recebido</h3>
-      <h4>{{caixa}}</h4>
-  </div>
-  <div class="card_datas">
-    <h3>Tipos de Pagamento</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Tipo</th>
-          <th>Quantidade</th>
-          <th>Valor</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>A Prazo</td>
-          <td>{{quantidade_prazo}}</td>
-          <td>{{valor_prazo}}</td>
-        </tr>
-        <tr>
-          <td>Débito</td>
-          <td>{{quantidade_debito}}</td>
-          <td>{{valor_debito}}</td>
-        </tr>
-        <tr>
-          <td>Crédito</td>
-          <td>{{qunatidade_credito}}</td>
-          <td>{{valor_credito}}</td>
-        </tr>
-        <tr>
-          <td>Pix</td>
-          <td>{{quantidade_pix}}</td>
-          <td>{{valor_pix}}</td>
-        </tr>
-        <tr>
-          <td>Dinheiro</td>
-          <td>{{quantidade_dinheiro}}</td>
-          <td>{{valor_dinheiro}}</td>
-        </tr>
-      </tbody>
-    </table>
-</div>
+      
+      <div class="payment-types">
+        <h3>Tipos de Pagamento</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Quantidade</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>A Prazo</td>
+              <td>{{ quantidade_prazo }}</td>
+              <td>{{ valor_prazo }}</td>
+            </tr>
+            <tr>
+              <td>Débito</td>
+              <td>{{ quantidade_debito }}</td>
+              <td>{{ valor_debito }}</td>
+            </tr>
+            <tr>
+              <td>Crédito</td>
+              <td>{{ quantidade_credito }}</td>
+              <td>{{ valor_credito }}</td>
+            </tr>
+            <tr>
+              <td>Pix</td>
+              <td>{{ quantidade_pix }}</td>
+              <td>{{ valor_pix }}</td>
+            </tr>
+            <tr>
+              <td>Dinheiro</td>
+              <td>{{ quantidade_dinheiro }}</td>
+              <td>{{ valor_dinheiro }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
     <footer>footer</footer>
   </main>
+
+  <style>
+    .content {
+      width: 85vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Alinhamento central */
+    }
+
+    .sub_menu {
+      margin-bottom: 20px;
+    }
+
+    .sub_menu button {
+      margin-right: 10px;
+    }
+
+    .sales-summary {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center; /* Centraliza as cartas */
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card_datas {
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+      text-align: center; /* Centraliza o texto */
+      width: 200px; /* Tamanho fixo para as cartas */
+    }
+
+    .payment-types {
+      width: 100%;
+      max-width: 900px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #007bff;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    footer {
+      background-color: #333;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+      margin-top: 20px;
+      width: 100%;
+    }
+  </style>
 </body>
 </html>

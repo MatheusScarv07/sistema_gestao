@@ -1,44 +1,235 @@
-{% include "client/partials/head.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes</title>
+    <style>
+        /* Estilos gerais */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column; /* Altera a direção do layout para coluna */
+            min-height: 100vh; /* Garante que o corpo ocupa pelo menos a altura da tela */
+        }
+
+        /* Estilo da sidebar */
+        .sidebar {
+            width: 200px;
+            background-color: #1a1a2e;
+            color: #ffffff;
+            padding-top: 20px;
+            height: 100vh;
+            position: fixed;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 15px;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #333;
+        }
+
+        /* Estilo do conteúdo principal */
+        main {
+            margin-left: 220px;
+            padding: 20px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .content {
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        /* Botão de Cadastro */
+        .content a button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .content a button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Formulário de Filtro */
+        .filter {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .filter h5 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .filter form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .filter input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 200px;
+        }
+
+        .filter button {
+            padding: 8px 12px;
+            border: none;
+            background-color: #28a745;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .filter button:hover {
+            background-color: #218838;
+        }
+
+        /* Tabela de Clientes */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tbody tr:hover {
+            background-color: #ddd;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Rodapé */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 5px 0; /* Reduzido de 10px para 5px */
+            text-align: center;
+            margin-top: auto; /* Adiciona esta linha para empurrar o footer para o fundo */
+            width: 100%;
+        }
+    </style>
+</head>
 <body>
 
-
-  {% include "global/partials/header.html" %}
+    <div class="sidebar">
+        <a href="#">Início</a>
+        <a href="#">Estoque</a>
+        <a href="#">Vendas</a>
+        <a href="#">Orçamento</a>
+        <a href="#">Clientes</a>
+        <a href="#">Entrada</a>
+        <a href="#">Funcionário</a>
+        <a href="#">Pagar</a>
+        <a href="#">Receber</a>
+        <a href="#">Fornecedor</a>
+    </div>
 
     <main>
-      <div class="content">
-        <a href="/client/register"><button>Cadastrar +</button></a>
-        <div class="filter">
-          <form action="" method="post">
-            <h5>Filtro</h5>
-            <input type="text" placeholder="name client" name="name">
-            <input type="text" placeholder="cpf client" name="name">
-            <button>Search</button>
-          </form>
-        </div>
-          <div>
+        <div class="content">
+            <a href="/client/register"><button>Cadastrar +</button></a>
+
+            <div class="filter">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <h5>Filtro</h5>
+                    <input type="text" placeholder="Nome do Cliente" name="name">
+                    <input type="text" placeholder="CPF do Cliente" name="cpf">
+                    <button>Pesquisar</button>
+                </form>
+            </div>
+
             <h2>Clientes</h2>
             <table>
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>CPF ou CPNJ</th>
-                  <th>Contato</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for cliente in clientes%}
-                <tr>
-                  <td><a href="/client/{{cliente.id}}"><strong>{{cliente.nome}}</strong></a></td>
-                  <td>{{cliente.cpf_cnpj}}</td>
-                  <td>{{cliente.telefone}}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>CPF ou CNPJ</th>
+                        <th>Contato</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cliente in clientes %}
+                    <tr>
+                        <td><a href="/client/{{cliente.id}}"><strong>{{cliente.nome}}</strong></a></td>
+                        <td>{{cliente.cpf_cnpj}}</td>
+                        <td>{{cliente.telefone}}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">Nenhum cliente encontrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
             </table>
-          </div>
-      </div>
-       <footer>footer aqui</footer>
+        </div>
     </main>
-    
+
+    <footer>
+        footer aqui
+    </footer>
+
 </body>
 </html>

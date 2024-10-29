@@ -4,13 +4,13 @@
     {% include "global/partials/header.html" %}
     <main>
         <div class="content">
-            <a href="/supplier"><button>Voltar</button></a>
+            <a href="/supplier"><button type="button" class="back-button">Voltar</button></a>
 
             <h1>NEW fornecedor</h1>
 
             <form method="POST" action="/supplier/register_new">
                 {% csrf_token %}
-                <input type="text" placeholder="CNPJ" name="cpf_cnpj" id='cnpj' >
+                <input type="text" placeholder="CNPJ" name="cpf_cnpj" id='cnpj'>
                 <input type="text" placeholder="Razão Social" name="name" id="razao_social">
                 <input type="text" placeholder="Nome Fantasia" name="nome_fantasia" id="nome_fantasia">
                 <input type="email" placeholder="Email" name="email" id='email'>
@@ -27,8 +27,8 @@
             </form>
         </div>
         <div class="footer">
-        <footer>footer aqui</footer>
-    </div>
+            <footer>footer aqui</footer>
+        </div>
     </main>
 
     <style>
@@ -61,7 +61,7 @@
             border: 1px solid #ddd;
         }
 
-        form button {
+        .back-button, form button {
             padding: 0.7em 1.5em;
             background-color: #007bff;
             color: white;
@@ -71,7 +71,7 @@
             cursor: pointer;
         }
 
-        form button:hover {
+        .back-button:hover, form button:hover {
             background-color: #0056b3;
         }
 
@@ -80,11 +80,10 @@
             margin-bottom: 0.5em;
         }
 
-        .footer{
+        .footer {
             margin-top: 0px;
             height: 1px;
             padding-top: 0px;
-
         }
     </style>
     <script src="{% static 'supplier/js/supplier.js' %}"></script>

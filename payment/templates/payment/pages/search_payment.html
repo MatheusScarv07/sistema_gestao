@@ -2,61 +2,123 @@
 <body>
     {% include "global/partials/header.html" %}
 
-
-
     <main>
-        <div>
+        <div class="sub_menu">
             <a href="{% url 'home_payment' %}"><button>Painel</button></a>
             <a href="{% url 'new_payment' %}"><button>Cadastrar Pagamento</button></a>
         </div>
-    
 
-    
-
-   
-
-        <title>Lista de Pagamentos</title>
-
-<body>
-    
-
-    <div>
         <h1>Consultar Boletos</h1>
-        <form method="GET">
+        <form method="GET" class="search-form">
             <label for="fornecedor">Fornecedor:</label>
-            <input type="text" id="fornecedor" name="fornecedor" value="{{ request.GET.fornecedor }}">
-    
+            <input type="text" id="fornecedor" name="fornecedor" value="{{ request.GET.fornecedor }}" required>
+
             <label for="numero_nota">Número da Nota:</label>
-            <input type="text" id="numero_nota" name="numero_nota" value="{{ request.GET.numero_nota }}">
-    
+            <input type="text" id="numero_nota" name="numero_nota" value="{{ request.GET.numero_nota }}" required>
+
             <label for="data_emissao">Data de Emissão:</label>
-            <input type="date" id="data_emissao" name="data_emissao" value="{{ request.GET.data_emissao }}">
-    
+            <input type="date" id="data_emissao" name="data_emissao" value="{{ request.GET.data_emissao }}" required>
+
             <button type="submit">Buscar</button>
         </form>
-    </div>
-      
-        <tbody>
-            {% for pagamento in pagamentos %}
-            <tr>
-                <td>{{ pagamento.fornecedor.nome }}</td> <!-- Substitua 'nome' pelo campo correto no modelo Supplier -->
-                <td>{{ pagamento.data_emissao }}</td>
-                <td>{{ pagamento.numero_nota }}</td>
-                <td>{{ pagamento.valor_boleto }}</td>
-                <td>{{ pagamento.data_vencimento }}</td>
-                <td>{{ pagamento.data_entrada }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="6">Nenhum pagamento encontrado.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
 
-</body>
-</html>
+        <div class="table-container">
+            <h2>Pagamentos Registrados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fornecedor</th>
+                        <th>Data de Emissão</th>
+                        <th>Número da Nota</th>
+                        <th>Valor do Boleto</th>
+                        <th>Data de Vencimento</th>
+                        <th>Data de Entrada</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pagamento in pagamentos %}
+                    <tr>
+                        <td>{{ pagamento.fornecedor.nome }}</td> <!-- Verifique se 'nome' é o campo correto -->
+                        <td>{{ pagamento.data_emissao }}</td>
+                        <td>{{ pagamento.numero_nota }}</td>
+                        <td>{{ pagamento.valor_boleto }}</td>
+                        <td>{{ pagamento.data_vencimento }}</td>
+                        <td>{{ pagamento.data_entrada }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6">Nenhum pagamento encontrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </main>
+
     <footer>footer aqui</footer>
+
+    <style>
+        .sub_menu {
+            display: flex;
+            gap: 5px; /* Espaçamento entre os botões */
+            margin-bottom: 20px; /* Espaço abaixo do menu */
+        }
+
+        .search-form {
+            display: flex;
+            flex-direction: column; /* Coloca os inputs verticalmente */
+            gap: 10px; /* Espaço entre os inputs */
+            margin-bottom: 30px; /* Espaço abaixo do formulário */
+            width: 70%; /* Limita a largura do formulário */
+        }
+
+        input {
+            padding: 0.5em;
+            border: 1px solid #ccc;
+            border-radius: 5px; /* Bordas arredondadas */
+            width: 100%; /* Faz os inputs ocuparem a largura total */
+        }
+
+        button {
+            padding: 0.7em 1.5em;
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .table-container {
+            width: 100%; /* Faz a tabela ocupar a largura total */
+            overflow-x: auto; /* Adiciona rolagem horizontal se necessário */
+        }
+
+        table {
+            width: 100%; /* Faz a tabela ocupar a largura total */
+            border-collapse: collapse; /* Remove espaçamento entre células */
+            margin-top: 20px; /* Espaço acima da tabela */
+        }
+
+        th, td {
+            border: 1px solid #ccc; /* Bordas nas células */
+            padding: 0.5em;
+            text-align: left; /* Alinha o texto à esquerda */
+        }
+
+        th {
+            background-color: #f2f2f2; /* Cor de fundo dos cabeçalhos */
+        }
+
+        footer {
+            margin-top: 2em; /* Espaço acima do footer */
+            text-align: center; /* Centraliza o footer */
+            padding: 1em 0; /* Espaço em volta do footer */
+        }
+    </style>
 </body>
 </html>

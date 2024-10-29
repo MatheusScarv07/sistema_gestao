@@ -1,44 +1,110 @@
 {% include "supplier/partials/head.html" %}
 <body>
-
-
-  {% include "global/partials/header.html" %}
+    {% include "global/partials/header.html" %}
 
     <main>
-      <div class="content">
-        <a href="/supplier/register"><button>Cadastrar +</button></a>
-        <div class="filter">
-          <form action="" method="post">
-            <h5>Filtro</h5>
-            <input type="text" placeholder="name client" name="name">
-            <input type="text" placeholder="cpf client" name="name">
-            <button>Search</button>
-          </form>
+        <div class="content">
+            <a href="/supplier/register"><button>Cadastrar +</button></a>
+            <div class="filter">
+                <form action="" method="post" class="filter-form">
+                    <h5>Filtro</h5>
+                    <input type="text" placeholder="Nome do Fornecedor" name="nome" required>
+                    <input type="text" placeholder="CPF/CNPJ do Fornecedor" name="cpf_cnpj" required>
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
+            <div>
+                <h2>Fornecedores</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>CPF/CNPJ</th>
+                            <th>Contato</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fornecedor in fornecedores %}
+                        <tr>
+                            <td><a href="supplier/details_supplier/{{ fornecedor.id }}"><strong>{{ fornecedor.nome }}</strong></a></td>
+                            <td>{{ fornecedor.cnpj }}</td>
+                            <td>{{ fornecedor.contato }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3">Nenhum fornecedor encontrado.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-          <div>
-            <h2>Fornecedores</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>CPF ou CPNJ</th>
-                  <th>Contato</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for fornecedor in fornecedores%}
-                <tr>
-                  <td><a href="supplier/details_supplier/{{fornecedor.id}}"><strong>{{fornecedor.nome}}</strong></a></td>
-                  <td>{{fornecedor.cnpj}}</td>
-                  <td>{{fornecedor.contato}}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-      </div>
-       <footer>footer aqui</footer>
+        <footer>footer aqui</footer>
     </main>
-    
+
+    <style>
+        .content {
+            width: 85vw; /* Define a largura do conteúdo */
+            padding: 20px; /* Espaço interno */
+            display: flex; /* Flexbox para disposição */
+            flex-direction: column; /* Coluna */
+            align-items: flex-start; /* Alinha à esquerda */
+            gap: 20px; /* Espaço entre os elementos */
+        }
+
+        .filter {
+            margin-bottom: 20px; /* Espaço abaixo do filtro */
+        }
+
+        .filter-form {
+            display: flex; /* Flexbox para o formulário */
+            flex-direction: column; /* Coloca os inputs verticalmente */
+            gap: 10px; /* Espaçamento entre os inputs */
+            width: 100%; /* Limita a largura do formulário */
+        }
+
+        input {
+            padding: 0.5em; /* Espaço interno nos inputs */
+            border: 1px solid #ccc; /* Bordas */
+            border-radius: 5px; /* Bordas arredondadas */
+            width: 100%; /* Faz os inputs ocuparem a largura total */
+        }
+
+        button {
+            padding: 0.7em 1.5em; /* Espaçamento interno do botão */
+            background-color: #007bff; /* Cor de fundo do botão */
+            color: white; /* Cor do texto do botão */
+            font-weight: bold; /* Texto em negrito */
+            border: none; /* Remove bordas do botão */
+            border-radius: 5px; /* Bordas arredondadas */
+            cursor: pointer; /* Muda o cursor ao passar o mouse */
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Cor de fundo ao passar o mouse */
+        }
+
+        table {
+            width: 100%; /* Faz a tabela ocupar a largura total */
+            border-collapse: collapse; /* Remove espaçamento entre células */
+            margin-top: 20px; /* Espaço acima da tabela */
+        }
+
+        th, td {
+            border: 1px solid #ccc; /* Bordas nas células */
+            padding: 0.5em; /* Espaçamento interno nas células */
+            text-align: left; /* Alinha o texto à esquerda */
+        }
+
+        th {
+            background-color: #f2f2f2; /* Cor de fundo dos cabeçalhos */
+        }
+
+        footer {
+            margin-top: 2em; /* Espaço acima do footer */
+            text-align: center; /* Centraliza o footer */
+            padding: 1em 0; /* Espaço em volta do footer */
+        }
+    </style>
 </body>
 </html>
