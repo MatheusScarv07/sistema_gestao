@@ -6,34 +6,110 @@
       <a href="/receive/home"><button>Painel</button></a>
       <a href="/receive/searchreceive"><button>Consultar Vendas</button></a>
     </div>
+
     <h1>Buscar Devedores</h1>
 
-    <form action="/receive/filtrar_vendas/" method='post'>
-      <input type="date" name="date_inicial" id="">
-      <input type="date" name="date_final" id="">
-      <select name="cliente" id="">
-        <option value="">cliente</option>
-        {% for cliente in clientes  %}
-        <option value="{{cliente.id}}">{{cliente.nome}}</option>
-        {% endfor %}
-      </select>
-      <input type="text" placeholder="cpf" name="cpf">
-      <input type="text" placeholder="number sale" name="number_sale">
-      
-
-      <button type="submit">Filtrar</button>
+    <!-- Formulário de filtro -->
+    <form class="form-filtro" action="/receive/filtrar_vendas/" method='post'>
+      <div class="input-group">
+        <input type="date" name="date_inicial" placeholder="Data inicial">
+        <input type="date" name="date_final" placeholder="Data final">
+        <select name="cliente">
+          <option value="">Cliente</option>
+          {% for cliente in clientes %}
+            <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
+          {% endfor %}
+        </select>
+        <input type="text" name="cpf" placeholder="CPF">
+        <input type="text" name="number_sale" placeholder="Número da Venda">
+      </div>
+      <button class="botao-filtrar" type="submit">Filtrar</button>
     </form>
-    <div>
+
+    <!-- Resultados da busca -->
+    <div class="resultado-consulta">
       {% for receive in receives %}
-      <a href="/sale/info/{{receive.num_sale.num_sale}}"><p>{{receive.num_sale.num_sale}}</p></a>
-      <p>{{receive.data_venda}}</p>
-      <p>{{receive.cliente}}</p>
-      <p>{{receive.valor}}</p>
+        <div class="devedor-item">
+          <a href="/sale/info/{{ receive.num_sale.num_sale }}">
+            <p class="num-venda">{{ receive.num_sale.num_sale }}</p>
+          </a>
+          <p class="data-venda">{{ receive.data_venda }}</p>
+          <p class="cliente">{{ receive.cliente }}</p>
+          <p class="valor">{{ receive.valor }}</p>
+        </div>
       {% endfor %}
     </div>
   </main>
-
   <footer></footer>
-  
 </body>
 </html>
+
+<style>
+  /* Estilização do conteúdo */
+  .sub_menu {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin-bottom: 1.5em;
+  }
+
+  .form-filtro {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
+    margin-bottom: 1.5em;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .input-group input,
+  .input-group select {
+    padding: 0.5em;
+    font-size: 1em;
+    width: 12em;
+  }
+
+  .botao-filtrar {
+    padding: 0.5em 1em;
+    font-weight: bold;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .resultado-consulta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 85vw;
+    margin: 0 auto;
+  }
+
+  .devedor-item {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1em;
+    padding: 1em;
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .devedor-item p {
+    margin: 0;
+    font-size: 1em;
+    text-align: center;
+  }
+
+  .num-venda {
+    font-weight: bold;
+    color: #007bff;
+  }
+</style>

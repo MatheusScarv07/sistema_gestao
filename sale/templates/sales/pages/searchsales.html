@@ -5,42 +5,115 @@
     <div class="sub_menu">
       <a href="/sales"><button>Painel</button></a>
       <a href="/sale/new-sale"><button>Nova Venda</button></a>
-      
     </div>
-    <h1>Search Sale</h1>
 
-    <form action="/sale/filtrar_vendas/" method='post'>
-      <input type="date" name="date_inicial" id="">
-      <input type="date" name="date_final" id="">
-      <select name="cliente" id="">
-        <option value="">cliente</option>
-        {% for cliente in clientes  %}
-        <option value="{{cliente.id}}">{{cliente.nome}}</option>
-        {% endfor %}
-      </select>
-      <select name="vendedor" id="">
-        <option value="">Vendedor</option>
-        {% for vendedor in vendedores  %}
-        <option value="{{vendedor.id}}">{{vendedor.nome}}</option>
-        {% endfor %}
-      </select>
-      <input type="text" placeholder="cpf" name="cpf">
-      <input type="text" placeholder="number sale" name="number_sale">
-      
+    <h1>Consultar Vendas</h1>
 
-      <button type="submit">Filtrar</button>
+    <!-- Formulário de filtro -->
+    <form class="form-filtro" action="/sale/filtrar_vendas/" method='post'>
+      <div class="input-group">
+        <input type="date" name="date_inicial" placeholder="Data inicial">
+        <input type="date" name="date_final" placeholder="Data final">
+        <select name="cliente" id="">
+          <option value="">Cliente</option>
+          {% for cliente in clientes %}
+            <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
+          {% endfor %}
+        </select>
+        <select name="vendedor" id="">
+          <option value="">Vendedor</option>
+          {% for vendedor in vendedores %}
+            <option value="{{ vendedor.id }}">{{ vendedor.nome }}</option>
+          {% endfor %}
+        </select>
+        <input type="text" name="cpf" placeholder="CPF">
+        <input type="text" name="number_sale" placeholder="Número da Venda">
+      </div>
+      <button class="botao-filtrar" type="submit">Filtrar</button>
     </form>
-    <div>
-      {% for venda in vendas  %}
-      <a href="/sale/info/{{venda.num_sale}}"><p>{{venda.num_sale}}</p></a>
-      <p>{{venda.data_venda}}</p>
-      <p>{{venda.cliente}}</p>
-      <p>{{venda.valor}}</p>
+
+    <!-- Resultados da consulta -->
+    <div class="resultado-consulta">
+      {% for venda in vendas %}
+        <div class="venda-item">
+          <a href="/sale/info/{{ venda.num_sale }}"><p class="num-venda">{{ venda.num_sale }}</p></a>
+          <p class="data-venda">{{ venda.data_venda }}</p>
+          <p class="cliente">{{ venda.cliente }}</p>
+          <p class="valor">{{ venda.valor }}</p>
+        </div>
       {% endfor %}
     </div>
   </main>
-
   <footer></footer>
-  
 </body>
 </html>
+
+<style>
+  /* Estilização do conteúdo */
+  .sub_menu {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin-bottom: 1.5em;
+  }
+
+  .form-filtro {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
+    margin-bottom: 1.5em;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .input-group input,
+  .input-group select {
+    padding: 0.5em;
+    font-size: 1em;
+    width: 12em;
+  }
+
+  .botao-filtrar {
+    padding: 0.5em 1em;
+    font-weight: bold;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .resultado-consulta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 85vw;
+    margin: 0 auto;
+  }
+
+  .venda-item {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1em;
+    padding: 1em;
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .venda-item p {
+    margin: 0;
+    font-size: 1em;
+    text-align: center;
+  }
+
+  .num-venda {
+    font-weight: bold;
+    color: #007bff;
+  }
+</style>

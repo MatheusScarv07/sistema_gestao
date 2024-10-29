@@ -6,22 +6,46 @@
         <div class="content">
             <h1>Editar Produto</h1>
 
-            <form action="" method="post">
+            <form action="" method="post" class="edit-form">
                 {% csrf_token %}
-                <input type="text" value="{{ produto.nome }}" name="name-product">
-                <input type="text" value="{{ produto.categoria }}" name="category">
-                <input type="text" value="{{ produto.descricao }}" name="description">
-                <input type="text" value="{{ produto.valor_venda }}" name="sale-price">
-                <input type="text" value="{{ produto.valor_custo }}" name="cost-price">
-                <input type="text" value="{{ produto.estoque }}" name="quantity-in-stock">
-                <input type="text" value="{{ produto.quantidade_minima_estoque }}" name="minimum-stock">
-                <input type="text" value="{{ produto.unidade_medida }}" name="unit-of-measure">
-                <input type="text" value="{{ produto.localizacao_estoque }}" name="location-in-stock">
-                <input type="text" value="{{ produto.status_produto }}" name="status-product">
-                <input type="text" value="{{ produto.garantia }}" name="guarantee">
-                <input type="text" value="{{ produto.observacao_adicional }}" name="additional-observations">
+                
+                <label for="name-product">Nome do Produto</label>
+                <input type="text" value="{{ produto.nome }}" name="name-product" id="name-product">
+                
+                <label for="category">Categoria</label>
+                <input type="text" value="{{ produto.categoria }}" name="category" id="category">
+                
+                <label for="description">Descrição</label>
+                <input type="text" value="{{ produto.descricao }}" name="description" id="description">
+                
+                <label for="sale-price">Preço de Venda</label>
+                <input type="text" value="{{ produto.valor_venda }}" name="sale-price" id="sale-price">
+                
+                <label for="cost-price">Preço de Custo</label>
+                <input type="text" value="{{ produto.valor_custo }}" name="cost-price" id="cost-price">
+                
+                <label for="quantity-in-stock">Quantidade em Estoque</label>
+                <input type="text" value="{{ produto.estoque }}" name="quantity-in-stock" id="quantity-in-stock">
+                
+                <label for="minimum-stock">Quantidade Mínima em Estoque</label>
+                <input type="text" value="{{ produto.quantidade_minima_estoque }}" name="minimum-stock" id="minimum-stock">
+                
+                <label for="unit-of-measure">Unidade de Medida</label>
+                <input type="text" value="{{ produto.unidade_medida }}" name="unit-of-measure" id="unit-of-measure">
+                
+                <label for="location-in-stock">Localização no Estoque</label>
+                <input type="text" value="{{ produto.localizacao_estoque }}" name="location-in-stock" id="location-in-stock">
+                
+                <label for="status-product">Status do Produto</label>
+                <input type="text" value="{{ produto.status_produto }}" name="status-product" id="status-product">
+                
+                <label for="guarantee">Garantia</label>
+                <input type="text" value="{{ produto.garantia }}" name="guarantee" id="guarantee">
+                
+                <label for="additional-observations">Observações Adicionais</label>
+                <input type="text" value="{{ produto.observacao_adicional }}" name="additional-observations" id="additional-observations">
 
-                <button type="submit">Salvar Alterações</button>
+                <button type="submit" class="save-button">Salvar Alterações</button>
             </form>
         </div>
     </main>
@@ -29,3 +53,53 @@
     <footer></footer>
 </body>
 </html>
+
+<style>
+  /* Estilo para o formulário de edição */
+  .content {
+      width: 50%;
+      margin: 0 auto;
+      padding: 2em;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .content h1 {
+      text-align: center;
+      margin-bottom: 1.5em;
+      color: #333;
+  }
+
+  .edit-form label {
+      display: block;
+      margin-top: 1em;
+      font-weight: bold;
+      color: #555;
+  }
+
+  .edit-form input[type="text"] {
+      width: 100%;
+      padding: 0.6em;
+      margin-top: 0.5em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+  }
+
+  .save-button {
+      width: 100%;
+      padding: 0.8em;
+      margin-top: 1.5em;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1em;
+      cursor: pointer;
+      text-transform: uppercase;
+  }
+
+  .save-button:hover {
+      background-color: #218838;
+  }
+</style>

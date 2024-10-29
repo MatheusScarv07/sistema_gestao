@@ -1,16 +1,18 @@
 {% include "stock/partials/head.html" %}
 <body>
     {% include "global/partials/header.html" %}
-    
+
     <main>
         <h1>Consultar Estoque</h1>
 
-        <div>
+        <!-- Botões de navegação -->
+        <div class="stock-menu">
             <a href="{% url 'home' %}"><button type="button">Painel</button></a>
             <a href="{% url 'new_product' %}"><button type="button">Novo Produto</button></a>
         </div>
 
-        <table>
+        <!-- Tabela de Produtos -->
+        <table class="estoque-tabela">
             <thead>
                 <tr>
                     <th>Código</th>
@@ -28,10 +30,11 @@
                     <td>{{ produto.nome }}</td>
                     <td>{{ produto.descricao }}</td>
                     <td>{{ produto.estoque }}</td>
-                    <td>R${{ produto.valor_venda|floatformat:2 }}</td>
+                    <td>R$ {{ produto.valor_venda|floatformat:2 }}</td>
                     <td>
-                        <a href="{% url 'editar_produto' produto.id %}"><button type="button">Editar</button></a>
-                        
+                        <a href="{% url 'editar_produto' produto.id %}">
+                            <button type="button" class="btn-editar">Editar</button>
+                        </a>
                     </td>
                 </tr>
                 {% empty %}
@@ -46,3 +49,51 @@
     <footer></footer>
 </body>
 </html>
+
+<style>
+  /* Estilo dos botões de navegação */
+  .stock-menu {
+    display: flex;
+    gap: 1em;
+    margin-bottom: 1.5em;
+    justify-content: center;
+  }
+
+  /* Estilo da Tabela */
+  .estoque-tabela {
+    width: 90%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    font-size: 1em;
+  }
+
+  .estoque-tabela th,
+  .estoque-tabela td {
+    padding: 0.8em;
+    text-align: center;
+    border: 1px solid #ddd;
+  }
+
+  .estoque-tabela th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+
+  /* Estilo para células e botões */
+  .btn-editar {
+    padding: 0.5em 1em;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .estoque-tabela tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  .estoque-tabela tbody tr:hover {
+    background-color: #eaeaea;
+  }
+</style>

@@ -10,36 +10,92 @@
 
       <h1>Registrar Nova Nota</h1>
 
-      <form action="{% url 'new_payment' %}" method="POST">
+      <form action="{% url 'new_payment' %}" method="POST" class="payment-form">
         {% csrf_token %}
-        
-        <label for="num_nota">Número da Nota:</label>
-        <input type="number" id="num_nota" name="num_nota" required>
 
-        <select name="fornecedor" id="">
-          <option value="">Fornecedor</option>
-          {% for fornecedor in fornecedores %}
-          <option value="{{fornecedor.cnpj}}">{{fornecedor.nome}}</option>
-          {% endfor %}
-        </select>
+        <div class="form-input">
+          <label for="num_nota">Número da Nota:</label>
+          <input type="number" id="num_nota" name="num_nota" required>
 
-        
+          <label for="fornecedor">Fornecedor:</label>
+          <select name="fornecedor" id="fornecedor" required>
+            <option value="" disabled selected>Selecione o Fornecedor</option>
+            {% for fornecedor in fornecedores %}
+            <option value="{{fornecedor.cnpj}}">{{fornecedor.nome}}</option>
+            {% endfor %}
+          </select>
 
-        <label for="vencimento">Data de Vencimento:</label>
-        <input type="date" id="vencimento" name="vencimento" required>
-        <br>
+          <label for="vencimento">Data de Vencimento:</label>
+          <input type="date" id="vencimento" name="vencimento" required>
 
-        <label for="data_venda">Data da Venda:</label>
-        <input type="date" id="data_venda" name="data_venda" required>
-        <br>
+          <label for="data_venda">Data da Venda:</label>
+          <input type="date" id="data_venda" name="data_venda" required>
 
-        <label for="valor">Valor:</label>
-        <input type="number" step="0.01" id="valor" name="valor" required>
-        <br>
+          <label for="valor">Valor:</label>
+          <input type="number" step="0.01" id="valor" name="valor" required>
+        </div>
 
         <button type="submit">Registrar Pagamento</button>
       </form>
     </div>
-    <footer>footer</footer>
+    <footer class="footer">footer</footer>
   </main>
+
+  <style>
+    .content {
+      width: 85vw;
+      padding: 2em 0; /* Adiciona espaço vertical */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3em;
+    }
+
+    .sub_menu {
+      display: flex;
+      gap: 5px; /* Espaçamento entre os botões */
+    }
+
+    .payment-form {
+      width: 70%; /* Limita a largura do formulário */
+      display: flex;
+      flex-direction: column;
+      gap: 1em; /* Espaço entre os elementos do formulário */
+    }
+
+    .form-input {
+      display: flex;
+      flex-direction: column; /* Alinha as labels e inputs verticalmente */
+      gap: 0.5em; /* Espaço entre os inputs */
+    }
+
+    input, select {
+      padding: 0.5em;
+      border: 1px solid #ccc;
+      border-radius: 5px; /* Bordas arredondadas */
+      width: 100%; /* Faz os inputs ocuparem a largura total */
+    }
+
+    button {
+      padding: 0.7em 1.5em;
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 1em; /* Espaço acima do botão */
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    footer {
+      margin-top: 2em; /* Espaço acima do footer */
+      text-align: center; /* Centraliza o footer */
+      padding: 1em 0; /* Espaço em volta do footer */
+    }
+  </style>
 </body>
+</html>

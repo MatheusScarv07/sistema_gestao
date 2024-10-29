@@ -3,46 +3,112 @@
     {% include "global/partials/header.html" %}
 
     <main>
+        <div class="content">
+            <div class="content-button">
+                <a href="{% url 'employee_home' %}"><button>Painel</button></a>
+                <a href="{% url 'new_employee' %}"><button>Novo Funcionário</button></a>
+            </div>
 
-        <div>
-            <a href="{% url 'employee_home' %}"><button>Painel</button></a>
-            <a href="{% url 'new_employee' %}"><button>Novo Funcionário</button></a>
-        </div>
-        <div>
-            <h1>Consultar Funcionários</h1>
-            <form method="GET">
-                <input type="text" placeholder="Nome do funcionário" name="name" value="{{ request.GET.name }}">
-                <input type="text" placeholder="Cargo do funcionário" name="cargo" value="{{ request.GET.cargo }}">
-                <button type="submit">Buscar</button>
-            </form>
+            <div class="search-section">
+                <h1>Consultar Funcionários</h1>
+                <form method="GET" class="search-form">
+                    <input type="text" placeholder="Nome do funcionário" name="name" value="{{ request.GET.name }}">
+                    <input type="text" placeholder="Cargo do funcionário" name="cargo" value="{{ request.GET.cargo }}">
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
+
+            <div class="employees-list">
+                <h2>Funcionários Cadastrados</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Cargo</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for employee in employees %}
+                        <tr>
+                            <td>{{ employee.nome }}</td>
+                            <td>{{ employee.cargo }}</td>
+                            <td>{{ employee.status|yesno:"Ativo,Inativo" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3">Nenhum funcionário encontrado.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div>
-            <h2>Funcionários Cadastrados</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Cargo</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for employee in employees %}
-                    <tr>
-                        <td>{{ employee.nome }}</td>
-                        <td>{{ employee.cargo }}</td>
-                        <td>{{ employee.status|yesno:"Ativo,Inativo" }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="3">Nenhum funcionário encontrado.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        <footer class="footer">footer aqui</footer>
     </main>
-    <footer>footer aqui</footer>
+
+    <style>
+        .content {
+            width: 85vw;
+            padding: 2em 0; /* Adiciona espaço vertical */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3em;
+        }
+
+        .content-button {
+            display: flex;
+            gap: 5px;
+        }
+
+        .search-section {
+            width: 70%; /* Limita a largura da seção de busca */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1em; /* Espaço entre os elementos */
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px; /* Espaço entre os inputs e o botão */
+            width: 100%; /* Ocupa toda a largura disponível */
+        }
+
+        .search-form input {
+            flex: 1; /* Permite que os inputs ocupem o espaço disponível */
+            padding: 0.5em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .employees-list {
+            width: 70%; /* Limita a largura da lista de funcionários */
+            text-align: center; /* Centraliza o texto na tabela */
+        }
+
+        table {
+            width: 100%; /* Ocupa toda a largura da seção */
+            border-collapse: collapse; /* Remove espaço entre as células */
+            margin-top: 1em; /* Espaço acima da tabela */
+        }
+
+        th, td {
+            padding: 1em; /* Espaço interno nas células */
+            border: 1px solid #ccc; /* Borda das células */
+        }
+
+        th {
+            background-color: #f2f2f2; /* Cor de fundo do cabeçalho */
+        }
+
+        .footer {
+            margin-top: 2em; /* Espaço acima do footer */
+            text-align: center; /* Centraliza o footer */
+            padding: 1em 0; /* Espaço em volta do footer */
+        }
+    </style>
 </body>
 </html>

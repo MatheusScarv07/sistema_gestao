@@ -6,48 +6,132 @@
   {% include "global/partials/header.html" %}
  
    <main>
-    <div class="sub_menu">
-      <div class="sub_menu">
-        <a href="/budget"><button>Painel</button></a>
-        <a href="/budget/new_budget/"><button>Novo Orcamento</button></a>
-      </div>
-    </div>
-    <h1>Search Budget</h1>
-    <div class="content">
-        <form action="/budget/filtrar_budget/" method='post'>
-            <input type="date" name="date_inicial" id="">
-            <input type="date" name="date_final" id="">
-            <select name="cliente" id="">
-              <option value="">cliente</option>
-              {% for cliente in clientes  %}
-              <option value="{{cliente.id}}">{{cliente.nome}}</option>
-              {% endfor %}
-            </select>
-            <select name="vendedor" id="">
-              <option value="">Vendedor</option>
-              {% for vendedor in vendedores  %}
-              <option value="{{vendedor.id}}">{{vendedor.nome}}</option>
-              {% endfor %}
-            </select>
-            <input type="text" placeholder="cpf" name="cpf">
-            <input type="text" placeholder="number sale" name="number_budget">
+    <main>
+      <div class="content">
+        <div class="sub_menu">
+          <a href="/budget"><button>Painel</button></a>
+          <a href="/budget/new_budget/"><button>Novo Orçamento</button></a>
+        </div>
+        
+        <h1>Buscar Orçamento</h1>
+        
+        <div class="search-budget-form">
+          <form action="/budget/filtrar_budget/" method='post'>
+            <input type="date" name="date_inicial" placeholder="Data Inicial">
+            <input type="date" name="date_final" placeholder="Data Final">
             
-      
+            <select name="cliente">
+              <option value="">Cliente</option>
+              {% for cliente in clientes %}
+                <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
+              {% endfor %}
+            </select>
+            
+            <select name="vendedor">
+              <option value="">Vendedor</option>
+              {% for vendedor in vendedores %}
+                <option value="{{ vendedor.id }}">{{ vendedor.nome }}</option>
+              {% endfor %}
+            </select>
+            
+            <input type="text" name="cpf" placeholder="CPF">
+            <input type="text" name="number_budget" placeholder="Número do Orçamento">
+            
             <button type="submit">Filtrar</button>
           </form>
-        <h3>Consultar Orcamento</h3>
-        {% for orcamento in  budget %}
-        
-        <p>{{orcamento.number_budget}}</p>
-         <p>{{orcamento.cliente}}</p>
-         <p>{{orcamento.data_orcamento}}</p>
-         <p>{{orcamento.total}}</p>
-        
-        {% endfor %}
         </div>
-    </div>
-    <footer>aqui está o footer</footer>
-   </main>
+        
+        <h3>Orçamentos Encontrados</h3>
+        
+        <div class="budget-list">
+          {% for orcamento in budget %}
+            <div class="budget-item">
+              <p><strong>Número do Orçamento:</strong> {{ orcamento.number_budget }}</p>
+              <p><strong>Cliente:</strong> {{ orcamento.cliente }}</p>
+              <p><strong>Data do Orçamento:</strong> {{ orcamento.data_orcamento }}</p>
+              <p><strong>Total:</strong> R$ {{ orcamento.total }}</p>
+            </div>
+          {% endfor %}
+        </div>
+        
+      
+      </div>
+      <footer>aqui está o footer</footer>
+    </main>
+
+    {% comment %} <tbody id="dados">
+      {% for item in cart %}
+        <tr>
+          <td>{{ item.name_product }}</td>
+          <td>{{ item.quantidade }}</td>
+          <td>{{ item.valor_uni }}</td>
+          <td data-valor="{{ item.valor_total }}">{{ item.valor_total }}</td>
+          <td>
+            <a class="edit-item" href="">
+              <img class="icons" src="{% static "budget/img/edit.png" %}" alt="">
+            </a>
+            <a class="delete_cart" href="/budget/excluir_produto/{{item.id}}">
+              <img class="icons" src="{% static "budget/img/remove.png" %}" alt="delete">
+            </a>
+            </td>
+        </tr>
+      {% endfor %}
+    </tbody> {% endcomment %}
+
+    <style>
+      .content {
+  width: 85vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-budget-form {
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 10px;
+  margin: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.search-budget-form input, .search-budget-form select, .search-budget-form button {
+  padding: 0.5em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
+
+.search-budget-form button {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.budget-list {
+  padding: 20px;
+  border-radius: 10px;
+  margin: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  border: 2px solid black;
+}
+
+.budget-item {
+  padding: 1em;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+.budget-item p {
+  margin: 0.5em 0;
+  font-weight: bold;
+}
+
+    </style>
 
    
  
