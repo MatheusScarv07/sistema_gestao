@@ -1,3 +1,4 @@
+{% load static %}
 {% include "receive/partials/head.html" %}
 <body>
   
@@ -5,15 +6,15 @@
   <main>
     <div class="content">
       <div class="sub_menu">
-        <a href="/receive"><button>Painel</button></a>
-        <a href="/receive/searchreceive"><button>Consultar caloteiros</button></a>
+        <a href="/receive"><button class="styled-button">Painel</button></a>
+        <a href="/receive/searchreceive"><button class="styled-button">Consultar Caloteiros</button></a>
       </div>
       <div>
         <div>
         </div>
         <form action="{% url "make_payment" %}" method="post">
           {% csrf_token %}
-          <h3>Dados da venda</h3>
+          <h3>Dados da Venda</h3>
           <input type="hidden" value="{{num_venda}}" name="num_venda">
           <p id="valor_venda">{{valor}}</p> <!-- Mostra o valor total da venda -->
           
@@ -21,7 +22,7 @@
           <div class="card_datas">
             <label for="type_payment_1">Forma de Pagamento 1:</label>
             <select name="type_payment_1" id="type_payment_1">
-              <option value="">Selecione o Tipo de pagamento</option>
+              <option value="">Selecione o Tipo de Pagamento</option>
               {% for tipo_pagamento in tipos_pagamento %}
                 <option value="{{tipo_pagamento.nome}}">{{tipo_pagamento.nome}}</option>
               {% endfor %}
@@ -33,14 +34,14 @@
           </div>
         
           <!-- Botão para adicionar uma segunda forma de pagamento -->
-          <button type="button" id="add_payment">Adicionar outra forma de pagamento</button>
+          <button type="button" class="styled-button" id="add_payment">Adicionar outra forma de pagamento</button>
         
           <!-- Campos para a segunda forma de pagamento, inicialmente ocultos -->
           <div id="second_payment" style="display: none;">
             <div class="card_datas">
               <label for="type_payment_2">Forma de Pagamento 2:</label>
               <select name="type_payment_2" id="type_payment_2">
-                <option value="">Selecione o Tipo de pagamento</option>
+                <option value="">Selecione o Tipo de Pagamento</option>
                 {% for tipo_pagamento in tipos_pagamento %}
                   <option value="{{tipo_pagamento.nome}}">{{tipo_pagamento.nome}}</option>
                 {% endfor %}
@@ -52,66 +53,67 @@
             </div>
           </div>
           
-          <button type="submit" id="submit_btn">Enviar</button>
+          <button type="submit" class="styled-button" id="submit_btn">Enviar</button>
         </form>
       </div>
     </div>
     <footer>footer</footer>
   </main>
 
-  <script>
-    document.getElementById('add_payment').addEventListener('click', function() {
-      // Exibe os campos da segunda forma de pagamento
-      document.getElementById('second_payment').style.display = 'block';
-    });
-    document.addEventListener('DOMContentLoaded', function () {
-      const valorVenda = parseFloat(document.getElementById('valor_venda').innerText);
-      const valor1Input = document.getElementById('valor_1');
-      const valor2Input = document.getElementById('valor_2');
-      const secondPaymentSection = document.getElementById('second_payment');
-      const addPaymentButton = document.getElementById('add_payment');
-      const submitButton = document.getElementById('submit_btn');
-      
-      // Evento para mostrar o segundo campo de pagamento
-      addPaymentButton.addEventListener('click', function () {
-        secondPaymentSection.style.display = 'block';
-        // Preenche automaticamente o valor restante no segundo campo de pagamento
-        const valor1 = parseFloat(valor1Input.value) || 0;
-        if (valor1 < valorVenda) {
-          valor2Input.value = (valorVenda - valor1).toFixed(2); // Preenche o campo 2 com o valor restante
-        }
-      });
-    
-      // Função de validação para garantir que a soma não ultrapasse o valor da venda
-      function validarValores() {
-        const valor1 = parseFloat(valor1Input.value) || 0;
-        const valor2 = parseFloat(valor2Input.value) || 0;
-        const somaValores = valor1 + valor2;
-    
-        // Se o valor 1 for maior ou igual ao valor de venda, não precisa de segundo pagamento
-        if (valor1 >= valorVenda) {
-          valor2Input.value = ''; // Limpa o valor 2
-          secondPaymentSection.style.display = 'none'; // Esconde a segunda forma de pagamento
-        } else if (somaValores > valorVenda) {
-          alert('A soma dos valores de pagamento não pode ser maior que o valor da venda!');
-          submitButton.disabled = true; // Desativa o botão de envio se a soma for maior
-        } else {
-          submitButton.disabled = false; // Ativa o botão de envio se a soma for válida
-        }
+  <style>
+      body {
+          margin: 0;
+          font-family: Arial, sans-serif;
       }
-    
-      // Eventos para validar os campos de pagamento à medida que o usuário digita
-      valor1Input.addEventListener('input', function () {
-        validarValores();
-        // Preenche o valor 2 com o valor restante automaticamente
-        const valor1 = parseFloat(valor1Input.value) || 0;
-        if (valor1 < valorVenda && secondPaymentSection.style.display === 'block') {
-          valor2Input.value = (valorVenda - valor1).toFixed(2);
-        }
-      });
-      
-      valor2Input.addEventListener('input', validarValores);
-    });
-  </script>
-</body>
-</html>
+
+      .content {
+          width: 85vw;
+          min-height: 85vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1em;
+          margin-top: 5em; /* Espaço para o header fixo */
+      }
+
+      .sub_menu {
+          display: flex;
+          gap: 5px;
+          margin-top: 10px;
+      }
+
+      .styled-button {
+          padding: 0.7em 1.5em;
+          background-color: #007bff;
+          color: white;
+          font-weight: bold;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+      }
+
+      .styled-button:hover {
+          background-color: #0056b3;
+      }
+
+      h3 {
+          font-size: 1.5em;
+          margin: 1em 0;
+      }
+
+      .card_datas {
+          margin-bottom: 1em;
+      }
+
+      footer {
+          width: 100%;
+          background-color: #f1f1f1;
+          padding: 1em;
+          text-align: center;
+          border-top: 1px solid #ddd;
+      }
+  </style>
+
+  <script>
+    document.getElementById('add

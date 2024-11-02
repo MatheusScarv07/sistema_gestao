@@ -2,11 +2,14 @@
 {% include "client/partials/head.html" %}
 <body>
 
-    {% include "global/partials/header.html" %}
+    <header>
+        {% include "global/partials/header.html" %}
+    </header>
 
     <main>
         <div class="content">
-            <a href="/client"><button>Voltar</button></a>
+            <a href="/client"><button class="back-button">Voltar</button></a>
+            
 
             <h1>NEW CLIENT</h1>
 
@@ -33,30 +36,57 @@
                 
                 <button>Save</button>
             </form>
-
         </div>
 
-        <div class="footer">
-        
-        <footer>Footer aqui</footer>
-    </div>
+        <footer class="footer">
+            Footer aqui
+        </footer>
     </main>
 
     <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #007bff;
+            padding: 1em;
+            color: white;
+            text-align: center;
+            z-index: 1000;
+        }
+
         .content {
             width: 85vw;
-            height: 95vh;
+            min-height: 85vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 1em;
+            margin-top: 5em; /* Espaço para o header fixo */
+        }
+
+        .back-button {
+            margin-top: 1em; /* Adiciona espaço acima do botão "Voltar" */
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 0.5em;
+            margin-top: 0.5em; /* Adiciona espaço acima do título "NEW CLIENT" */
+            text-align: center;
         }
 
         form {
             display: flex;
             flex-direction: column;
-            height: 70vh;
             width: 90%;
+            max-width: 600px;
             padding: 10px;
             border: 2px solid black;
             border-radius: 10px;
@@ -86,16 +116,12 @@
             background-color: #0056b3;
         }
 
-        h1 {
-            font-size: 2em;
-            margin-bottom: 0.5em;
-        }
-
-        .footer{
-            margin-top: 0px;
-            height: 1px;
-            padding-top: 0px;
-
+        .footer {
+            width: 100%;
+            background-color: #f1f1f1;
+            padding: 1em;
+            text-align: center;
+            border-top: 1px solid #ddd;
         }
     </style>
 
