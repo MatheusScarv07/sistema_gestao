@@ -1,100 +1,74 @@
+{% load static %}
 {% include "employee/partials/head.html" %}
 <body>
-    {% include "global/partials/header.html" %}
+    <header>
+        {% include "global/partials/header.html" %}
+    </header>
 
     <main>
         <div class="content">
             <div class="content-button">
-                <a href="{% url 'employee_home' %}"><button>Painel</button></a>
-                <a href="{% url 'new_employee' %}"><button>Novo Funcionário</button></a>
-    
-    
-                <a href="{% url 'search_employee' %}"><button>Consultar Funcionário</button></a>
-            <h1>Novo Funcionario</h1>  <!-- Verifique se isso está correto -->
+                <a href="{% url 'employee_home' %}"><button class="styled-button">Painel</button></a>
+                <a href="{% url 'new_employee' %}"><button class="styled-button">Novo Funcionário</button></a>
+                <a href="{% url 'search_employee' %}"><button class="styled-button">Consultar Funcionário</button></a>
+            </div>
 
-            
-        
+            <h1>Novo Funcionário</h1>
 
+            <div class="form">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-input">
+                        <input class="input-nome" type="text" placeholder="Nome do funcionário" name="name" required>
+                        <input type="text" placeholder="Cargo do funcionário" name="cargo" required>
+                        <label for="status">Ativo</label>
+                        <input type="checkbox" name="status">
+                    </div>
+                    <button type="submit" class="styled-button">Salvar</button>
+                </form>
+            </div>
         </div>
 
-        <div class="form">
-
-            <form method="POST">
-                {% csrf_token %}
-                <div class="form-input">
-            
-                <input class="input-nome" type="text" placeholder="Nome do funcionário" name="name" required>
-            
-                <input type="text" placeholder="Cargo do funcionário" name="cargo" required>
-                <label for="status">Ativo</label>
-                <input type="checkbox" name="status">
-                </div>
-            
-                <button type="submit">Salvar</button>
-            </form>
-            
-            
-        </div>
-    </div>
-
-    <div class="footer">
-        <footer>footer aqui</footer>
-
-    </div>
+        <footer class="footer">
+            Footer aqui
+        </footer>
     </main>
-    
-
 
     <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #007bff;
+            padding: 1em;
+            color: white;
+            text-align: center;
+            z-index: 1000;
+        }
+
         .content {
             width: 85vw;
-            height: 95vh;
+            min-height: 85vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5em;
+            gap: 1em;
+            margin-top: 5em; /* Espaço para o header fixo */
         }
-        .content-button{
+
+        .content-button {
             display: flex;
             margin-top: 10px;
             gap: 5px;
         }
 
-        .form {
-            display: flex;
-            flex-direction: column;
-            margin-right: 50px;
-            height: 40vh;
-            width: 70%;
-            padding: 70px;
-            border: 2px solid black;
-            border-radius: 10px;
-            gap: 1em;
-            align-items: center;
-            
-        }
-
-        .form-input {
-            display: flex;
-            width: 130%;
-            height: 3em;
-            padding: 0.5em;
-            gap: 20px;
-            
-        }
-        .input-nome {
-            width: 50%;
-            height: 100%;
-            padding: 0.5em;
-            
-
-        }
-
-
-
-        form button {
-            margin-top: 90px;
-            margin-left: 200px;
+        .styled-button {
             padding: 0.7em 1.5em;
             background-color: #007bff;
             color: white;
@@ -102,27 +76,53 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
 
-        form button:hover {
+        .styled-button:hover {
             background-color: #0056b3;
         }
 
-        h1 {
+        .form {
             display: flex;
-            margin-top: 50px;
-            margin-right: 300px;
-            font-size: 2em;
-            margin-bottom: 0.5em;
-            
+            flex-direction: column;
+            width: 90%;
+            max-width: 600px;
+            padding: 10px;
+            border: 2px solid black;
+            border-radius: 10px;
+            gap: 1em;
+            align-items: center;
         }
 
-        .footer{
-            margin-top: 0px;
-            height: 1px;
-            padding-top: 0px;
+        .form-input {
+            display: flex;
+            width: 100%;
+            gap: 20px;
+        }
 
+        .input-nome {
+            flex: 1;
+            padding: 0.5em;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin: 0.5em 0; /* Margens uniformes */
+            text-align: center;
+        }
+
+        .footer {
+            width: 100%;
+            background-color: #f1f1f1;
+            padding: 1em;
+            text-align: center;
+            border-top: 1px solid #ddd;
         }
     </style>
+
+    <script src="{% static 'employee/js/employee.js' %}"></script>
 </body>
 </html>
