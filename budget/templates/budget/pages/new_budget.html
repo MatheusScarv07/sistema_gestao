@@ -6,13 +6,7 @@
   {% include "global/partials/header.html" %}
   <main>
     <div class="content">
-      <div class="sub_menu">
-        <a href="/budget"><button>Painel</button></a>
-        <a href="/budget/search_budget/"><button>Consultar Orçamentos</button></a>
-      </div>
-      
       <h1>Novo Orçamento</h1>
-
       
       <form class="form_button" action="/budget/gerar-relatorio/" method="post">
         {% csrf_token %}
@@ -51,7 +45,49 @@
           </select>
         </fieldset>
         </div>
-        
+        <div class="modal fade" id="estoqueModal" tabindex="-1" role="dialog" aria-labelledby="estoqueModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="estoqueModalLabel">Consultar Estoque</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <!-- Campo de pesquisa -->
+                <input type="text" id="productFilter" placeholder="Filtrar produtos..." onkeyup="filterProducts()">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Nome do Produto</th>
+                      <th>Quantidade</th>
+                      <th>Preço Unitário</th>
+                      <th>Ação</th>
+                    </tr>
+                  </thead>
+                  <tbody id="estoque-tbody">
+                    {% for produto in produtos_estoque %}
+                      <tr>
+                        <td>{{ produto.id }}</td>
+                        <td class="product-name">{{ produto.nome }}</td>
+                        <td>{{ produto.estoque }}</td>
+                        <td>{{ produto.valor_venda }}</td>
+                        <td>
+                          <button type="button" class="btn btn-primary" onclick="selectProduct('{{ produto.id }}', '{{ produto.nome }}', '{{ produto.valor_venda }}')">Selecionar</button>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
         
         
         
@@ -61,7 +97,7 @@
           <div class="dado-produto">
             <input name="id_produto" type="text" id="product_id" placeholder="ID do produto" onchange="fetchProductData(this.value)">
             <input name="name" type="text" id="product_name" placeholder="Nome do produto" readonly>
-            <a class="link-estoque" href="#">Consultar estoque</a>
+            <a class="link-estoque" href="#" data-toggle="modal" data-target="#estoqueModal">Consultar estoque</a>
           </div>
 
           <div class="dado-produto">
@@ -72,6 +108,13 @@
           <button type="submit" class="add">
             <img class="icons" src="{% static "budget/img/add.png" %}" alt="delete">
           </button>
+          {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
           </div>
           
           
@@ -127,7 +170,10 @@
           {% csrf_token %}
             <button class="enviar"  type="submit">Efetuar Venda</button>
         </form>
-        <button class="enviar">Cancelar</button>
+        <form action="{% url "cancelar_carrinho" %}" method="post">
+          <button class="enviar" type='submit'>Cancelar</button>
+        </form>
+        
        </div>
       
     </div>
@@ -136,7 +182,22 @@
     </div>
   </main>
   <style>
-   
+    .messages {
+      list-style-type: none;
+      padding: 0;
+  }
+  
+  .messages li {
+      margin: 10px 0;
+  }
+  
+  .messages li.error {
+      color: red;
+  }
+  
+  .messages li.success {
+      color: green;
+  }
     .content {
       width: 85vw;
       height: auto;
@@ -280,14 +341,96 @@
         $('#cliente').select2();
         $('#vendedor').select2();
     });
+    
+function price_finally() {
+  // Pegando os valores de quantidade e preço unitário
+  const quantity = document.getElementById('quantity').value;
+  const unitPrice = document.getElementById('unit_price').value;
+  
+  // Convertendo os valores para números e calculando o total
+  const totalPrice = parseFloat(quantity) * parseFloat(unitPrice);
+  
+  // Exibindo o preço total, formatando para duas casas decimais
+  if (!isNaN(totalPrice)) {
+      document.getElementById('total_price').value = totalPrice.toFixed(2);
+  } else {
+      document.getElementById('total_price').value = '';
+  }
+}
+
+
+function fetchProductData(productId) {
+  // Faz uma requisição fetch para obter os dados do produto
+  fetch(`/sales/get_product/${productId}`)
+      .then(response => response.json()) // Converte a resposta para JSON
+      .then(data => {
+          console.log(data); // Exibe os dados no console
+          if (data.error) {
+              // Mostra um alerta se houver um erro nos dados recebidos
+              alert(data.error);
+          } else {
+              // Preenche os campos do formulário com os dados do produto
+              document.getElementById(`product_name`).value = data.name;
+              document.getElementById(`unit_price`).value = data.price;
+          }
+      })
+      .catch(error => console.error('Error:', error)); // Tratamento de erros
+}
+
+function formatarMoeda(valor) {
+  return `R$ ${valor.toFixed(2).replace(",", "X").replace(".", ",").replace("X", ".")}`;
+}
+
+// Seleciona todos os elementos <td> com o atributo data-valor
+const tdsValoresTotais = document.querySelectorAll('td[data-valor]');
+
+tdsValoresTotais.forEach(td => {
+  // Obtém o valor do data-valor e o converte em número
+  const valorTotal = parseFloat(td.getAttribute("data-valor"));
+  
+  // Formata o valor e substitui o conteúdo do <td>
+  td.textContent = formatarMoeda(valorTotal);
+});
+
+
+function selectProduct(id, name, unitPrice) {
+  // Preencher os campos do produto selecionado
+  document.getElementById('product_id').value = id; // Preencher ID do produto
+  document.getElementById('product_name').value = name; // Preencher nome do produto
+  preco = parseFloat(unitPrice)
+  document.getElementById('unit_price').value = preco; // Preencher preço unitário
+
+  // Opcional: Fechar o modal após selecionar o produto
+  // Fechar o modal sem jQuery
+  $('#exampleModal').modal('hide');
+}
+
+function filterProducts() {
+  const filter = document.getElementById('productFilter').value.toLowerCase();
+  const rows = document.querySelectorAll('#estoque-tbody tr');
+
+  rows.forEach(row => {
+      const productName = row.querySelector('.product-name').textContent.toLowerCase();
+      if (productName.includes(filter)) {
+          row.style.display = '';
+      } else {
+          row.style.display = 'none';
+      }
+  });
+}
+
   </script>
   
-  <script src="{% static 'budget/js/new_budget.js' %}"></script>
+  
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=add" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=edit" />
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=delete_forever" />
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  
+  <script src="{% static 'budget/js/new_budget.js' %}"></script>
+  
 </body>
 </html>
