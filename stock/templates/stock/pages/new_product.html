@@ -1,20 +1,18 @@
 {% include "stock/partials/head.html" %}
 <body>
 
-    {% include "global/partials/header.html" %}
+    <header>
+        {% include "global/partials/header.html" %}
+        <div class="sub_menu">
+            <a href="{% url 'home' %}"><button type="button">Painel</button></a>
+            <a href="{% url 'product' %}"><button>Consultar Estoque</button></a>
+        </div>
+    </header>
 
     <main>
         <div class="content">
-              
-            <div class="sub_menu">
-                <a href="{% url 'home' %}"><button type="button">Painel</button></a>
-                <a href="{% url 'product' %}"><button>Consultar Estoque</button></a>
-            </div>
-            
 
-            <h1>NEW PRODUCT</h1>
-
-           
+            <h1>Novo Produto</h1>
 
             {% if messages %}
                 <div class="messages">
@@ -26,24 +24,24 @@
 
             <form action="{% url 'new_product' %}" method="post">
                 {% csrf_token %}
-                <input type="text" placeholder="name-product" name="name-product">
-                <input type="text" placeholder="id-product" name="id-product">
-                <input type="text" placeholder="category" name="category">
-                <input type="text" placeholder="description" name="description">
-                <input type="text" placeholder="sale-price" name="sale-price">
-                <input type="text" placeholder="cost-price" name="cost-price">
-                <input type="text" placeholder="quantity-in-stock" name="quantity-in-stock">
-                <input type="text" placeholder="minimum-stock" name="minimum-stock">
-                <input type="text" placeholder="unit-of-measure" name="unit-of-measure">
-                <input type="text" placeholder="supplier" name="supplier">
-                <input type="text" placeholder="id-supplier" name="id-supplier">
-                <input type="text" placeholder="location-in-stock" name="location-in-stock">
-                <input type="text" placeholder="tax-code" name="tax-code">
-                <input type="text" placeholder="ICMS-IP-ETC" name="ICMS-IP-ETC">
-                <input type="text" placeholder="status-product" name="status-product">
-                <input type="text" placeholder="guarantee" name="guarantee">
-                <input type="text" placeholder="expiration-date" name="expiration-date">
-                <input type="text" placeholder="additional-observations" name="additional-observations">
+                <input type="text" placeholder="Nome do Produto" name="name-product" required>
+                <input type="text" placeholder="ID do Produto" name="id-product" required>
+                <input type="text" placeholder="Categoria" name="category" required>
+                <input type="text" placeholder="Descrição" name="description" required>
+                <input type="number" placeholder="Preço de Venda" name="sale-price" required step="0.01">
+                <input type="number" placeholder="Preço de Custo" name="cost-price" required step="0.01">
+                <input type="number" placeholder="Quantidade em Estoque" name="quantity-in-stock" required>
+                <input type="number" placeholder="Quantidade Mínima" name="minimum-stock" required>
+                <input type="text" placeholder="Unidade de Medida" name="unit-of-measure" required>
+                <input type="text" placeholder="Fornecedor" name="supplier" required>
+                <input type="text" placeholder="ID do Fornecedor" name="id-supplier" required>
+                <input type="text" placeholder="Localização no Estoque" name="location-in-stock" required>
+                <input type="text" placeholder="Código Fiscal" name="tax-code" required>
+                <input type="text" placeholder="ICMS/IP/ETC" name="ICMS-IP-ETC" required>
+                <input type="text" placeholder="Status do Produto" name="status-product" required>
+                <input type="text" placeholder="Garantia" name="guarantee" required>
+                <input type="date" placeholder="Data de Validade" name="expiration-date" required>
+                <textarea placeholder="Observações Adicionais" name="additional-observations" rows="4"></textarea>
                 
                 <button type="submit">Salvar</button>
             </form>
@@ -67,45 +65,54 @@
                 </div>
             {% endif %}
         </div>
-        <div class="footer">
-        <footer>rodape</footer>
-    </div>
+        
+       
     </main>
 
-
-
     <style>
+        header {
+            background-color: #f8f9fa;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .sub_menu {
+            display: flex;
+            justify-content: center;
+            gap: 1em;
+            margin: 10px 0;
+        }
+
         .content {
             width: 85vw;
-            height: 95vh;
+            height: auto;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.1em;
+            gap: 1em;
+            padding: 1em;
+            margin-top: 20px; /* Adicionando margem superior para espaçamento */
         }
 
         form {
             display: flex;
             flex-direction: column;
-            height: 80vh;
             width: 90%;
-            padding: 10px;
+            padding: 20px;
             border: 2px solid black;
             border-radius: 10px;
             gap: 1em;
-            align-items: center;
         }
 
-        form input, form select {
-            width: 90%;
-            height: 0.3em;
+        form input, form textarea {
+            width: 100%;
             padding: 0.5em;
             border-radius: 5px;
             border: 1px solid #ddd;
         }
 
         form button {
-            padding: 0.7em 1.5em;
+            padding: 0.7em;
             background-color: #007bff;
             color: white;
             font-weight: bold;
@@ -123,12 +130,8 @@
             margin-bottom: 0.5em;
         }
 
-        .footer{
-            margin-top: 0px;
-            height: 1px;
-            padding-top: 0px;
-
-        }
+      
+       
     </style>
 
 </body>

@@ -1,233 +1,146 @@
 {% load static %}
 {% include "sales/partials/head.html" %}
 <body>
-  {% include "global/partials/header.html" %}
-  <main>
-    <div class="content">
-      <div class="sub_menu">
-        <a href="/sales"><button>Painel</button></a>
-        
-        <a href="/sales/searchsales"><button>Consultar Vendas</button></a>
-      </div>
-      <h1>NEW SALE</h1>
+    {% include "global/partials/header.html" %}
+    
+    <main>
+        <div class="content">
+            <div class="content-button">
+                <a href="/sales"><button class="styled-button">Painel</button></a>
+                <a href="/sales/searchsales"><button class="styled-button">Consultar Vendas</button></a>
+            </div>
 
-      <!-- Formulário principal -->
-      <form action="/sale/salvar-carrinho/" method="post">
-        {% csrf_token %}
-        <div class="dados-orcamento">
-            <!-- Área do Cliente -->
-        <fieldset class='area-cliente'>
-          <div class="teste"></div>
-          <legend>Cliente</legend>
-          <select name="cliente" id="cliente">
-            <option value="" disabled {% if not selected_cliente %}selected{% endif %}>Selecione o Cliente</option>
-            {% for cliente in clientes %}
-              <option value="{{ cliente.id }}" {% if selected_cliente and cliente.id == selected_cliente.id %}selected{% endif %}>
-                  {{ cliente.nome }}
-              </option>
-            {% endfor %}
-          </select>
-        </fieldset>
+            <h1>NOVA VENDA</h1>
 
-        <!-- Área do Vendedor -->
-        <fieldset class="area-vendedor">
-          <legend>Vendedor</legend>
-          <select name="vendedor" id="vendedor">
-            <option value="" disabled {% if not selected_vendedor %}selected{% endif %}>Selecione o Vendedor</option>
-            {% for vendedor in vendedores %}
-              <option value="{{ vendedor.id }}" {% if selected_vendedor and vendedor.id == selected_vendedor.id %}selected{% endif %}>
-                  {{ vendedor.nome }}
-              </option>
-            {% endfor %}
-          </select>
-        </fieldset>
+            <form action="/sale/salvar-carrinho/" method="post">
+                {% csrf_token %}
+                <div class="dados-orcamento">
+                    <fieldset class='area-cliente'>
+                        <legend>Cliente</legend>
+                        <select name="cliente" id="cliente">
+                            <option value="" disabled {% if not selected_cliente %}selected{% endif %}>Selecione o Cliente</option>
+                            {% for cliente in clientes %}
+                                <option value="{{ cliente.id }}" {% if selected_cliente and cliente.id == selected_cliente.id %}selected{% endif %}>
+                                    {{ cliente.nome }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </fieldset>
+
+                    <fieldset class="area-vendedor">
+                        <legend>Vendedor</legend>
+                        <select name="vendedor" id="vendedor">
+                            <option value="" disabled {% if not selected_vendedor %}selected{% endif %}>Selecione o Vendedor</option>
+                            {% for vendedor in vendedores %}
+                                <option value="{{ vendedor.id }}" {% if selected_vendedor and vendedor.id == selected_vendedor.id %}selected{% endif %}>
+                                    {{ vendedor.nome }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </fieldset>
+                </div>
+
+                <fieldset class="carrinho">
+                    <legend>Adicionar Produto</legend>
+                    <div class="dado-produto">
+                        <input name="id_produto" type="text" id="product_id" placeholder="ID do produto" onchange="fetchProductData(this.value)">
+                        <input name="name" type="text" id="product_name" placeholder="Nome do produto" readonly>
+                        <a class="link-estoque" href="#">Consultar estoque</a>
+                    </div>
+
+                    <div class="dado-produto">
+                        <input name="Qntde" type="text" id="quantity" placeholder="Quantidade" onchange="price_finally()">
+                        <input name="valor" type="text" id="unit_price" placeholder="Preço Unitário" readonly onchange="price_finally()">
+                        <input name="valor_total" type="text" id="total_price" placeholder="Preço Total" readonly>
+                        <button type="submit" class="add"><img class="icons" src="{% static '/img/add.png' %}" alt=""></button>
+                    </div>
+                </fieldset>
+            </form>
+
+            <div class="response-message">{{ response }}</div>
+
+            <fieldset class="infos">
+                <legend>Carrinho</legend>
+                <table id="tabela-carrinho">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Valor Unitário</th>
+                            <th>Valor Total</th>
+                            <th>Opção</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dados">
+                        {% for item in cart %}
+                            <tr>
+                                <td>{{ item.name_product }}</td>
+                                <td>{{ item.quantidade }}</td>
+                                <td>{{ item.valor_uni }}</td>
+                                <td data-valor="{{ item.valor_total }}">{{ item.valor_total }}</td>
+                                <td>
+                                    <a href="/sale/excluir_produto/{{ item.id }}/"><img class='icons' src="{% static '/img/remove.png' %}" alt=""></a>
+                                    <a href=""><img class='icons' src="{% static '/img/edit.png' %}" alt=""></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </fieldset>
+
+            <div class="action_button">
+                <form class="form_button" action="enviar_orcamento" method="post">
+                    {% csrf_token %}
+                    <button class="styled-button" type="submit">Enviar Orçamento</button>
+                </form>
+                <form class="form_button" action="sale/new_sale/concluido/" method="post">
+                    {% csrf_token %}
+                    <button class="styled-button" type="submit">Efetuar Venda</button>
+                </form>
+                <button class="styled-button">Cancelar</button>
+            </div>
         </div>
-        
-        
-        
-        
-        <!-- Adicionar Produto -->
-        <fieldset class="carrinho">
-          <legend>Adicionar Produto</legend>
-          <div class="dado-produto">
-            <input name="id_produto" type="text" id="product_id" placeholder="ID do produto" onchange="fetchProductData(this.value)">
-            <input name="name" type="text" id="product_name" placeholder="Nome do produto" readonly>
-            <a class="link-estoque" href="#">Consultar estoque</a>
-          </div>
 
-          <div class="dado-produto">
-            <input name="Qntde" type="text" id="quantity" placeholder="Quantidade" onchange="price_finally()">
-          
-          <input name="valor" type="text" id="unit_price" placeholder="Preço Unitário" readonly onchange="price_finally()">
-          <input name="valor_total" type="text" id="total_price" placeholder="Preço Total" readonly>
-          <button type="submit" class="add"><img class="icons" src="{% static "/img/add.png" %}" alt=""></button>
-          </div>
-          
-          
-        </fieldset>
-      </form>
-      
-      <!-- Mensagem de resposta -->
-      <div class="response-message">{{ response }}</div>
-      
-      <!-- Carrinho -->
-      <fieldset class="infos">
-        <legend>Carrinho</legend>
-        <table id="tabela-carrinho">
-          <thead>
-            <tr>
-              <th>Produto</th>
-              <th>Quantidade</th>
-              <th>Valor Unitário</th>
-              <th>Valor Total</th>
-              <th>Opção</th>
-            </tr>
-          </thead>
-          <tbody id="dados">
-            {% for item in cart %}
-              <tr>
-                <td>{{ item.name_product }}</td>
-                <td>{{ item.quantidade }}</td>
-                <td>{{ item.valor_uni }}</td>
-                <td data-valor="{{ item.valor_total }}">{{ item.valor_total }}</td>
-                <td><a href="/sale/excluir_produto/{{item.id}}/"><img class='icons' src="{% static "/img/remove.png" %}" alt=""></a> <a href=""><img class='icons' src="{% static "/img/edit.png" %}" alt=""></a></td>
-                
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </fieldset>
-      
-      <!-- Opções de envio -->
-       <div class="action_button">
-        <form class="form_button" action="enviar_orcamento" method="post">
-          {% csrf_token %}
-          
-            <button class="enviar"  type="submit">Enviar Orçamento</button>
-    
-        </form>
-        <form class="form_button" action="sale/new_sale/concluido/" method="post">
-          {% csrf_token %}
-            <button class="enviar"  type="submit">Efetuar Venda</button>
-        </form>
-        <button class="enviar">Cancelar</button>
-       </div>
-    </div>
-    <footer>Assinatura</footer>
-  </main>
-  <script src="{% static 'sale/js/sales.js' %}"></script>
-  <style>
-   
-    .content {
-      width: 85vw;
-      height: auto;
-      display: flex;
-      flex-direction: column;
-    
+        <footer class="footer">
+            Assinatura
+        </footer>
+    </main>
 
-    }
-    .dados-orcamento{
-      display: flex;
-      gap: 1em;
-    }
-  .area-cliente{
-      padding: 20px;
-      width: 90%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 10px;
-      border: 2px solid black;
-      margin-left: 2em;
-  }
-  .area-cliente select{
-    width: 80%;
-    height: 3em;
-  }
-  .area-vendedor{
-    padding: 20px;
-      width: 70%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 10px;
-      border: 2px solid black;
-      margin-right: 2em;
-  }
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
 
-  .area-vendedor select{
-    width: 80%;
-    height: 3em;
-  }
-  .response-message {
-      color: green; /* ou red para erros */
-      font-weight: bold;
-  }
-  .carrinho{
-      padding: 20px;
-      width: 90%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 1em;
-      border-radius: 10px;
-      border: 2px solid black;
-      margin-bottom: 0.5em;
-      margin-left: 3em;
-  }
-  .dado-produto{
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    gap: 1em;
-  }
-  .link-estoque{
-    background-color: #fff;
-    height: 2.2em;
-    text-align: center;
-    padding-top: 0.5em;
-    text-decoration: none;
-    color: black;
-    margin-right: 6em;
-  }
-  .dado-produto input{
-    height: 2.2em;
-  }
-  .dado-produto button{
-    height: 2.2em;
-  }
-  .add{
-    border: none;
-    background-color: #fff;
-    cursor: pointer;
-  }
-  .infos{
-    padding: 20px;
-      width: 90%;
-      border-radius: 10px;
-      border: 2px solid black;
-      margin-bottom: 0.5em;
-      margin-top: 2em;
-      margin-left: 2em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-  }
-  #tabela-carrinho th, #tabela-carrinho td {
-      padding: 8px;
-      text-align: center;
-      border: 1px solid black;
-      width: 12em;
-  }
-  .delete_cart{
-    color: black;
-  }
-  .edit-item{
-    color: black;
-  }
-  .enviar{
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #007bff;
+            padding: 1em;
+            color: white;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .content {
+            width: 85vw;
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1em;
+            margin-top: 5em; /* Espaço para o header fixo */
+        }
+
+        .content-button {
+            display: flex;
+            margin-top: 10px;
+            gap: 5px;
+        }
+
+        .styled-button {
             padding: 0.7em 1.5em;
             background-color: #007bff;
             color: white;
@@ -235,33 +148,95 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-bottom: 1em;
-  }
-  .action_button{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1em;
-  }
-  .icons{
-    width: 2em;
-    margin-left: 2em;
-  }
-  </style>
-  <script>
-    $(document).ready(function() {
-        $('#cliente').select2();
-        $('#vendedor').select2();
-    });
-  </script>
-  
-  <script src="{% static 'budget/js/new_budget.js' %}"></script>
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=add" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=edit" />
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=delete_forever" />
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+            transition: background-color 0.3s;
+        }
+
+        .styled-button:hover {
+            background-color: #0056b3;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin: 0.5em 0; /* Margens uniformes */
+            text-align: center;
+        }
+
+        .dados-orcamento {
+            display: flex;
+            gap: 1em;
+        }
+
+        .area-cliente, .area-vendedor, .carrinho, .infos {
+            padding: 20px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            border: 2px solid black;
+            margin: 1em 0;
+        }
+
+        select {
+            width: 80%;
+            height: 3em;
+            margin: 10px 0;
+        }
+
+        .response-message {
+            color: green; /* ou red para erros */
+            font-weight: bold;
+        }
+
+        .dado-produto {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+            gap: 1em;
+        }
+
+        .dado-produto input {
+            height: 2.2em;
+            width: 100%;
+        }
+
+        .add {
+            border: none;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        #tabela-carrinho th, #tabela-carrinho td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid black;
+            width: 12em;
+        }
+
+        .footer {
+            width: 100%;
+            background-color: #f1f1f1;
+            padding: 1em;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+
+        .icons {
+            width: 2em;
+            margin-left: 2em;
+        }
+
+        .action_button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1em;
+        }
+    </style>
+
+    <script src="{% static 'sales/js/sales.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </body>
 </html>
-
