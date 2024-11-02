@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -170,22 +171,20 @@
             margin-top: auto; /* Adiciona esta linha para empurrar o footer para o fundo */
             width: 100%;
         }
+        .icons{
+            width: 2em;
+            margin-left: 2em;
+          }
+          .actions_icons{
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+          }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <a href="#">Início</a>
-        <a href="#">Estoque</a>
-        <a href="#">Vendas</a>
-        <a href="#">Orçamento</a>
-        <a href="#">Clientes</a>
-        <a href="#">Entrada</a>
-        <a href="#">Funcionário</a>
-        <a href="#">Pagar</a>
-        <a href="#">Receber</a>
-        <a href="#">Fornecedor</a>
-    </div>
+    {% include "global/partials/header.html" %}
 
     <main>
         <div class="content">
@@ -208,6 +207,7 @@
                         <th>Nome</th>
                         <th>CPF ou CNPJ</th>
                         <th>Contato</th>
+                        <th>ação</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -216,10 +216,19 @@
                         <td><a href="/client/{{cliente.id}}"><strong>{{cliente.nome}}</strong></a></td>
                         <td>{{cliente.cpf_cnpj}}</td>
                         <td>{{cliente.telefone}}</td>
+                        <td>
+                            <a href="{% url 'edit_client' cliente.id %}"><img class="icons" src="{% static 'client/img/edit.png' %}" alt=""></a>
+                            <form action="{% url 'delete_client' cliente.id %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button class='actions_icons' type="submit" onclick="return confirm('Tem certeza que deseja deletar este cliente?');">
+                                    <img class='icons' src="{% static "client/img/remove.png" %}" alt="">
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="3">Nenhum cliente encontrado.</td>
+                        <td colspan="4">Nenhum cliente encontrado.</td>
                     </tr>
                     {% endfor %}
                 </tbody>

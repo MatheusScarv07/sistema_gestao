@@ -1,3 +1,4 @@
+{% load static %}
 {% include "budget/partials/head.html" %}
 
 
@@ -43,16 +44,33 @@
         
         <h3>Orçamentos Encontrados</h3>
         
-        <div class="budget-list">
-          {% for orcamento in budget %}
-            <div class="budget-item">
-              <p><strong>Número do Orçamento:</strong> {{ orcamento.number_budget }}</p>
-              <p><strong>Cliente:</strong> {{ orcamento.cliente }}</p>
-              <p><strong>Data do Orçamento:</strong> {{ orcamento.data_orcamento }}</p>
-              <p><strong>Total:</strong> R$ {{ orcamento.total }}</p>
-            </div>
-          {% endfor %}
-        </div>
+        <table class="budget-table">
+          <thead>
+            <tr>
+              <th>Número do Orçamento</th>
+              <th>Cliente</th>
+              <th>Data do Orçamento</th>
+              <th>Total</th>
+              <th>Açoes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for orcamento in budget %}
+            <tr>
+              <td>{{ orcamento.number_budget }}</td>
+              <td>{{ orcamento.cliente }}</td>
+              <td>{{ orcamento.data_orcamento }}</td>
+              <td>R$ {{ orcamento.total }}</td>
+              <td>
+                <a href="/budget/new-sale/{{orcamento.number_budget}}"><img class='icons' src="{% static "budget/img/money.png" %}" alt="Faturar"></a>
+                <a href=""><img class='icons' src="{% static "budget/img/edit.png" %}" alt="Editar"></a>
+                <a href=""><img class='icons' src="{% static "budget/img/remove.png" %}" alt="Excluir"></a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        
         
       
       </div>
@@ -79,6 +97,15 @@
     </tbody> {% endcomment %}
 
     <style>
+      .icons{
+        width: 2em;
+        margin-left: 2em;
+      }
+      .actions_icons{
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+      }
       .content {
   width: 85vw;
   display: flex;
@@ -129,6 +156,33 @@
 .budget-item p {
   margin: 0.5em 0;
   font-weight: bold;
+}
+
+.budget-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 1.1em;
+  font-family: Arial, sans-serif;
+}
+
+.budget-table th, .budget-table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.budget-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.budget-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.budget-table tr:hover {
+  background-color: #ddd;
 }
 
     </style>

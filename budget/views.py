@@ -11,9 +11,9 @@ from stock.models import Stock
 from sale.controler.clients import get_clients
 from django.template.loader import render_to_string
 from django.http import HttpResponse
-from weasyprint import HTML
-import tempfile
-from twilio.rest import Client as TwilioClient
+from django.contrib import messages
+from sale.models import Sale, SaleInfo
+
 
 
 
@@ -64,12 +64,14 @@ def new_budget(request):
     button_enviar = False
     response = ''
     vendedor = Employee.objects.all()
+    produtos = Stock.objects.all()
     return render(request, 'budget/pages/new_budget.html', context={
         'clientes': clients,
         'vendedores': vendedor,
         'cart': carts,
         'button_enviar': button_enviar,
-        'response': response
+        'response': response,
+        'produtos_estoque': produtos
     })
 
 @csrf_exempt
@@ -137,43 +139,40 @@ def enviar_orcamento(request):
 
 @csrf_exempt
 def cart(request):
-    response = ''
     if request.method == 'POST':
         cliente_id = request.POST.get('cliente')
         vendedor_id = request.POST.get('vendedor')
         id_produto = request.POST.get('id_produto')
         product_name = request.POST.get('name')
         quantidade = float(request.POST.get('Qntde'))
-        valor_uni = float(request.POST.get('valor'))
+        valor_uni_str = request.POST.get('valor').replace(',', '.')
+        valor_uni = float(valor_uni_str)
         valor_total = float(request.POST.get('valor_total'))
 
         # Salva o ID do cliente e vendedor na sessão
         request.session['cliente_id'] = cliente_id
         request.session['vendedor_id'] = vendedor_id
-        print(cliente_id)
-        
 
         try:
             # Busca cliente e vendedor
             cliente = Client.objects.get(id=cliente_id)
             vendedor = Employee.objects.get(id=vendedor_id)
         except Client.DoesNotExist:
-            response = 'Cliente não encontrado'
-            return JsonResponse({'error': response}, status=404)
+            messages.error(request, 'Cliente não encontrado')  # Mensagem de erro
+            return render_cart_page(request)
+
         except Employee.DoesNotExist:
-            response = 'Vendedor não encontrado'
-            return JsonResponse({'error': response}, status=404)
+            messages.error(request, 'Vendedor não encontrado')  # Mensagem de erro
+            return render_cart_page(request)
 
         # Verifica estoque do produto
         try:
             dados_carrinho = Stock.objects.get(id=id_produto)
         except Stock.DoesNotExist:
-            response = 'Produto não encontrado'
-            return JsonResponse({'error': response}, status=404)
+            messages.error(request, 'Produto não encontrado')  # Mensagem de erro
+            return render_cart_page(request)
 
-        
-        
-            # Cria e salva o item no carrinho
+        # Cria e salva o item no carrinho
         cart_item = CartTempBudget(
             id_cliente=cliente_id,
             id_produto=id_produto,
@@ -181,31 +180,32 @@ def cart(request):
             quantidade=quantidade,
             valor_uni=valor_uni,
             valor_total=valor_total
-            )
-        
+        )
+
         cart_item.save()
-        response = 'Produto Adicionado'
+        messages.success(request, 'Produto Adicionado com sucesso!')  # Mensagem de sucesso
 
         # Busca todos os itens do carrinho
-        carts = CartTempBudget.objects.all()
-        button_enviar = True
+        return render_cart_page(request, cliente, vendedor)
 
-        # Renderiza o template com o contexto correto
-        return render(
-            request,
-            'budget/pages/new_budget.html',
-            context={
-                'clientes': Client.objects.all(),  # Passa todos os clientes
-                'vendedores': Employee.objects.all(),  # Passa todos os vendedores
-                'selected_cliente': cliente,  # Passa o cliente selecionado
-                'selected_vendedor': vendedor,  # Passa o vendedor selecionado
-                'cart': carts,
-                'response': response,
-                'button_enviar': button_enviar
-            }
-        )
     else:
         return JsonResponse({'error': 'Método não permitido'}, status=405)
+
+
+def render_cart_page(request, cliente=None, vendedor=None):
+    # Renderiza o template com o contexto correto
+    return render(
+        request,
+        'budget/pages/new_budget.html',
+        context={
+            'clientes': Client.objects.all(),
+            'vendedores': Employee.objects.all(),
+            'selected_cliente': cliente,
+            'selected_vendedor': vendedor,
+            'cart': CartTempBudget.objects.all(),
+            'button_enviar': True  # Habilita o botão enviar na renderização normal
+        }
+    )
     
 
 
@@ -227,6 +227,7 @@ def excluir_produto(request, id):
                 clientes = Client.objects.all()
                 vendedores = Employee.objects.all()
                 carts = CartTempBudget.objects.all()
+                produtos = Stock.objects.all()
                 return render(
                     request,
                     'budget/pages/new_budget.html',
@@ -238,6 +239,7 @@ def excluir_produto(request, id):
                         'button_enviar': True,
                         'selected_cliente': cliente,  # O cliente selecionado
                         'selected_vendedor': vendedor,  # O vendedor selecionado
+                        'produtos_estoque': produtos,
                     }
                 )
             except Client.DoesNotExist:
@@ -249,6 +251,14 @@ def excluir_produto(request, id):
 
     except CartTempBudget.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Produto não encontrado'})
+
+@csrf_exempt 
+def clear_cart(request):
+    # Remove todos os itens do carrinho para o cliente especificado
+    CartTempBudget.objects.all().delete()
+
+    # Retorna uma resposta de sucesso
+    return redirect('inicio')
 
 
 
@@ -289,3 +299,70 @@ def enviar_whatsapp(request):
     )
     
     return HttpResponse(f"PDF enviado via WhatsApp com sucesso. ID da mensagem: {message.sid}")
+
+
+def efetuar_venda(request, num_orcamento):
+    try:
+        dados_orcamento = BudgetInfo.objects.get(number_budget=int(num_orcamento))
+        client = Client.objects.get(id=dados_orcamento.cliente.id)
+        seller = Employee.objects.get(id=dados_orcamento.vendedor.id)
+        budget_items = Budget.objects.filter(number_budget=num_orcamento)
+        print(budget_items)
+         # Obter o carrinho temporário e informações do orçamento
+        numero_venda = randint(1, 1000)
+        budget_items = Budget.objects.filter(number_budget=num_orcamento)
+
+        valor = []
+        sales = []  # List to collect Sale instances for bulk creation
+        for produto in budget_items:
+            data = datetime.now()
+            item = Stock.objects.get(id=produto.produto.id)
+
+            # Create new sale
+            new_sale = Sale(
+                num_sale=numero_venda,
+                cliente=client,
+                data_venda=data,
+                vendedor=seller,
+                cpf_cnpj_cliente=client.cpf_cnpj,
+                produto=item,
+                valor_unitario=produto.valor_unitario,
+                quantidade=produto.quantidade,
+                valor_total=produto.valor_total
+            )
+            valor.append(produto.valor_total)
+            sales.append(new_sale)
+
+        # Bulk create sales for efficiency
+        print(sales)
+        Sale.objects.bulk_create(sales)
+
+        # Calculate total sale value
+        valor_venda = sum(valor)
+
+        # Create sale information
+        sale_info = SaleInfo(
+            num_sale=numero_venda,
+            cliente=client,
+            cpf_cnpj=client.cpf_cnpj,
+            valor=valor_venda,
+            vendedor=seller
+        )
+        sale_info.save()
+
+        # Clear temporary cart
+        dados_orcamento.delete()  # This also deletes related budget items
+        Budget.objects.filter(number_budget=num_orcamento).delete() 
+
+        return redirect('receive_page', num_venda = numero_venda)  
+
+    except BudgetInfo.DoesNotExist:
+        return HttpResponseBadRequest("Budget information not found.")
+    except Client.DoesNotExist:
+        return HttpResponseBadRequest("Client not found.")
+    except Employee.DoesNotExist:
+        return HttpResponseBadRequest("Seller not found.")
+    except Stock.DoesNotExist:
+        return HttpResponseBadRequest("Stock item not found.")
+    except Exception as e:
+        return HttpResponseBadRequest(f"An unexpected error occurred: {e}")

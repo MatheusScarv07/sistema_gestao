@@ -48,3 +48,38 @@ tdsValoresTotais.forEach(td => {
     // Formata o valor e substitui o conteúdo do <td>
     td.textContent = formatarMoeda(valorTotal);
 });
+
+
+function selectProduct(id, name, unitPrice) {
+    // Preencher os campos do produto selecionado
+    document.getElementById('product_id').value = id; // Preencher ID do produto
+    document.getElementById('product_name').value = name; // Preencher nome do produto
+    document.getElementById('unit_price').value = unitPrice; // Preencher preço unitário
+
+    // Opcional: Fechar o modal após selecionar o produto
+    $('#estoqueModal').modal('hide');
+}
+
+function filterProducts() {
+    const filter = document.getElementById("productFilter").value.toLowerCase();
+    const table = document.getElementById("estoque-tbody");
+    const rows = table.getElementsByTagName("tr");
+
+    for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName("td");
+        let found = false;
+
+        for (let j = 1; j < cells.length; j++) { // Start from index 1 to skip ID
+            if (cells[j].innerText.toLowerCase().includes(filter)) {
+                found = true;
+                break;
+            }
+        }
+
+        if (found) {
+            rows[i].style.display = ""; // Show the row
+        } else {
+            rows[i].style.display = "none"; // Hide the row
+        }
+    }
+}
