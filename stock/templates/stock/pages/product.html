@@ -1,99 +1,143 @@
+{% load static %}
 {% include "stock/partials/head.html" %}
+
 <body>
+  <header>
     {% include "global/partials/header.html" %}
+  </header>
 
-    <main>
-        <h1>Consultar Estoque</h1>
+  <main class="content">
+    <h1>Consultar Estoque</h1>
 
-        <!-- Botões de navegação -->
-        <div class="stock-menu">
-            <a href="{% url 'home' %}"><button type="button">Painel</button></a>
-            <a href="{% url 'new_product' %}"><button type="button">Novo Produto</button></a>
-        </div>
+    <!-- Botões de navegação -->
+    <div class="stock-menu">
+      <a href="{% url 'home' %}"><button type="button" class="enviar">Painel</button></a>
+      <a href="{% url 'new_product' %}"><button type="button" class="enviar">Novo Produto</button></a>
+    </div>
 
-        <!-- Tabela de Produtos -->
-        <table class="estoque-tabela">
-            <thead>
-                <tr>
-                    <th>Código</th>
-                    <th>Nome</th>
-                    <th>Descrição</th>
-                    <th>Quantidade</th>
-                    <th>Valor de Venda</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for produto in produtos %}
-                <tr>
-                    <td>{{ produto.id }}</td>
-                    <td>{{ produto.nome }}</td>
-                    <td>{{ produto.descricao }}</td>
-                    <td>{{ produto.estoque }}</td>
-                    <td>R$ {{ produto.valor_venda|floatformat:2 }}</td>
-                    <td>
-                        <a href="{% url 'editar_produto' produto.id %}">
-                            <button type="button" class="btn-editar">Editar</button>
-                        </a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="6">Nenhum produto encontrado.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </main>
+    <!-- Tabela de Produtos -->
+    <table class="estoque-tabela">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nome</th>
+          <th>Descrição</th>
+          <th>Quantidade</th>
+          <th>Valor de Venda</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for produto in produtos %}
+        <tr>
+          <td>{{ produto.id }}</td>
+          <td>{{ produto.nome }}</td>
+          <td>{{ produto.descricao }}</td>
+          <td>{{ produto.estoque }}</td>
+          <td>R$ {{ produto.valor_venda|floatformat:2 }}</td>
+          <td>
+            <a href="{% url 'editar_produto' produto.id %}">
+              <button type="button" class="btn-editar">Editar</button>
+            </a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6">Nenhum produto encontrado.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
 
-    <footer></footer>
+  <footer></footer>
+
+  <style>
+    /* Estilo do corpo */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #007bff;
+      padding: 1em;
+      color: white;
+      text-align: center;
+      z-index: 1000;
+    }
+
+    .content {
+      padding-top: 30px; /* Ajustar o valor aqui para subir a main */
+      width: 85vw;
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+      padding: 1em;
+    }
+
+    /* Estilo dos botões de navegação */
+    .stock-menu {
+      display: flex;
+      gap: 1em;
+      margin-bottom: 1.5em;
+      justify-content: center;
+    }
+
+    .stock-menu button {
+      padding: 0.7em 1.5em;
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Estilo da Tabela */
+    .estoque-tabela {
+      width: 90%;
+      margin: 0 auto;
+      border-collapse: collapse;
+      font-size: 1em;
+    }
+
+    .estoque-tabela th,
+    .estoque-tabela td {
+      padding: 0.8em;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    .estoque-tabela th {
+      background-color: #f4f4f4;
+      font-weight: bold;
+    }
+
+    /* Estilo para células e botões */
+    .btn-editar {
+      padding: 0.5em 1em;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .estoque-tabela tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .estoque-tabela tbody tr:hover {
+      background-color: #eaeaea;
+    }
+  </style>
 </body>
 </html>
-
-<style>
-  /* Estilo dos botões de navegação */
-  .stock-menu {
-    display: flex;
-    gap: 1em;
-    margin-bottom: 1.5em;
-    justify-content: center;
-  }
-
-  /* Estilo da Tabela */
-  .estoque-tabela {
-    width: 90%;
-    margin: 0 auto;
-    border-collapse: collapse;
-    font-size: 1em;
-  }
-
-  .estoque-tabela th,
-  .estoque-tabela td {
-    padding: 0.8em;
-    text-align: center;
-    border: 1px solid #ddd;
-  }
-
-  .estoque-tabela th {
-    background-color: #f4f4f4;
-    font-weight: bold;
-  }
-
-  /* Estilo para células e botões */
-  .btn-editar {
-    padding: 0.5em 1em;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .estoque-tabela tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-
-  .estoque-tabela tbody tr:hover {
-    background-color: #eaeaea;
-  }
-</style>

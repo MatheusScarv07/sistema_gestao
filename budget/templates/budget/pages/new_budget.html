@@ -113,6 +113,7 @@
         {% for message in messages %}
             <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
         {% endfor %}
+        {% endif %}
     </ul>
           </div>
         </fieldset>
@@ -172,9 +173,7 @@
        </div>
       
     </div>
-    <div class="footer">
-    <footer>Assinatura</footer>
-    </div>
+    
   </main>
 
   <style>
@@ -301,13 +300,7 @@
       margin-top: 1em;
     }
 
-    .footer {
-      width: 100%;
-      background-color: #f1f1f1;
-      padding: 1em;
-      text-align: center;
-      border-top: 1px solid #ddd;
-    }
+   
   </style>
   <script>
     $(document).ready(function() {

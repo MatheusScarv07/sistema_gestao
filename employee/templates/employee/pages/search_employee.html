@@ -1,12 +1,16 @@
+{% load static %}
 {% include "employee/partials/head.html" %}
+
 <body>
-    {% include "global/partials/header.html" %}
+    <header>
+        {% include "global/partials/header.html" %}
+    </header>
 
     <main>
         <div class="content">
             <div class="content-button">
-                <a href="{% url 'employee_home' %}"><button>Painel</button></a>
-                <a href="{% url 'new_employee' %}"><button>Novo Funcionário</button></a>
+                <a href="{% url 'employee_home' %}"><button class="styled-button">Painel</button></a>
+                <a href="{% url 'new_employee' %}"><button class="styled-button">Novo Funcionário</button></a>
             </div>
 
             <div class="search-section">
@@ -14,7 +18,7 @@
                 <form method="GET" class="search-form">
                     <input type="text" placeholder="Nome do funcionário" name="name" value="{{ request.GET.name }}">
                     <input type="text" placeholder="Cargo do funcionário" name="cargo" value="{{ request.GET.cargo }}">
-                    <button type="submit">Buscar</button>
+                    <button type="submit" class="styled-button">Buscar</button>
                 </form>
             </div>
 
@@ -45,22 +49,64 @@
             </div>
         </div>
 
-        <footer class="footer">footer aqui</footer>
+        
     </main>
 
     <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column; /* Alinha o conteúdo na vertical */
+            height: 100vh; /* Define a altura da tela */
+        }
+
+        header {
+            position: fixed; /* Muda a posição para relativa */
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #007bff;
+            padding: 1em;
+            color: white;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        main {
+            flex: 1; /* Permite que o main ocupe o espaço restante */
+            display: flex;
+            justify-content: center; /* Centraliza o conteúdo horizontalmente */
+            align-items: center; /* Centraliza o conteúdo verticalmente */
+            padding: 2em 0; /* Adiciona espaço vertical */
+        }
+
         .content {
             width: 85vw;
-            padding: 2em 0; /* Adiciona espaço vertical */
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 3em;
+            gap: 2em; /* Ajustado para aumentar o espaçamento vertical */
         }
 
         .content-button {
             display: flex;
-            gap: 5px;
+            gap: 10px; /* Espaço entre os botões */
+        }
+
+        .styled-button {
+            padding: 0.7em 1.5em;
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .styled-button:hover {
+            background-color: #0056b3;
         }
 
         .search-section {
@@ -104,11 +150,9 @@
             background-color: #f2f2f2; /* Cor de fundo do cabeçalho */
         }
 
-        .footer {
-            margin-top: 2em; /* Espaço acima do footer */
-            text-align: center; /* Centraliza o footer */
-            padding: 1em 0; /* Espaço em volta do footer */
-        }
+       
     </style>
+
+    <script src="{% static 'employee/js/employee.js' %}"></script>
 </body>
 </html>

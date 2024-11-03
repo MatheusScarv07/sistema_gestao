@@ -1,63 +1,94 @@
 {% include "employee/partials/head.html" %}
 <body>
-    {% include "global/partials/header.html" %}
+    <header>
+        {% include "global/partials/header.html" %}
+    </header>
 
     <main>
-        <div class="sub_menu">
-            <a href="{% url 'home_payment' %}"><button>Painel</button></a>
-            <a href="{% url 'new_payment' %}"><button>Cadastrar Pagamento</button></a>
-        </div>
+        <div class="container">
+            <div class="sub_menu">
+                <a href="{% url 'home_payment' %}"><button>Painel</button></a>
+                <a href="{% url 'new_payment' %}"><button>Cadastrar Pagamento</button></a>
+            </div>
 
-        <h1>Consultar Boletos</h1>
-        <form method="GET" class="search-form">
-            <label for="fornecedor">Fornecedor:</label>
-            <input type="text" id="fornecedor" name="fornecedor" value="{{ request.GET.fornecedor }}" required>
+            <h1>Consultar Boletos</h1>
+            <form method="GET" class="search-form">
+                <label for="fornecedor">Fornecedor:</label>
+                <input type="text" id="fornecedor" name="fornecedor" value="{{ request.GET.fornecedor }}" required>
 
-            <label for="numero_nota">Número da Nota:</label>
-            <input type="text" id="numero_nota" name="numero_nota" value="{{ request.GET.numero_nota }}" required>
+                <label for="numero_nota">Número da Nota:</label>
+                <input type="text" id="numero_nota" name="numero_nota" value="{{ request.GET.numero_nota }}" required>
 
-            <label for="data_emissao">Data de Emissão:</label>
-            <input type="date" id="data_emissao" name="data_emissao" value="{{ request.GET.data_emissao }}" required>
+                <label for="data_emissao">Data de Emissão:</label>
+                <input type="date" id="data_emissao" name="data_emissao" value="{{ request.GET.data_emissao }}" required>
 
-            <button type="submit">Buscar</button>
-        </form>
+                <button type="submit">Buscar</button>
+            </form>
 
-        <div class="table-container">
-            <h2>Pagamentos Registrados</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Fornecedor</th>
-                        <th>Data de Emissão</th>
-                        <th>Número da Nota</th>
-                        <th>Valor do Boleto</th>
-                        <th>Data de Vencimento</th>
-                        <th>Data de Entrada</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for pagamento in pagamentos %}
-                    <tr>
-                        <td>{{ pagamento.fornecedor.nome }}</td> <!-- Verifique se 'nome' é o campo correto -->
-                        <td>{{ pagamento.data_emissao }}</td>
-                        <td>{{ pagamento.numero_nota }}</td>
-                        <td>{{ pagamento.valor_boleto }}</td>
-                        <td>{{ pagamento.data_vencimento }}</td>
-                        <td>{{ pagamento.data_entrada }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="6">Nenhum pagamento encontrado.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="table-container">
+                <h2>Pagamentos Registrados</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fornecedor</th>
+                            <th>Data de Emissão</th>
+                            <th>Número da Nota</th>
+                            <th>Valor do Boleto</th>
+                            <th>Data de Vencimento</th>
+                            <th>Data de Entrada</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pagamento in pagamentos %}
+                        <tr>
+                            <td>{{ pagamento.fornecedor.nome }}</td>
+                            <td>{{ pagamento.data_emissao }}</td>
+                            <td>{{ pagamento.numero_nota }}</td>
+                            <td>{{ pagamento.valor_boleto }}</td>
+                            <td>{{ pagamento.data_vencimento }}</td>
+                            <td>{{ pagamento.data_entrada }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6">Nenhum pagamento encontrado.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 
     <footer>footer aqui</footer>
 
     <style>
+        header {
+            position: fixed; /* Fixa a barra de navegação no topo */
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #007bff; /* Cor de fundo da barra */
+            padding: 1em;
+            color: white; /* Cor do texto */
+            text-align: center;
+            z-index: 1000; /* Garante que fique acima de outros elementos */
+        }
+
+        main {
+            display: flex; /* Usa flexbox para centralizar */
+            justify-content: center; /* Centraliza horizontalmente */
+            min-height: calc(100vh - 80px); /* Altura mínima, ajustando para a barra de navegação */
+            margin: 120px auto 0; /* Aumenta o espaço acima do main */
+            width: 80%; /* Define a largura do main */
+        }
+
+        .container {
+            width: 100%; /* Largura total para o container */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centraliza itens no container */
+        }
+
         .sub_menu {
             display: flex;
             gap: 5px; /* Espaçamento entre os botões */
@@ -69,7 +100,7 @@
             flex-direction: column; /* Coloca os inputs verticalmente */
             gap: 10px; /* Espaço entre os inputs */
             margin-bottom: 30px; /* Espaço abaixo do formulário */
-            width: 70%; /* Limita a largura do formulário */
+            width: 100%; /* Limita a largura do formulário */
         }
 
         input {

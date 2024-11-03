@@ -1,194 +1,174 @@
 {% load static %}
 {% include "budget/partials/head.html" %}
 
-
-
 <body>
-  {% include "global/partials/header.html" %}
- 
-   <main>
-    <main>
-      <div class="content">
-        <div class="sub_menu">
-          <a href="/budget"><button>Painel</button></a>
-          <a href="/budget/new_budget/"><button>Novo Orçamento</button></a>
-        </div>
-        
-        <h1>Buscar Orçamento</h1>
-        
-        <div class="search-budget-form">
-          <form action="/budget/filtrar_budget/" method='post'>
-            <input type="date" name="date_inicial" placeholder="Data Inicial">
-            <input type="date" name="date_final" placeholder="Data Final">
-            
-            <select name="cliente">
-              <option value="">Cliente</option>
-              {% for cliente in clientes %}
-                <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
-              {% endfor %}
+  <header>
+    {% include "global/partials/header.html" %}
+  </header>
+
+  <main>
+    <div class="content">
+      <div class="sub_menu">
+        <a href="/budget"><button class="enviar">Painel</button></a>
+        <a href="/budget/new_budget/"><button class="enviar">Novo Orçamento</button></a>
+        <a href="/budget/relatorios/"><button class="enviar">Relatórios</button></a>
+      </div>
+
+      <!-- Título da página -->
+      <h1>Relatórios de Orçamento</h1>
+      
+      <!-- Formulário de seleção de relatórios -->
+      <form class="form_button" action="/budget/gerar-relatorio/" method="post">
+        {% csrf_token %}
+        <div class="dados-relatorio">
+          <fieldset class="area-relatorio">
+            <legend>Selecionar Relatório</legend>
+            <select name="tipo_relatorio" id="tipo_relatorio">
+              <option value="" disabled selected>Selecione o tipo de relatório</option>
+              <option value="mensal">Diario</option>
+              <option value="mensal">Mensal</option>
+              <option value="anual">Anual</option>
+              <option value="personalizado">Personalizado</option>
             </select>
-            
-            <select name="vendedor">
-              <option value="">Vendedor</option>
-              {% for vendedor in vendedores %}
-                <option value="{{ vendedor.id }}">{{ vendedor.nome }}</option>
-              {% endfor %}
-            </select>
-            
-            <input type="text" name="cpf" placeholder="CPF">
-            <input type="text" name="number_budget" placeholder="Número do Orçamento">
-            
-            <button type="submit">Filtrar</button>
-          </form>
+          </fieldset>
         </div>
-        
-        <h3>Orçamentos Encontrados</h3>
-        
-        <table class="budget-table">
+
+        <!-- Botão para gerar o relatório -->
+        <button class="enviar" type="submit">Gerar Relatório</button>
+      </form>
+
+      <!-- Tabela de relatórios recentes -->
+      <fieldset class="infos">
+        <legend>Relatórios Recentes</legend>
+        <table id="tabela-relatorios">
           <thead>
             <tr>
-              <th>Número do Orçamento</th>
-              <th>Cliente</th>
-              <th>Data do Orçamento</th>
-              <th>Total</th>
-              <th>Açoes</th>
+              <th>ID</th>
+              <th>Nome do Relatório</th>
+              <th>Data</th>
+              <th>Opções</th>
             </tr>
           </thead>
           <tbody>
-            {% for orcamento in budget %}
-            <tr>
-              <td>{{ orcamento.number_budget }}</td>
-              <td>{{ orcamento.cliente }}</td>
-              <td>{{ orcamento.data_orcamento }}</td>
-              <td>R$ {{ orcamento.total }}</td>
-              <td>
-                <a href="/budget/new-sale/{{orcamento.number_budget}}"><img class='icons' src="{% static "budget/img/money.png" %}" alt="Faturar"></a>
-                <a href=""><img class='icons' src="{% static "budget/img/edit.png" %}" alt="Editar"></a>
-                <a href=""><img class='icons' src="{% static "budget/img/remove.png" %}" alt="Excluir"></a>
-              </td>
-            </tr>
+            {% for relatorio in relatorios %}
+              <tr>
+                <td>{{ relatorio.id }}</td>
+                <td>{{ relatorio.nome }}</td>
+                <td>{{ relatorio.data }}</td>
+                <td>
+                  <a class="view-report" href="/budget/visualizar_relatorio/{{ relatorio.id }}">
+                    <img class="icons" src="{% static 'budget/img/view.png' %}" alt="Visualizar">
+                  </a>
+                  <a class="delete-report" href="/budget/excluir_relatorio/{{ relatorio.id }}">
+                    <img class="icons" src="{% static 'budget/img/remove.png' %}" alt="Remover">
+                  </a>
+                </td>
+              </tr>
             {% endfor %}
           </tbody>
         </table>
-        
-        
-      
-      </div>
-      <footer>aqui está o footer</footer>
-    </main>
+      </fieldset>
+    </div>
+  </main>
 
-    {% comment %} <tbody id="dados">
-      {% for item in cart %}
-        <tr>
-          <td>{{ item.name_product }}</td>
-          <td>{{ item.quantidade }}</td>
-          <td>{{ item.valor_uni }}</td>
-          <td data-valor="{{ item.valor_total }}">{{ item.valor_total }}</td>
-          <td>
-            <a class="edit-item" href="">
-              <img class="icons" src="{% static "budget/img/edit.png" %}" alt="">
-            </a>
-            <a class="delete_cart" href="/budget/excluir_produto/{{item.id}}">
-              <img class="icons" src="{% static "budget/img/remove.png" %}" alt="delete">
-            </a>
-            </td>
-        </tr>
-      {% endfor %}
-    </tbody> {% endcomment %}
+  <style>
+    /* Mantendo o estilo consistente */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
 
-    <style>
-      .icons{
-        width: 2em;
-        margin-left: 2em;
-      }
-      .actions_icons{
-        border: none;
-        background-color: transparent;
-        cursor: pointer;
-      }
-      .content {
-  width: 85vw;
-  display: flex;
-  flex-direction: column;
-}
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #007bff;
+      padding: 1em;
+      color: white;
+      text-align: center;
+      z-index: 1000;
+    }
 
-.search-budget-form {
-  padding: 20px;
-  border: 1px solid black;
-  border-radius: 10px;
-  margin: 2em;
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-}
+    .content {
+      padding-top: 60px;
+      width: 85vw;
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+      padding: 1em;
+    }
 
-.search-budget-form input, .search-budget-form select, .search-budget-form button {
-  padding: 0.5em;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 1em;
-}
+    .sub_menu {
+      display: flex;
+      gap: 1em;
+      margin-bottom: 1em;
+    }
+    .sub_menu button {
+      padding: 0.7em 1.5em;
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
 
-.search-budget-form button {
-  background-color: #007bff;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-}
+    h1 {
+      font-size: 2em;
+      margin-bottom: 0.5em;
+      text-align: center;
+    }
 
-.budget-list {
-  padding: 20px;
-  border-radius: 10px;
-  margin: 2em;
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  border: 2px solid black;
-}
+    form button {
+      padding: 0.7em 1.5em;
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
 
-.budget-item {
-  padding: 1em;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #f9f9f9;
-}
+    form button:hover {
+      background-color: #0056b3;
+    }
 
-.budget-item p {
-  margin: 0.5em 0;
-  font-weight: bold;
-}
+    form input, form select {
+      width: 70%;
+      height: 1.5em;
+      padding: 0.5em;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
 
-.budget-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
-  font-size: 1.1em;
-  font-family: Arial, sans-serif;
-}
+    .infos {
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 1em;
+      margin-top: 1em;
+    }
 
-.budget-table th, .budget-table td {
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  text-align: left;
-}
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
-.budget-table th {
-  background-color: #007bff;
-  color: white;
-}
+    th, td {
+      padding: 0.5em;
+      text-align: left;
+    }
 
-.budget-table tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
+    th {
+      background-color: #f1f1f1;
+    }
+  </style>
 
-.budget-table tr:hover {
-  background-color: #ddd;
-}
-
-    </style>
-
-   
- 
- 
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

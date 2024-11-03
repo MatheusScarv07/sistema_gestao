@@ -1,6 +1,9 @@
 {% include "payment/partials/head.html" %}
 <body>
-  {% include "global/partials/header.html" %}
+  <header>
+    {% include "global/partials/header.html" %}
+  </header>
+
   <main>
     <div class="content">
       <div class="sub_menu">
@@ -42,6 +45,22 @@
   </main>
 
   <style>
+    header {
+      position: fixed; /* Fixa a barra de navegação no topo */
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #007bff; /* Cor de fundo da barra */
+      padding: 1em;
+      color: white; /* Cor do texto */
+      text-align: center;
+      z-index: 1000; /* Garante que fique acima de outros elementos */
+    }
+
+    main {
+      margin-top: 80px; /* Espaço para que o conteúdo não fique por baixo da barra de navegação */
+    }
+
     .content {
       width: 85vw;
       padding: 2em 0; /* Adiciona espaço vertical */
@@ -90,8 +109,6 @@
     button:hover {
       background-color: #0056b3;
     }
-
-   
   </style>
 </body>
 </html>
