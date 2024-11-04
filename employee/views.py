@@ -17,7 +17,7 @@ def new_employee(request):
         Employee.objects.create(nome=nome, cargo=cargo, status=status)
 
         # Redirecionar para a página inicial após o cadastro
-        return redirect('employee_home')
+        return redirect('new_employee')
 
     return render(request, 'employee/pages/new_employee.html')
 
