@@ -2,10 +2,13 @@
 {% include "client/partials/head.html" %}
 <body>
 
-    {% include "global/partials/header.html" %}
+    <header>
+        {% include "global/partials/header.html" %}
+    </header>
 
     <main>
         <div class="content">
+
             <a href="/client"><button class="btn-back">Voltar</button></a>
 
             <h1>NEW CLIENT</h1>
@@ -41,10 +44,7 @@
                 
                 <button type="submit">Salvar</button>
             </form>
-
         </div>
-
-       
     </main>
 
     <style>
@@ -77,6 +77,34 @@
 
         .btn-back:hover {
             background-color: #5a6268;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #007bff;
+            padding: 1em;
+            color: white;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .content {
+            width: 85vw;
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1em;
+            margin-top: 5em; /* Espaço para o header fixo */
+        }
+
+        .back-button {
+            margin-top: 1em; /* Adiciona espaço acima do botão "Voltar" */
         }
 
         h1 {
@@ -108,11 +136,20 @@
             color: #721c24;
             background-color: #f8d7da;
             border: 1px solid #f5c6cb;
+
+            margin-bottom: 0.5em;
+            margin-top: 0.5em; /* Adiciona espaço acima do título "NEW CLIENT" */
+            text-align: center;
         }
 
         form {
             display: flex;
             flex-direction: column;
+            width: 90%;
+            max-width: 600px;
+            padding: 10px;
+            border: 2px solid black;
+            border-radius: 10px;
             gap: 1em;
             margin-top: 20px;
             height: auto;
@@ -141,13 +178,7 @@
             background-color: #0056b3;
         }
 
-        .footer {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 0.9em;
-            color: #666;
-        }
-
+      
     </style>
 
     <script src="{% static 'client/js/client.js' %}"></script>
