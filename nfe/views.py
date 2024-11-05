@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from supplier.models import Supplier
@@ -151,7 +151,7 @@ def excluir_produto(request, id):
         return JsonResponse({'success': False, 'message': 'Produto não encontrado'})
 
 @csrf_exempt
-def efetuar_venda(request):
+def efetuar_entrada(request):
     try:
         carrinho = NFECartTemp.objects.all()
         fornecedor_ = Supplier.objects.get(id = request.session.get('fornecedor_id') )
@@ -160,6 +160,7 @@ def efetuar_venda(request):
         boleto = request.session.get('boleto')
         valor_nfe = request.session.get('valor_nota')
         valor = []
+       
         for produto in carrinho:
             data = datetime.now()
             item = Stock.objects.get(id = produto.id_produto)
@@ -174,6 +175,12 @@ def efetuar_venda(request):
                 data_entrada = data,
                 
             )
+            estoque_atual = item.estoque or 0  # Considera 0 caso o estoque esteja vazio
+            novo_estoque = estoque_atual + produto.quantidade
+            item.estoque = novo_estoque  # Atualiza o estoque do item
+            item.valor_custo = produto.valor_uni
+            item.save()  # Salva a atualização no banco de dados
+
             valor.append(produto.valor_total)
             new.save()
             valor_nota = sum(valor)
@@ -189,30 +196,29 @@ def efetuar_venda(request):
         )
         info.save()
         NFECartTemp.objects.all().delete()
-        fornecedores = Supplier.objects.all()
-        carts = NFECartTemp.objects.all()
-        button_enviar = False
-        response = ''
         request.session.pop('numero_nota')
         request.session.pop('fornecedor_id')
         request.session.pop('data_emissao')
-        if boleto == 'Sim':
-            return render('new_payment', numero_nota_)
-        else:
-            return render(request, 'sales/pages/sales.html', context={
-                'clientes': fornecedores,
-                'cart': carts,
-                'button_enviar': button_enviar,
-                'response': response
-            })      
+        return redirect('entrada_de_nota')      
     except Exception as e:
         # Handle exceptions appropriately, e.g., return an error response
         return HttpResponseBadRequest(f"An error occurred: {e}")
-    
-    #CRIAR TEMPLATE PARA ESSE CODIGO
-    def sale_info(request, num_os):
-     try:
-        venda = Sale.objects.get(num_sale=num_os)
-        return render(request, 'sales/pages/sale_info.html', {'venda': venda})
-     except Sale.DoesNotExist:
-        return HttpResponseNotFound("Venda não encontrada")
+
+
+def search_nfes(request):
+    compras = NFEInfo.objects.all()
+    fornecedores = Supplier.objects.all()
+
+    return render(request, 'nfe/pages/searchnfe.html', context={
+        'fornecedores': fornecedores,
+        'notas':compras
+    })
+
+def info_nfe(request, num_nota):
+    compra = NFE.objects.filter(numero_nota= num_nota)
+    dados = NFEInfo.objects.get(numero_nota = num_nota)
+
+    return render(request, 'nfe/pages/info_nfe', context={
+        'dados_nota': dados,
+        'itens': compra
+    })

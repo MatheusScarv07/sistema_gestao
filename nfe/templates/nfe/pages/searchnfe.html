@@ -1,0 +1,36 @@
+{% include "sales/partials/head.html" %}
+<body>
+  {% include "global/partials/header.html" %}
+  <main>
+    
+    <h1>Search nfe</h1>
+
+    <form action="/nfe/filtrar_notas/" method='post'>
+      <input type="date" name="date_inicial" id="">
+      <input type="date" name="date_final" id="">
+      <select name="cliente" id="">
+        <option value="">fornecedor</option>
+        {% for fornecedor in fornecedores  %}
+        <option value="{{fornecedor.id}}">{{fornecedor.nome}}</option>
+        {% endfor %}
+      </select>
+      
+      <input type="text" placeholder="Numero da Nota" name="num_nota">
+      
+
+      <button type="submit">Filtrar</button>
+    </form>
+    <div>
+      {% for nota in notas  %}
+      <a href="/nfe/info/{{nota.numero_nota}}"><p>{{nota.numero_nota}}</p></a>
+      <p>{{nota.data_emissao}}</p>
+      <p>{{nota.fornecedor}}</p>
+      <p>{{nota.valor_total}}</p>
+      {% endfor %}
+    </div>
+  </main>
+
+  <footer></footer>
+  
+</body>
+</html>

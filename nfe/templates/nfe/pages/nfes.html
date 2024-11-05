@@ -17,7 +17,7 @@
         <!-- Div com os dados da nota -->
         <div class="nfe-data">
           <select name="fornecedor" id="fornecedor">
-            <option value="" disabled {% if not selected_cliente %}selected{% endif %}>Selecione o Cliente</option>
+            <option value="" disabled {% if not selected_cliente %}selected{% endif %}>Selecione o fornecedor</option>
             {% for fornecedor in fornecedores %}
               <option value="{{ fornecedor.id }}" {% if selected_fornecedor and fornecedor.id == selected_fornecedor.id %}selected{% endif %}>
                 {{ fornecedor.nome }}
@@ -38,13 +38,13 @@
           {% endif %}
 
           {% if valor_nfe %}
-            <input type="text" name='valor_total_nfe' value="{{valor_total_nota}}" placeholder='Valor total da nota'>
+            <input type="text" name='valor_total_nfe' value="{{valor_total_nota}}">
           {% else %}
             <input type="text" name='valor_total_nfe' placeholder='Valor total da nota'>
           {% endif %}
 
           {% if boleto %}
-            <input type="text" name='boleto' value="{{boleto}}" placeholder='Valor total da nota'>
+            <input type="text" name='boleto' value="{{boleto}}" placeholder='Boleto'>
           {% else %}
             <select name="boleto" id="">
               <option value="Sim">Sim</option>
@@ -92,13 +92,7 @@
 
       <form id="sale_form" action="/nfe/new_nfe/concluido/" method="post">
         {% if button_enviar %}
-          <button type="submit">Efetuar Aprovação</button>
-        {% endif %}
-      </form>
-
-      <form action="enviar_orcamento" method="post">
-        {% if button_enviar %}
-          <button type="submit">Enviar Orçamento</button>
+          <button type="submit">Salvar</button>
         {% endif %}
       </form>
     </div>

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import pay
 from datetime import datetime
 from supplier.models import Supplier
+from nfe.models import NFEInfo
 # Create your views here.
 
 
@@ -41,6 +42,39 @@ def new_payment(request):
     return render (request, 'payment/pages/new_payment.html',context={
         "fornecedores" : fornecedor
     })
+
+
+def new_payment_nfe(request, numero_nota):
+    nota = NFEInfo.objects.get(numero_nota=numero_nota)
+    num_nota = nota.numero_nota
+    fornecedor = nota.fornecedor
+    data_emissao = nota.data_emissao
+    if request.method == 'POST':
+        # Recuperar dados do formulário
+        vencimento = request.POST.get('vencimento')
+        valor = request.POST.get('valor')
+        dados_fornecedor = Supplier.objects.get(cnpj=fornecedor.cnpj)
+
+        # Criar novo objeto Pagamento
+        pay.objects.create(
+            fornecedor = dados_fornecedor,
+            data_emissao = data_emissao,
+            numero_nota=num_nota,
+            valor_boleto=valor,
+            data_vencimento=vencimento,
+            data_entrada = datetime.now()
+            
+            
+        )
+
+        # Redirecionar para a página de sucesso ou outra página
+        return redirect('entrada_de_nota')  # Use o namespace aqui
+
+    # Renderizar o template com o formulário para GET request
+    return redirect (request, 'payment/pages/new_payment.html',context={
+        "fornecedores" : fornecedor
+    })
+
 
 
 

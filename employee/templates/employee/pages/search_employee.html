@@ -30,6 +30,7 @@
                             <th>Nome</th>
                             <th>Cargo</th>
                             <th>Status</th>
+                            <th>Ação</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -38,6 +39,15 @@
                             <td>{{ employee.nome }}</td>
                             <td>{{ employee.cargo }}</td>
                             <td>{{ employee.status|yesno:"Ativo,Inativo" }}</td>
+                            <td>
+                                <a href="/employee/{{employee.id}}/edit/"><img class='icons' src="{% static "employee/img/edit.png" %}" alt=""></a>
+                                <form action="/employee/{{employee.id}}/delete/" method="post">
+                                    {% csrf_token %}
+                                    <button class="actions_icons" type="submit"><img class='icons' src="{% static "employee/img/remove.png" %}" alt=""></button>
+                                    
+                                </form>
+                                
+                            </td>
                         </tr>
                         {% empty %}
                         <tr>
@@ -150,7 +160,15 @@
             background-color: #f2f2f2; /* Cor de fundo do cabeçalho */
         }
 
-       
+        .icons{
+            width: 2em;
+            margin-left: 2em;
+          }
+          .actions_icons{
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+          }
     </style>
 
     <script src="{% static 'employee/js/employee.js' %}"></script>

@@ -2,14 +2,10 @@
 <body>
   {% include "global/partials/header.html" %}
   <main>
-    <div class="sub_menu">
-      <a href="/sales"><button>Painel</button></a>
-      <a href="/sale/new-sale"><button>Nova Venda</button></a>
-      <a href="/sales/searchsales"><button>Consultar Vendas</button></a>
-    </div>
+    
     <h1>{{nome}} - {{num_venda}}</h1>
     <div>
-      {% for produto in products  %}
+      {% for produto in itens  %}
       <p>{{produto.num_sale}}</p>
       <p>{{produto.data_venda}}</p>
       <p>{{produto.produto}}</p>

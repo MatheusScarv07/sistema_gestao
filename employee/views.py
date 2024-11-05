@@ -1,5 +1,9 @@
 from django.shortcuts import render,redirect
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy
+from django.views.generic.edit import UpdateView
 from .models import Employee
+from .forms import EmployeeForm
 
 
 def home(request):
@@ -38,3 +42,28 @@ def search_employee(request):
         employees = employees.filter(cargo__icontains=cargo)
 
     return render(request, 'employee/pages/search_employee.html', {'employees': employees})
+
+def edit_employee(request, id):
+    # Obtém o funcionário pelo ID
+    employee = get_object_or_404(Employee, id=id)
+
+    if request.method == "POST":
+        # Popula o formulário com os dados enviados e a instância do funcionário
+        form = EmployeeForm(request.POST, instance=employee)
+        if form.is_valid():
+            form.save()  # Salva as alterações
+            return redirect('search_employee')  # Redireciona para a página inicial ou a página desejada
+    else:
+        # Cria o formulário com os dados do funcionário
+        form = EmployeeForm(instance=employee)
+
+    return render(request, 'employee/pages/edit_employee.html', {'form': form, 'employee': employee})
+
+def delete_employee(request, id):
+    # Verifica se a requisição é do tipo POST
+    if request.method == "POST":
+        funcionario = get_object_or_404(Employee, id=id)  # Obtém o cliente pelo ID
+        funcionario.delete()  # Deleta o cliente
+        return redirect('search_employee')  # Redireciona para a página inicial ou a lista de clientes
+
+    return redirect('search_employee')
