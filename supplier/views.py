@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Supplier
+from django.contrib import messages
 from datetime import datetime
 from django.http import JsonResponse
 from brasilapy import BrasilAPI
@@ -28,20 +29,30 @@ def register(request):
         cep_form = request.POST.get('cep')
         created_at = datetime.now()
 
+        # Verificar se o CNPJ já existe
+        if Supplier.objects.filter(cnpj=cnpj_form).exists():
+            messages.error(request, 'Este CNPJ já está cadastrado.')
+            return redirect('/supplier/register_new')
+
+        # Criar o fornecedor se o CNPJ for único
         fornecedor = Supplier(
-            nome = nome_form,
-            cnpj = cnpj_form,
-            email = email_form,
-            contato = contato_form,
-            rua = rua_form,
-            numero = numero_form,
-            bairro = bairro_form,
-            cidade = cidade_form,
-            estado = estado_form,
-            cep = cep_form,
-            created = created_at
-            )
+            nome=nome_form,
+            cnpj=cnpj_form,
+            email=email_form,
+            contato=contato_form,
+            rua=rua_form,
+            numero=numero_form,
+            bairro=bairro_form,
+            cidade=cidade_form,
+            estado=estado_form,
+            cep=cep_form,
+            created=created_at
+        )
         fornecedor.save()
+        
+        messages.success(request, 'Fornecedor registrado com sucesso!')
+        return redirect('/supplier')  # Ou para a página de listagem de fornecedores
+
     return render(request, 'supplier/pages/home.html')
 
 """ def get_dados(request, cnpj):
@@ -78,3 +89,32 @@ def details_client(request, id):
     return render(request, 'supplier/pages/details_supplier.html', context={
         'supplier': data
     })
+
+
+
+
+
+
+
+
+def listar_fornecedores(request):
+    # Variáveis para armazenar os dados de filtro
+    nome = request.POST.get('nome', '')
+    cpf_cnpj = request.POST.get('cpf_cnpj', '')
+
+    # Filtrando os fornecedores com base nos dados de filtro
+    fornecedores = Supplier.objects.all()  # Começa com todos os fornecedores
+
+    if nome:
+        fornecedores = fornecedores.filter(nome__icontains=nome)  # Filtra pelo nome
+    if cpf_cnpj:
+        fornecedores = fornecedores.filter(cnpj__icontains=cpf_cnpj)  # Filtra pelo CPF/CNPJ
+
+    # Renderiza a página com os fornecedores filtrados
+    return render(request, 'supplier/pages/home.html', {'fornecedores': fornecedores})
+
+
+
+def detalhes_fornecedor(request, id):
+    fornecedor = get_object_or_404(Supplier, id=id)  # Buscar fornecedor pelo ID
+    return render(request, 'supplier/details_supplier.html', {'fornecedor': fornecedor})

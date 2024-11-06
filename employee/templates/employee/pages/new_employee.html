@@ -8,11 +8,7 @@
 
     <main>
         <div class="content">
-            <div class="content-button">
-                <a href="{% url 'employee_home' %}"><button class="styled-button">Painel</button></a>
-                <a href="{% url 'new_employee' %}"><button class="styled-button">Novo Funcionário</button></a>
-                <a href="{% url 'search_employee' %}"><button class="styled-button">Consultar Funcionário</button></a>
-            </div>
+            
 
             <h1>Novo Funcionário</h1>
 
@@ -30,9 +26,7 @@
             </div>
         </div>
 
-        <footer class="footer">
-            Footer aqui
-        </footer>
+        
     </main>
 
     <style>
@@ -115,13 +109,7 @@
             text-align: center;
         }
 
-        .footer {
-            width: 100%;
-            background-color: #f1f1f1;
-            padding: 1em;
-            text-align: center;
-            border-top: 1px solid #ddd;
-        }
+       
     </style>
 
     <script src="{% static 'employee/js/employee.js' %}"></script>
