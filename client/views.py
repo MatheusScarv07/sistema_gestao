@@ -141,7 +141,7 @@ def edit_client(request, id):
         form = ClientForm(request.POST, instance=cliente)
         if form.is_valid():
             form.save()  # Salva as alterações
-            return redirect('home')  # Redireciona para a página inicial ou onde desejar
+            return redirect('consultar_cliente')  # Redireciona para a página inicial ou onde desejar
     else:
         form = ClientForm(instance=cliente)  # Cria o formulário com os dados do cliente
 
