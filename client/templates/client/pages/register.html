@@ -33,7 +33,7 @@
                 <input type="text" placeholder="RG of client" name="rg" required>
                 <input type="text" placeholder="Phone number" name="telefone" required>
                 <input type="email" placeholder="Email" name="email" required>
-                <input type="text" placeholder="CEP" name="cep" id="cep" onblur="fetchEnderecoData(this.value)" required>
+                <input type="text" placeholder="C-E-P" name="cep" id="cep" onblur="fetchEnderecoData(this.value)" required>
                 <input type="text" placeholder="Address" name="endereco" id="rua" required>
                 <input type="text" placeholder="Number" name="numero" required>
                 <input type="text" placeholder="Complement" name="complemento">
@@ -146,11 +146,12 @@
             border-radius: 10px;
             gap: 1em;
             margin-top: 20px;
-            height: auto;
+            height: 80%;
         }
 
         form input, form select {
             width: 100%;
+            height:70%
             padding: 10px;
             border-radius: 5px;
             border: 1px solid #ddd;

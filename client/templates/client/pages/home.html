@@ -1,9 +1,5 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% include "client/partials/head.html" %}
     <title>Clientes</title>
     <style>
         /* Estilos gerais */
@@ -15,6 +11,17 @@
             display: flex;
             flex-direction: column; /* Altera a direção do layout para coluna */
             min-height: 100vh; /* Garante que o corpo ocupa pelo menos a altura da tela */
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #007bff;
+            padding: 1em;
+            color: white;
+            text-align: center;
+            z-index: 1000;
         }
 
         /* Estilo da sidebar */
@@ -155,10 +162,6 @@
 
         a {
             color: #007bff;
-            text-decoration: none;
-        }
-
-        a:hover {
             text-decoration: underline;
         }
 
@@ -184,7 +187,9 @@
 </head>
 <body>
 
-    {% include "global/partials/header.html" %}
+    <header>
+        {% include "global/partials/header.html" %}
+    </header>
 
     <main>
         <div class="content">
