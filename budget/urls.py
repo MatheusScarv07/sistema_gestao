@@ -1,4 +1,4 @@
-from budget.views import home,budget_search, search_budget_filter,new_budget, enviar_orcamento, cart, excluir_produto , gerar_relatorio , enviar_whatsapp, clear_cart, efetuar_venda
+from budget.views import home,budget_search, search_budget_filter,new_budget, enviar_orcamento, cart, excluir_produto , gerar_relatorio , enviar_whatsapp, clear_cart, efetuar_venda, page_details
 from django.urls import path
 
 
@@ -13,5 +13,7 @@ urlpatterns = [
     path('budget/gerar-relatorio/', gerar_relatorio, name='gerar_relatorio'),  # Nota: caminho correto
     path('budget/enviar_whatsapp/', enviar_whatsapp, name='enviar_whatsapp'),  # Nota: "/" no final
     path('budget/cancelar', clear_cart, name='cancelar_carrinho'),
-    path('budget/new-sale/<int:num_orcamento>', efetuar_venda, name='aprovar_venda' )
+    path('budget/new-sale/<int:num_orcamento>', efetuar_venda, name='aprovar_venda' ),
+    path('budget/<int:number_budget>/info', page_details)
+    
 ]

@@ -7,68 +7,47 @@
   </header>
 
   <main>
-    <div class="content">
-      <div class="sub_menu">
-        <a href="/budget"><button class="enviar">Painel</button></a>
-        <a href="/budget/new_budget/"><button class="enviar">Novo Orçamento</button></a>
-        <a href="/budget/relatorios/"><button class="enviar">Relatórios</button></a>
-      </div>
-
       <!-- Título da página -->
       <h1>Relatórios de Orçamento</h1>
       
       <!-- Formulário de seleção de relatórios -->
-      <form class="form_button" action="/budget/gerar-relatorio/" method="post">
-        {% csrf_token %}
-        <div class="dados-relatorio">
+    
           <fieldset class="area-relatorio">
             <legend>Selecionar Relatório</legend>
-            <select name="tipo_relatorio" id="tipo_relatorio">
-              <option value="" disabled selected>Selecione o tipo de relatório</option>
-              <option value="mensal">Diario</option>
-              <option value="mensal">Mensal</option>
-              <option value="anual">Anual</option>
-              <option value="personalizado">Personalizado</option>
-            </select>
-          </fieldset>
-        </div>
+            <td>{{ budget.number_budget }}</td>
+            <td>{{ budget.data_orcamento }}</td>
+            <td>{{ budget.cliente.nome }}</td>
+            <td>{{budget.cpf_cnpj_cliente}}</td>
+            <td>{{budget.total}}</td>
 
-        <!-- Botão para gerar o relatório -->
-        <button class="enviar" type="submit">Gerar Relatório</button>
+          </fieldset>
       </form>
 
       <!-- Tabela de relatórios recentes -->
       <fieldset class="infos">
-        <legend>Relatórios Recentes</legend>
+        <legend>Itens</legend>
         <table id="tabela-relatorios">
           <thead>
             <tr>
-              <th>Numero</th>
-              <th>Data</th>
-              <th>Cliente</th>
-              <th>CPF ou CNPJ</th>
-              <th>Valor</th>
+              <th>ID</th>
+              <th>Descrição</th>
+              <th>Codigo</th>
+              <th>Quantidade</th>
+              <th>Valor Uni</th>
+              <th>Valor_total</th>
               <th>Opções</th>
             </tr>
           </thead>
           <tbody>
-            {% for relatorio in budget %}
+            {% for relatorio in budget_info %}
               <tr>
-                <td>{{ relatorio.number_budget }}</td>
-                <td>{{ relatorio.data_orcamento }}</td>
-                <td>{{ relatorio.cliente.nome }}</td>
-                <td>{{relatorio.cpf_cnpj_cliente}}</td>
-                <td>{{relatorio.total}}</td>
+                <td>{{relatorio.produto.id}}</td>
+                <td>{{relatorio.produto.nome}}</td>
+                <td>{{relatorio.produto.codigo}}</td>
+                <td>{{relatorio.quantidade}}</td>
+                <td>{{relatorio.valor_unitario}}</td>
+                <td>{{relatorio.valor_total}}</td>
                 <td>
-                  <a href="/budget/new-sale/{{relatorio.number_budget}}">
-                    <img class='icons' src="{% static "/budget/img/money.png" %}" alt="">
-                  </a>
-                  <a href="">
-                    <img class='icons' src="{% static "/budget/img/edit.png" %}" alt="">
-                  </a>
-                  <a class="view-report" href="/budget/{{relatorio.number_budget}}/info">
-                    <img class="icons" src="{% static 'budget/img/view.png' %}" alt="Visualizar">
-                  </a>
                   <a class="delete-report" href="/budget/excluir_relatorio/{{ relatorio.id }}">
                     <img class="icons" src="{% static 'budget/img/remove.png' %}" alt="Remover">
                   </a>

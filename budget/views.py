@@ -26,8 +26,7 @@ def home (request):
 
 
 def budget_search(request):
-  data = datetime.today()
-  budget = BudgetInfo.objects.filter(data_orcamento=data)
+  budget = BudgetInfo.objects.all()
 
   clientes = Client.objects.all()
   vendedor_db = Employee.objects.all()
@@ -366,3 +365,13 @@ def efetuar_venda(request, num_orcamento):
         return HttpResponseBadRequest("Stock item not found.")
     except Exception as e:
         return HttpResponseBadRequest(f"An unexpected error occurred: {e}")
+    
+
+def page_details(request, number_budget):
+    budget = BudgetInfo.objects.get(number_budget= number_budget)
+    budget_info = Budget.objects.filter(number_budget=number_budget)
+    print(budget_info)
+    return render(request, 'budget/pages/info_budget.html', context={
+        'budget': budget,
+        'budget_info': budget_info
+    })
