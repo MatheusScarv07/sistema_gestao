@@ -1,17 +1,12 @@
 {% load static %}
 {% include "nfe/partials/head.html" %}
-<body>
-  
+
+<header>
   {% include "global/partials/header.html" %}
-  
+</header>
+<body>
   <main>
     <div class="content">
-      <div class="sub_menu">
-        <a href="/nfe"><button>Painel</button></a>
-        <a href="/nfe/new-nfe"><button>Nova NFE</button></a>
-        <a href="/sales/searchsales"><button>Consultar Vendas</button></a>
-      </div>
-      
       <h1>NOVA NFE</h1>
       <form action="/nfe/salvar-carrinho/" method="post">
         <!-- Div com os dados da nota -->
@@ -96,18 +91,44 @@
         {% endif %}
       </form>
     </div>
-    
-    <footer>Assinatura</footer>
   </main>
   
   <script src="{% static 'nfe/js/sales.js' %}"></script>
 
   <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #007bff;
+      padding: 1em;
+      color: white;
+      text-align: center;
+      z-index: 1000;
+    }
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    
+
     .content {
-      width: 85vw;
+      width: 150vw;
       display: flex;
       flex-direction: column;
+      padding-top: 130px; /* Ajuste conforme a altura do seu header */
+      margin: auto; /* Centraliza horizontalmente */
+      align-items: center; /* Centraliza o conteúdo da div */
     }
+    
 
     .sub_menu {
       margin-bottom: 20px;
@@ -127,13 +148,16 @@
     .nfe-data input,
     .nfe-data select,
     .product-data input,
-    .product-data select,
-    button {
-      padding: 0.5em;
+    .product-data select {
+      width: 300px; /* Ajuste este valor para aumentar a largura desejada */
+      max-width: 150%; /* Garante que eles ocupem o máximo da largura possível */
+      padding: 10px;
       border-radius: 5px;
       border: 1px solid #ccc;
       font-size: 1em;
+      box-sizing: border-box;
     }
+
 
     button {
       background-color: #007bff;
@@ -157,7 +181,6 @@
     #tabela-carrinho th {
       background-color: #f0f0f0;
     }
-
   </style>
 </body>
 </html>
