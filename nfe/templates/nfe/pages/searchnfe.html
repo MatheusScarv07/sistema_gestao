@@ -1,36 +1,147 @@
+{% load static %}
 {% include "sales/partials/head.html" %}
 <body>
-  {% include "global/partials/header.html" %}
-  <main>
-    
-    <h1>Search nfe</h1>
-
-    <form action="/nfe/filtrar_notas/" method='post'>
-      <input type="date" name="date_inicial" id="">
-      <input type="date" name="date_final" id="">
-      <select name="cliente" id="">
-        <option value="">fornecedor</option>
-        {% for fornecedor in fornecedores  %}
-        <option value="{{fornecedor.id}}">{{fornecedor.nome}}</option>
-        {% endfor %}
-      </select>
-      
-      <input type="text" placeholder="Numero da Nota" name="num_nota">
-      
-
-      <button type="submit">Filtrar</button>
-    </form>
-    <div>
-      {% for nota in notas  %}
-      <a href="/nfe/info/{{nota.numero_nota}}"><p>{{nota.numero_nota}}</p></a>
-      <p>{{nota.data_emissao}}</p>
-      <p>{{nota.fornecedor}}</p>
-      <p>{{nota.valor_total}}</p>
-      {% endfor %}
-    </div>
-  </main>
-
-  <footer></footer>
-  
+    <header>
+        {% include "global/partials/header.html" %}
+    </header>
+    <main>
+        <div class="content">
+            <div class="search-section">
+                <h1>Pesquisar NFE</h1>
+                <form action="/nfe/filtrar_notas/" method="post" class="search-form">
+                    <input type="date" name="date_inicial" id="">
+                    <input type="date" name="date_final" id="">
+                    <select name="cliente" id="">
+                        <option value="">Fornecedor</option>
+                        {% for fornecedor in fornecedores %}
+                            <option value="{{ fornecedor.id }}">{{ fornecedor.nome }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="text" placeholder="Número da Nota" name="num_nota">
+                    <button type="submit" class="styled-button">Filtrar</button>
+                </form>
+            </div>
+            <div class="nfe-list">
+                <h2>Notas Fiscais Encontradas</h2>
+                <div class="nfe-results">
+                    {% for nota in notas %}
+                        <div class="nfe-item">
+                            <a href="/nfe/info/{{ nota.numero_nota }}">
+                                <p>{{ nota.numero_nota }}</p>
+                            </a>
+                            <p>{{ nota.data_emissao }}</p>
+                            <p>{{ nota.fornecedor }}</p>
+                            <p>{{ nota.valor_total }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer></footer>
 </body>
+
+
+<style>
+  body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+  }
+
+  header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #007bff;
+      padding: 1em;
+      color: white;
+      text-align: center;
+      z-index: 1000;
+  }
+
+  main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 2em 0;
+  }
+
+  .content {
+      width: 85vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2em;
+  }
+
+  .search-section {
+      width: 70%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1em;
+  }
+
+  .search-form {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+  }
+
+  .search-form input, .search-form select {
+      flex: 1;
+      padding: 0.5em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+  }
+
+  .styled-button {
+      padding: 0.7em 1.5em;
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+  }
+
+  .styled-button:hover {
+      background-color: #0056b3;
+  }
+
+  .nfe-list {
+      width: 70%;
+      text-align: center;
+  }
+
+  .nfe-results {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+  }
+
+  .nfe-item {
+      background-color: #f9f9f9;
+      padding: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+  }
+
+  .nfe-item a {
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+  }
+
+  .nfe-item p {
+      margin: 0.5em 0;
+  }
+</style>
+
 </html>

@@ -1,18 +1,129 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <h2>Editar Funcionário</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Salvar</button>
-    <a href="{% url 'home' %}">Cancelar</a>
-  </form>
+{% load static %}
+{% include "employee/partials/head.html" %}
 
+<body>
+    <header>
+        {% include "global/partials/header.html" %}
+    </header>
+
+    <main>
+        <div class="content">
+            <h1>Editar Funcionário</h1>
+
+            <div class="form">
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <!-- Renderiza os campos do formulário (presumivelmente Django form fields) -->
+                    <div class="form-input">
+                        {{ form.name }}
+                        {{ form.cargo }}
+                        <div class="status-checkbox">
+                            <label for="status">Ativo</label>
+                            {{ form.status }}
+                        </div>
+                    </div>
+                    
+                    <div class="content-button">
+                        <button type="submit" class="styled-button">Salvar</button>
+                        <a href="{% url 'home' %}" class="cancel-button">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #007bff;
+            padding: 1em;
+            color: white;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .content {
+            width: 85vw;
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1em;
+            margin-top: 5em; /* Espaço para o header fixo */
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            width: 90%;
+            max-width: 600px;
+            padding: 10px;
+            border: 2px solid black;
+            border-radius: 10px;
+            gap: 1em;
+            align-items: center;
+        }
+
+        .form-input {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 1em;
+        }
+
+        .input-nome, .input-cargo, .status-checkbox {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .styled-button {
+            padding: 0.7em 1.5em;
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .styled-button:hover {
+            background-color: #0056b3;
+        }
+
+        .cancel-button {
+            padding: 0.7em 1.5em;
+            background-color: #f44336;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cancel-button:hover {
+            background-color: #d32f2f;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin: 0.5em 0;
+            text-align: center;
+        }
+
+    </style>
+
+    <script src="{% static 'employee/js/employee.js' %}"></script>
 </body>
 </html>
