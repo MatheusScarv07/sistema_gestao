@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseBadRequest
+from django.db.models import Sum
 from .models import Receive, PaymentHistory, PaymentType
 from sale.models import SaleInfo
 from client.models import Client
@@ -124,4 +125,58 @@ def search_receive(request):
         })
   except Exception as e:
         ...
-  
+
+def clientes_pendentes(request):
+    # Filtra os pagamentos pendentes
+    pagamentos_pendentes = Receive.objects.filter(status='Pendente')
+
+    return render(request, 'receive/pages/clientes_pendentes.html', {'pagamentos_pendentes': pagamentos_pendentes})
+
+def receber_pagamento(request, receive_id):
+    # Obter a informação de pagamento a partir do ID
+    pagamento = Receive.objects.get(id=receive_id)
+    
+    # Calculando a soma dos pagamentos já realizados para a venda
+    pagamentos_realizados = PaymentHistory.objects.filter(num_sale=pagamento.num_sale)
+    total_pago = pagamentos_realizados.aggregate(Sum('valor'))['valor__sum'] or 0
+    
+    # Verificando se o pagamento excede a dívida
+    if total_pago >= pagamento.valor:
+        status_atualizado = 'Pago'
+    else:
+        status_atualizado = pagamento.status
+
+    if request.method == 'POST':
+        # Obter o valor pago pelo cliente do formulário
+        valor_pago = float(request.POST.get('valor_pago'))
+        
+        # Verificar se o valor pago não ultrapassa o valor restante da dívida
+        if total_pago + valor_pago > pagamento.valor:
+            # Mensagem de erro, valor pago excede o saldo
+            return render(request, 'receive/pages/receber_pagamento.html', {
+                'pagamento': pagamento,
+                'erro': 'O valor pago não pode exceder o valor da dívida.'
+            })
+        
+        # Registrar o pagamento no histórico
+        PaymentHistory.objects.create(
+            num_sale=pagamento.num_sale,
+            cliente=pagamento.cliente,
+            cpf_cnpj=pagamento.cpf_cnpj,
+            type=pagamento.tipo_pagamento,
+            valor=valor_pago
+        )
+
+        # Atualizar o status do pagamento
+        if total_pago + valor_pago >= pagamento.valor:
+            pagamento.status = 'Pago'  # Marca como pago
+            pagamento.save()
+
+        # Redirecionar para a página com os pagamentos pendentes ou um feedback
+        return redirect('clientes_pendentes')  # Ou outra página de sucesso
+
+    return render(request, 'receive/pages/receber_pagamento.html', {
+        'pagamento': pagamento,
+        'total_pago': total_pago,
+        'status_atualizado': status_atualizado,
+    })
