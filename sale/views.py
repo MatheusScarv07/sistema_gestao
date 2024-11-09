@@ -109,12 +109,14 @@ def new_sale(request):
     button_enviar = False
     response = ''
     vendedor = Employee.objects.all()
+    produtos = Stock.objects.all()
     return render(request, 'sales/pages/sales.html', context={
         'clientes': clients,
         'vendedores': vendedor,
         'cart': carts,
         'button_enviar': button_enviar,
-        'response': response
+        'response': response,
+        'produtos_estoque': produtos
     })
 def get_product(request, product_id):
     try:
@@ -187,7 +189,7 @@ def cart(request):
         # Busca todos os itens do carrinho
         carts = CartTemp.objects.all()
         button_enviar = True
-
+        produtos = Stock.objects.all()
         # Renderiza o template com o contexto correto
         return render(
             request,
@@ -199,7 +201,8 @@ def cart(request):
                 'selected_vendedor': vendedor,  # Passa o vendedor selecionado
                 'cart': carts,
                 'response': response,
-                'button_enviar': button_enviar
+                'button_enviar': button_enviar,
+                'produtos_estoque': produtos
             }
         )
     else:
@@ -270,6 +273,7 @@ def efetuar_venda(request):
                 quantidade = produto.quantidade,
                 valor_total = produto.valor_total
             )
+            item.estoque = item.estoque - produto.quantidade
             valor.append(produto.valor_total)
             new.save()
         valor_venda = sum(valor)
@@ -346,13 +350,7 @@ def enviar_orcamento(request):
             button_enviar = False
             response = ''
             vendedor = Employee.objects.all()
-            return render(request, 'sales/pages/sales.html', context={
-                'clientes': clients,
-                'vendedores': vendedor,
-                'cart': carts,
-                'button_enviar': button_enviar,
-                'response': response
-            })      
+            return redirect('new_sale')      
     except Exception as e:
         # Handle exceptions appropriately, e.g., return an error response
         return HttpResponseBadRequest(f"An error occurred: {e}")

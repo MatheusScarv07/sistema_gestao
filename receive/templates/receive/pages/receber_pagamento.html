@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receber Pagamento</title>
+</head>
+<body>
+    <h1>Receber Pagamento</h1>
+
+    <p><strong>Cliente:</strong> {{ pagamento.cliente.nome }}</p>
+    <p><strong>Valor da Dívida:</strong> R$ {{ pagamento.valor }}</p>
+    <p><strong>Valor Pago Até Agora:</strong> R$ {{ total_pago }}</p>
+    <p><strong>Status Atual:</strong> {{ status_atualizado }}</p>
+
+    {% if erro %}
+    <p style="color: red;">{{ erro }}</p>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <label for="valor_pago">Valor Pago:</label>
+        <input type="number" id="valor_pago" name="valor_pago" step="0.01" required>
+        <br><br>
+        <button type="submit">Registrar Pagamento</button>
+    </form>
+</body>
+</html>

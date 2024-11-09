@@ -41,12 +41,23 @@
                             <td>{{ employee.status|yesno:"Ativo,Inativo" }}</td>
                             <td>
                                 <a href="/employee/{{employee.id}}/edit/"><img class='icons' src="{% static "employee/img/edit.png" %}" alt=""></a>
-                                <form action="/employee/{{employee.id}}/delete/" method="post">
+                                {% if employee.status %}
+                                <form action="/employee/{{employee.id}}/inactivate/" method="post">
                                     {% csrf_token %}
-                                    <button class="actions_icons" type="submit"><img class='icons' src="{% static "employee/img/remove.png" %}" alt=""></button>
-                                    
+                                        <!-- Botão para inativar o funcionário ativo -->
+                                        <button class="actions_icons" type="submit">
+                                            <img class="icons" src="{% static 'employee/img/block.png' %}" alt="Inativar">
+                                        </button>
                                 </form>
-                                
+                                {% else %}
+                                <form action="/employee/{{employee.id}}/activate/" method="post">
+                                    {% csrf_token %}
+                                        <!-- Botão para inativar o funcionário ativo -->
+                                        <button class="actions_icons" type="submit">
+                                            <img class="icons" src="{% static 'employee/img/check.png' %}" alt="Inativar">
+                                        </button>
+                                </form>
+                                {% endif %}
                             </td>
                         </tr>
                         {% empty %}

@@ -59,11 +59,24 @@ def edit_employee(request, id):
 
     return render(request, 'employee/pages/edit_employee.html', {'form': form, 'employee': employee})
 
-def delete_employee(request, id):
+def inativar_employee(request, id):
     # Verifica se a requisição é do tipo POST
     if request.method == "POST":
-        funcionario = get_object_or_404(Employee, id=id)  # Obtém o cliente pelo ID
-        funcionario.delete()  # Deleta o cliente
-        return redirect('search_employee')  # Redireciona para a página inicial ou a lista de clientes
+        funcionario = get_object_or_404(Employee, id=id)  # Obtém o funcionário pelo ID
+        funcionario.status = False  # Altera o status para 'inativo'
+        funcionario.save()  # Salva as alterações no banco de dados
+        return redirect('search_employee')  # Redireciona para a página de pesquisa ou lista de funcionários
 
-    return redirect('search_employee')
+    return redirect('search_employee')  # Redireciona se a requisição não for POST
+
+
+def ativar_employee(request, id):
+    # Verifica se a requisição é do tipo POST
+    if request.method == "POST":
+        funcionario = get_object_or_404(Employee, id=id)  # Obtém o funcionário pelo ID
+        funcionario.status = True  # Altera o status para 'inativo'
+        funcionario.save()  # Salva as alterações no banco de dados
+        return redirect('search_employee')  # Redireciona para a página de pesquisa ou lista de funcionários
+
+    return redirect('search_employee')  # Redireciona se a requisição não for POST
+ativar_employee

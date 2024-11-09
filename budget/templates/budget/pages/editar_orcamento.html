@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Orçamento</title>
+    <script>
+        // Função para atualizar os valores totais de cada item e do orçamento
+        function atualizarTotais() {
+            let totalOrcamento = 0;
+
+            // Itera sobre todos os itens do orçamento
+            document.querySelectorAll('.item-orcamento').forEach(item => {
+                const quantidadeInput = item.querySelector('.quantidade');
+                const valorUnitarioInput = item.querySelector('.valor-unitario');
+                const valorTotalInput = item.querySelector('.valor-total');
+
+                // Obtém valores e converte para float, trocando vírgula por ponto se necessário
+                let quantidade = parseInt(quantidadeInput.value) || 0;
+                let valorUnitario = parseFloat(valorUnitarioInput.value.replace(',', '.')) || 0;
+
+                // Calcula o valor total do item
+                let valorTotal = quantidade * valorUnitario;
+                valorTotalInput.value = valorTotal.toFixed(2).replace('.', ',');
+
+                // Adiciona ao total do orçamento
+                totalOrcamento += valorTotal;
+            });
+
+            // Atualiza o total do orçamento no campo principal
+            document.querySelector('#total-orcamento').value = totalOrcamento.toFixed(2).replace('.', ',');
+        }
+    </script>
+</head>
+<body>
+    <h1>Editar Orçamento - Número {{ budget.number_budget }}</h1>
+
+    <!-- Formulário de edição para o orçamento principal -->
+    <form method="post" action="{% url 'salvar_orcamento' number_budget=budget.number_budget %}">
+        {% csrf_token %}
+        <h2>Orçamento Principal</h2>
+        <label>Total:</label>
+        <input type="text" id="total-orcamento" name="total" value="{{ budget.total }}" readonly><br>
+    
+        <h2>Itens do Orçamento</h2>
+        {% for item in budget_items %}
+            <div class="item-orcamento">
+                <label>Produto:</label>
+                <input type="text" value="{{ item.produto.nome }}" readonly><br>
+
+                <label>Quantidade:</label>
+                <input type="number" class="quantidade" name="quantidade_{{ item.id }}" value="{{ item.quantidade }}" oninput="atualizarTotais()"><br>
+
+                <label>Valor Unitário:</label>
+                <input type="text" class="valor-unitario" name="valor_unitario_{{ item.id }}" value="{{ item.valor_unitario }}" oninput="atualizarTotais()"><br>
+
+                <label>Valor Total:</label>
+                <input type="text" class="valor-total" value="{{ item.valor_total }}" readonly><br>
+            </div>
+            <hr>
+        {% endfor %}
+    
+        <button type="submit">Salvar Alterações</button>
+    </form>
+</body>
+</html>

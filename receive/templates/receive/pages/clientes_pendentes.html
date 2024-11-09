@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes com Pagamento Pendente</title>
+</head>
+<body>
+    <h1>Clientes com Pagamento Pendente</h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID Cliente</th>
+                <th>Nome Cliente</th>
+                <th>CPF/CNPJ</th>
+                <th>Valor da Dívida</th>
+                <th>Data da Venda</th>
+                <th>Tipo de Pagamento</th>
+                <th>Status</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pagamento in pagamentos_pendentes %}
+            <tr>
+                <td>{{ pagamento.cliente.id }}</td>
+                <td>{{ pagamento.cliente.nome }}</td>
+                <td>{{ pagamento.cpf_cnpj }}</td>
+                <td>{{ pagamento.valor }}</td>
+                <td>{{ pagamento.data_venda }}</td>
+                <td>{{ pagamento.tipo_pagamento }}</td>
+                <td>{{ pagamento.status }}</td>
+                <td>
+                    <!-- Botão para redirecionar para a página de recebimento de pagamento -->
+                    <a href="{% url 'receber_pagamento' pagamento.id %}">
+                        <button>Receber Pagamento</button>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

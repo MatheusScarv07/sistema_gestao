@@ -63,13 +63,13 @@
                   <a href="/budget/new-sale/{{relatorio.number_budget}}">
                     <img class='icons' src="{% static "/budget/img/money.png" %}" alt="">
                   </a>
-                  <a href="">
+                  <a href="/budget/editar/{{relatorio.number_budget}}/">
                     <img class='icons' src="{% static "/budget/img/edit.png" %}" alt="">
                   </a>
                   <a class="view-report" href="/budget/{{relatorio.number_budget}}/info">
                     <img class="icons" src="{% static 'budget/img/view.png' %}" alt="Visualizar">
                   </a>
-                  <a class="delete-report" href="/budget/excluir_relatorio/{{ relatorio.id }}">
+                  <a class="delete-report" href="/budget/{{relatorio.number_budget}}/delete">
                     <img class="icons" src="{% static 'budget/img/remove.png' %}" alt="Remover">
                   </a>
                 </td>

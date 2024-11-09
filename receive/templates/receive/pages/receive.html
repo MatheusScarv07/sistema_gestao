@@ -2,7 +2,7 @@
 {% include "receive/partials/head.html" %}
 <body>
   
-  {% include "receive/partials/header.html" %}
+  {% include "global/partials/header.html" %}
   <main>
     <div class="content">
       <div class="sub_menu">
@@ -24,7 +24,7 @@
             <select name="type_payment_1" id="type_payment_1">
               <option value="">Selecione o Tipo de Pagamento</option>
               {% for tipo_pagamento in tipos_pagamento %}
-                <option value="{{tipo_pagamento.nome}}">{{tipo_pagamento.nome}}</option>
+                <option value="{{tipo_pagamento.id}}">{{tipo_pagamento.nome}}</option>
               {% endfor %}
             </select>
           </div>
@@ -43,7 +43,7 @@
               <select name="type_payment_2" id="type_payment_2">
                 <option value="">Selecione o Tipo de Pagamento</option>
                 {% for tipo_pagamento in tipos_pagamento %}
-                  <option value="{{tipo_pagamento.nome}}">{{tipo_pagamento.nome}}</option>
+                  <option value="{{tipo_pagamento.id}}">{{tipo_pagamento.nome}}</option>
                 {% endfor %}
               </select>
             </div>

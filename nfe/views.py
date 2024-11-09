@@ -4,7 +4,8 @@ from datetime import datetime
 from supplier.models import Supplier
 from stock.models import Stock
 from nfe.models import NFE, NFECartTemp, NFEInfo
-from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, Http404
+
 
 # Create your views here.
 
@@ -215,10 +216,14 @@ def search_nfes(request):
     })
 
 def info_nfe(request, num_nota):
-    compra = NFE.objects.filter(numero_nota= num_nota)
-    dados = NFEInfo.objects.get(numero_nota = num_nota)
-
-    return render(request, 'nfe/pages/info_nfe', context={
-        'dados_nota': dados,
-        'itens': compra
+    # Tenta recuperar as informações da NFE
+    try:
+        compra = NFE.objects.filter(numero_nota=num_nota)
+        dados = NFEInfo.objects.get(numero_nota=num_nota)
+    except NFEInfo.DoesNotExist:
+        raise Http404("Informações da NFE não encontradas")
+    
+    return render(request, 'nfe/pages/info_nfe.html', context={
+        'budget': dados,
+        'budget_info': compra
     })

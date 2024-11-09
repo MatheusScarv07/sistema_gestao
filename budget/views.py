@@ -302,22 +302,31 @@ def enviar_whatsapp(request):
 
 def efetuar_venda(request, num_orcamento):
     try:
+        # Tente obter as informações do orçamento
         dados_orcamento = BudgetInfo.objects.get(number_budget=int(num_orcamento))
+        
+        # Verifique se cliente e vendedor existem
+        if dados_orcamento.cliente is None:
+            return HttpResponseBadRequest("Cliente não especificado no orçamento.")
+        if dados_orcamento.vendedor is None:
+            return HttpResponseBadRequest("Vendedor não especificado no orçamento.")
+        
         client = Client.objects.get(id=dados_orcamento.cliente.id)
         seller = Employee.objects.get(id=dados_orcamento.vendedor.id)
+        
+        # Obtenha os itens do orçamento
         budget_items = Budget.objects.filter(number_budget=num_orcamento)
-        print(budget_items)
-         # Obter o carrinho temporário e informações do orçamento
+        
+        # Obtenha o número da venda e inicialize listas para valores e vendas
         numero_venda = randint(1, 1000)
-        budget_items = Budget.objects.filter(number_budget=num_orcamento)
-
         valor = []
-        sales = []  # List to collect Sale instances for bulk creation
+        sales = []
+
         for produto in budget_items:
             data = datetime.now()
             item = Stock.objects.get(id=produto.produto.id)
 
-            # Create new sale
+            # Crie uma nova venda
             new_sale = Sale(
                 num_sale=numero_venda,
                 cliente=client,
@@ -332,14 +341,13 @@ def efetuar_venda(request, num_orcamento):
             valor.append(produto.valor_total)
             sales.append(new_sale)
 
-        # Bulk create sales for efficiency
-        print(sales)
+        # Criação em massa das vendas
         Sale.objects.bulk_create(sales)
 
-        # Calculate total sale value
+        # Calcula o valor total da venda
         valor_venda = sum(valor)
 
-        # Create sale information
+        # Crie as informações da venda
         sale_info = SaleInfo(
             num_sale=numero_venda,
             cliente=client,
@@ -349,22 +357,22 @@ def efetuar_venda(request, num_orcamento):
         )
         sale_info.save()
 
-        # Clear temporary cart
-        dados_orcamento.delete()  # This also deletes related budget items
-        Budget.objects.filter(number_budget=num_orcamento).delete() 
+        # Limpe o carrinho temporário
+        dados_orcamento.delete()
+        Budget.objects.filter(number_budget=num_orcamento).delete()
 
-        return redirect('receive_page', num_venda = numero_venda)  
+        return redirect('receive_page', num_venda=numero_venda)
 
     except BudgetInfo.DoesNotExist:
-        return HttpResponseBadRequest("Budget information not found.")
+        return HttpResponseBadRequest("Informações do orçamento não encontradas.")
     except Client.DoesNotExist:
-        return HttpResponseBadRequest("Client not found.")
+        return HttpResponseBadRequest("Cliente não encontrado.")
     except Employee.DoesNotExist:
-        return HttpResponseBadRequest("Seller not found.")
+        return HttpResponseBadRequest("Vendedor não encontrado.")
     except Stock.DoesNotExist:
-        return HttpResponseBadRequest("Stock item not found.")
+        return HttpResponseBadRequest("Item de estoque não encontrado.")
     except Exception as e:
-        return HttpResponseBadRequest(f"An unexpected error occurred: {e}")
+        return HttpResponseBadRequest(f"Ocorreu um erro inesperado: {e}")
     
 
 def page_details(request, number_budget):
@@ -375,3 +383,86 @@ def page_details(request, number_budget):
         'budget': budget,
         'budget_info': budget_info
     })
+
+def delete_budget(request, number_budget):
+    try:
+        # Tenta obter o orçamento e os itens do orçamento
+        budget = BudgetInfo.objects.get(number_budget=number_budget)
+        budget_info = Budget.objects.filter(number_budget=number_budget)
+
+        # Exclui o orçamento e os itens relacionados
+        budget.delete()
+        budget_info.delete()
+
+        return redirect('ver_orcamentos')
+
+    except BudgetInfo.DoesNotExist:
+        return HttpResponseBadRequest("Orçamento não encontrado.")
+    except Exception as e:
+        return HttpResponseBadRequest(f"Ocorreu um erro inesperado: {e}")
+    
+
+def editar_orcamento(request, number_budget):
+    try:
+        # Tenta obter o orçamento principal
+        budget = BudgetInfo.objects.get(number_budget=number_budget)
+        
+        # Obter os itens do orçamento relacionados
+        budget_items = Budget.objects.filter(number_budget=number_budget)
+
+        # Renderiza a página de edição com os dados do orçamento e itens
+        return render(request, 'budget/pages/editar_orcamento.html', {
+            'budget': budget,
+            'budget_items': budget_items
+        })
+
+    except BudgetInfo.DoesNotExist:
+        return HttpResponseBadRequest("Orçamento não encontrado.")
+    except Exception as e:
+        return HttpResponseBadRequest(f"Ocorreu um erro inesperado: {e}")
+    
+def salvar_orcamento(request, number_budget):
+    if request.method == 'POST':
+        try:
+            # Obtém o orçamento principal
+            budget = BudgetInfo.objects.get(number_budget=number_budget)
+            
+            # Atualiza dados do orçamento principal, se necessário
+            total = request.POST.get('total', str(budget.total))
+            total = total.replace(',', '.')  # Substitui vírgula por ponto, se houver
+            budget.total = float(total)  # Converte para float após a substituição
+            budget.save()
+
+            # Itera sobre os itens do orçamento e atualiza cada um
+            budget_items = Budget.objects.filter(number_budget=number_budget)
+            for item in budget_items:
+                item_id = str(item.id)
+                
+                # Obtém e converte quantidade
+                quantidade = int(request.POST.get(f'quantidade_{item_id}', item.quantidade))
+                
+                # Obtém e converte valor unitário, substituindo ',' por '.'
+                valor_unitario = request.POST.get(f'valor_unitario_{item_id}', str(item.valor_unitario))
+                valor_unitario = valor_unitario.replace(',', '.')  # Substitui vírgula por ponto
+                valor_unitario = float(valor_unitario)
+                
+                # Calcula o valor total
+                valor_total = quantidade * valor_unitario
+                
+                # Atualiza o item do orçamento
+                item.quantidade = quantidade
+                item.valor_unitario = valor_unitario
+                item.valor_total = valor_total
+                item.save()
+
+            return redirect('ver_orcamentos')
+
+        except BudgetInfo.DoesNotExist:
+            return HttpResponseBadRequest("Orçamento não encontrado.")
+        except Budget.DoesNotExist:
+            return HttpResponseBadRequest("Item do orçamento não encontrado.")
+        except Exception as e:
+            return HttpResponseBadRequest(f"Ocorreu um erro inesperado: {e}")
+
+    else:
+        return HttpResponseBadRequest("Método inválido para esta requisição.")
