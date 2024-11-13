@@ -26,7 +26,7 @@ def home (request):
 
 
 def budget_search(request):
-  budget = BudgetInfo.objects.all()
+  budget = BudgetInfo.objects.all().order_by('-data_orcamento')
 
   clientes = Client.objects.all()
   vendedor_db = Employee.objects.all()

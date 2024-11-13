@@ -10,7 +10,7 @@ urlpatterns = [
     path('nfe/excluir_produto/<int:id>/', excluir_produto, name='excluir_produto'),
     path('nfe/new_nfe/concluido/', efetuar_entrada, name='entrada_efetuada'),
     path('nfe/searchnfe/',search_nfes, name='search_nfes' ),
-    path('nfe/info/<int:numero_nota>/', info_nfe )
+    path('nfe/info/<int:num_nota>/', info_nfe )
 
     
 ]
