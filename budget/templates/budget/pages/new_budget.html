@@ -162,10 +162,6 @@
           {% csrf_token %}
           <button class="enviar" type="submit">Enviar Orçamento</button>
         </form>
-        <form class="form_button" action="/budget/enviar_orcamento/" method="post">
-          {% csrf_token %}
-          <button class="enviar" type="submit">Efetuar Venda</button>
-        </form>
         <form action="{% url "cancelar_carrinho" %}" method="post">
           <button class="enviar" type='submit'>Cancelar</button>
         </form>

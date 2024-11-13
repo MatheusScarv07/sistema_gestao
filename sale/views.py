@@ -357,8 +357,8 @@ def enviar_orcamento(request):
  
 def searchsales(request):
     try: 
-        data = datetime.today()
-        vendas = SaleInfo.objects.filter(data_venda=data)
+        
+        vendas = SaleInfo.objects.all().order_by('-data_venda')
         clientes = Client.objects.all()
         vendedor = Employee.objects.all()
         return render(request, 'sales/pages/searchsales.html', context={
