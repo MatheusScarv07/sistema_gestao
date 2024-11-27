@@ -1,27 +1,125 @@
 {% include "client/partials/head.html" %}
 <body>
-
-
-  {% include "global/partials/header.html" %}
-
-    <main>
-      <div class="content">
-        <div>
-            <a href="/client"><button>Voltar</button></a>
-        </div>
-          <div>
-            <h2>{{client.nome}}</h2>
-            <p>{{client.email}}</p>
-            <p>{{client.telefone}}</p>
-            <p>{{client.cpf_cnpj}}</p>
-            <p>{{client.rg}}</p>
-            <p>{{client.ie}}</p>
-            <p>{{client.rua}}, {{client.numero_casa}}, {{client.complemento}}, {{client.bairro}}, {{client.cidade}}, {{client.estado}}</p>
-          </div>
-          
+  <header>
+    {% include "global/partials/header.html" %}
+</header>
+  
+  <main>
+    <div class="content">
+      <!-- Botão de voltar -->
+      
+      
+      <!-- Informações do cliente -->
+      <div class="client-info">
+        <h2>{{ client.nome }}</h2>
+        <p><strong>Email:</strong> {{ client.email }}</p>
+        <p><strong>Telefone:</strong> {{ client.telefone }}</p>
+        <p><strong>CPF/CNPJ:</strong> {{ client.cpf_cnpj }}</p>
+        <p><strong>RG:</strong> {{ client.rg }}</p>
+        <p><strong>IE:</strong> {{ client.ie }}</p>
+        <p>
+          <strong>Endereço:</strong> {{ client.rua }}, {{ client.numero_casa }},
+          {{ client.complemento }}, {{ client.bairro }},
+          {{ client.cidade }}, {{ client.estado }}
+        </p>
       </div>
-       
-    </main>
-    
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; {{ current_year }} - Sua Empresa</p>
+  </footer>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #007bff;
+      padding: 1em;
+      color: white;
+      text-align: center;
+      z-index: 1000;
+    }
+
+    main {
+      padding-top: 80px;
+      text-align: center;
+      width: 85vw;
+      margin: auto;
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5em;
+    }
+
+    .back-button {
+      margin-bottom: 1.5em;
+    }
+
+    .back-button button {
+      padding: 0.7em 1.5em;
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .back-button button:hover {
+      background-color: #0056b3;
+    }
+
+    .client-info {
+      background-color: #f9f9f9;
+      padding: 2em;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
+      text-align: left;
+    }
+
+    .client-info h2 {
+      margin-top: 0;
+      color: #333;
+      font-size: 1.8em;
+    }
+
+    .client-info p {
+      margin: 0.5em 0;
+      font-size: 1em;
+      color: #555;
+    }
+
+    .client-info strong {
+      color: #000;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1em;
+      background-color: #f1f1f1;
+      border-top: 1px solid #ddd;
+      margin-top: 2em;
+      width: 100%;
+    }
+
+    footer p {
+      margin: 0;
+      font-size: 0.9em;
+      color: #777;
+    }
+  </style>
 </body>
 </html>
