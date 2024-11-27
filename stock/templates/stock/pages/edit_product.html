@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Produto</title>
     <style>
-        /* Estilos para centralizar e organizar o formulário */
+        /* Estilos gerais */
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -14,6 +14,26 @@
             min-height: 100vh;
             margin: 0;
             background-color: #f4f4f9;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #007bff;
+            padding: 1em;
+            color: white;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        main {
+            width: 100%;
+            padding-top: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .container {
@@ -89,9 +109,29 @@
         .cancel-btn:hover {
             background-color: #c9302c;
         }
+
+        footer {
+            text-align: center;
+            padding: 1em;
+            background-color: #f1f1f1;
+            border-top: 1px solid #ddd;
+            margin-top: 2em;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #777;
+        }
     </style>
 </head>
 <body>
+  <!-- Cabeçalho global -->
+  <header>
+    {% include "global/partials/header.html" %}
+  </header>
+
+  <main>
     <div class="container">
         <h1>Editar Produto</h1>
         <form method="post">
@@ -118,5 +158,8 @@
             </div>
         </form>
     </div>
+  </main>
+
+ 
 </body>
 </html>

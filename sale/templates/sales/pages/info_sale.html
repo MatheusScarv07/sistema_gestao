@@ -1,47 +1,167 @@
-{% include "sales/partials/head.html" %}
-<body>
-  {% include "global/partials/header.html" %}
-  <main>
-    <div class="sub_menu">
-      <a href="/sales"><button>Painel</button></a>
-      <a href="/sale/new-sale"><button>Nova Venda</button></a>
-      <a href="/sales/searchsales"><button>Consultar Vendas</button></a>
-    </div>
-    <h1>{{nome}} - {{num_venda}}</h1>
-    <div>
-      {% for produto in products  %}
-      <p>{{produto.num_sale}}</p>
-      <p>{{produto.data_venda}}</p>
-      <p>{{produto.produto}}</p>
-      <p>{{produto.valor_unitario}}</p>
-      <p>{{produto.quantidade}}</p>
-      <p>{{produto.valor_total}}</p>
-      {% endfor %}
-    </div>
-    <div>
-      <h3>Historico de pagamento</h3>
-      
-      <table>
-        <thead>
-          <th>Data</th>
-          <th>Tipo pagamento</th>
-          <th>Valor</th>
-        </thead>
-        <tbody>
-          {% for pagamento in pagamentos  %}
-          <tr>
-            <td>{{pagamento.data}}</td>
-            <td>{{pagamento.type}}</td>
-            <td>{{pagamento.valor}}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      
-    </div>
-  </main>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Venda</title>
+    <style>
+        /* Estilo geral */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
 
-  <footer></footer>
-  
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #007bff;
+            padding: 1em;
+            color: white;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        main {
+            margin: 80px auto 0 auto;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .sub_menu {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2em;
+            gap: 1em;
+        }
+
+        .sub_menu a button {
+            padding: 0.8em 1.2em;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            text-transform: uppercase;
+        }
+
+        .sub_menu a button:hover {
+            background-color: #0056b3;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 1em;
+        }
+
+        .product-details,
+        .payment-history {
+            margin: 2em 0;
+            padding: 1.5em;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-details h2,
+        .payment-history h3 {
+            margin-bottom: 1em;
+            color: #007bff;
+        }
+
+        .product-details p {
+            margin: 0.5em 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1em;
+        }
+
+        table thead th {
+            background-color: #007bff;
+            color: white;
+            padding: 0.8em;
+            text-align: left;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody td {
+            padding: 0.8em;
+            border: 1px solid #ddd;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1em;
+            background-color: #f1f1f1;
+            border-top: 1px solid #ddd;
+            margin-top: 2em;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho global -->
+    <header>
+        {% include "global/partials/header.html" %}
+    </header>
+
+    <main>
+        <!-- Submenu -->
+        
+
+        <!-- Detalhes da venda -->
+        <h1>{{nome}} - {{num_venda}}</h1>
+
+        <div class="product-details">
+            <h2>Produtos</h2>
+            {% for produto in products %}
+            <p><strong>Venda Nº:</strong> {{produto.num_sale}}</p>
+            <p><strong>Data:</strong> {{produto.data_venda}}</p>
+            <p><strong>Produto:</strong> {{produto.produto}}</p>
+            <p><strong>Valor Unitário:</strong> R$ {{produto.valor_unitario}}</p>
+            <p><strong>Quantidade:</strong> {{produto.quantidade}}</p>
+            <p><strong>Valor Total:</strong> R$ {{produto.valor_total}}</p>
+            <hr>
+            {% endfor %}
+        </div>
+
+        <!-- Histórico de pagamentos -->
+        <div class="payment-history">
+            <h3>Histórico de Pagamento</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Tipo de Pagamento</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pagamento in pagamentos %}
+                    <tr>
+                        <td>{{pagamento.data}}</td>
+                        <td>{{pagamento.type}}</td>
+                        <td>R$ {{pagamento.valor}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    
 </body>
 </html>

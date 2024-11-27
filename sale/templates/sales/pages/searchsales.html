@@ -1,11 +1,11 @@
 {% include "sales/partials/head.html" %}
 <body>
-  {% include "global/partials/header.html" %}
+  <header>
+    {% include "global/partials/header.html" %}
+  </header>
+  
   <main>
-    <div class="sub_menu">
-      <a href="/sales"><button>Painel</button></a>
-      <a href="/sale/new-sale"><button>Nova Venda</button></a>
-    </div>
+    
 
     <h1>Consultar Vendas</h1>
 
@@ -44,76 +44,145 @@
       {% endfor %}
     </div>
   </main>
-  <footer></footer>
+  
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #007bff;
+      padding: 1em;
+      color: white;
+      text-align: center;
+      z-index: 1000;
+    }
+
+    main {
+      padding-top: 80px;
+      text-align: center;
+      width: 85vw;
+      margin: auto;
+    }
+
+    .sub_menu {
+      display: flex;
+      justify-content: center;
+      gap: 1em;
+      margin-bottom: 1.5em;
+    }
+
+    .sub_menu button {
+      padding: 0.7em 1.5em;
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .sub_menu button:hover {
+      background-color: #0056b3;
+    }
+
+    h1 {
+      margin-bottom: 1.5em;
+      font-size: 2em;
+      color: #333;
+    }
+
+    .form-filtro {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+      align-items: center;
+      margin-bottom: 1.5em;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 1em;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .input-group input,
+    .input-group select {
+      padding: 0.5em;
+      font-size: 1em;
+      width: 12em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .botao-filtrar {
+      padding: 0.5em 1em;
+      font-weight: bold;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .botao-filtrar:hover {
+      background-color: #0056b3;
+    }
+
+    .resultado-consulta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .venda-item {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1em;
+      padding: 1em;
+      width: 100%;
+      max-width: 800px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      margin-bottom: 1em;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .venda-item p {
+      margin: 0;
+      font-size: 1em;
+      text-align: center;
+    }
+
+    .num-venda {
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1em;
+      background-color: #f1f1f1;
+      border-top: 1px solid #ddd;
+      margin-top: 2em;
+      width: 100%;
+    }
+
+    footer p {
+      margin: 0;
+      font-size: 0.9em;
+      color: #777;
+    }
+  </style>
 </body>
 </html>
-
-<style>
-  /* Estilização do conteúdo */
-  .sub_menu {
-    display: flex;
-    justify-content: center;
-    gap: 1em;
-    margin-bottom: 1.5em;
-  }
-
-  .form-filtro {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-    align-items: center;
-    margin-bottom: 1.5em;
-  }
-
-  .input-group {
-    display: flex;
-    gap: 1em;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .input-group input,
-  .input-group select {
-    padding: 0.5em;
-    font-size: 1em;
-    width: 12em;
-  }
-
-  .botao-filtrar {
-    padding: 0.5em 1em;
-    font-weight: bold;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .resultado-consulta {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 85vw;
-    margin: 0 auto;
-  }
-
-  .venda-item {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1em;
-    padding: 1em;
-    width: 100%;
-    border-bottom: 1px solid #ddd;
-  }
-
-  .venda-item p {
-    margin: 0;
-    font-size: 1em;
-    text-align: center;
-  }
-
-  .num-venda {
-    font-weight: bold;
-    color: #007bff;
-  }
-</style>
