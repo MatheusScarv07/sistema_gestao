@@ -8,77 +8,78 @@
 
   <main>
     <div class="content">
-      
-
       <!-- Título da página -->
       <h1>Relatórios de Orçamento</h1>
-      
-      <!-- Formulário de seleção de relatórios -->
-      <form class="form_button" action="/budget/gerar-relatorio/" method="post">
-        {% csrf_token %}
-        <div class="dados-relatorio">
-          <fieldset class="area-relatorio">
-            <legend>Selecionar Relatório</legend>
-            <select name="tipo_relatorio" id="tipo_relatorio">
-              <option value="" disabled selected>Selecione o tipo de relatório</option>
-              <option value="mensal">Diario</option>
-              <option value="mensal">Mensal</option>
-              <option value="anual">Anual</option>
-              <option value="personalizado">Personalizado</option>
-            </select>
-          </fieldset>
-        </div>
-
-        <!-- Botão para gerar o relatório -->
-        <button class="enviar" type="submit">Gerar Relatório</button>
-      </form>
 
       <!-- Tabela de relatórios recentes -->
       <fieldset class="infos">
         <legend>Relatórios Recentes</legend>
-        <table id="tabela-relatorios">
-          <thead>
-            <tr>
-              <th>Numero</th>
-              <th>Data</th>
-              <th>Cliente</th>
-              <th>CPF ou CNPJ</th>
-              <th>Valor</th>
-              <th>Opções</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for relatorio in budget %}
+        <div class="table-container">
+          <table id="tabela-relatorios">
+            <thead>
+              <tr>
+                <th>Numero</th>
+                <th>Data</th>
+                <th>Cliente</th>
+                <th>CPF ou CNPJ</th>
+                <th>Valor</th>
+                <th>Opções</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for relatorio in budget %}
               <tr>
                 <td>{{ relatorio.number_budget }}</td>
                 <td>{{ relatorio.data_orcamento }}</td>
                 <td>{{ relatorio.cliente.nome }}</td>
-                <td>{{relatorio.cpf_cnpj_cliente}}</td>
-                <td>{{relatorio.total}}</td>
+                <td>{{ relatorio.cpf_cnpj_cliente }}</td>
+                <td>{{ relatorio.total }}</td>
                 <td>
-                  <a href="/budget/new-sale/{{relatorio.number_budget}}">
-                    <img class='icons' src="{% static "/budget/img/money.png" %}" alt="">
+                  <a href="/budget/new-sale/{{ relatorio.number_budget }}">
+                    <img class="icons" src="{% static '/budget/img/money.png' %}" alt="Vender">
                   </a>
-                  <a href="/budget/editar/{{relatorio.number_budget}}/">
-                    <img class='icons' src="{% static "/budget/img/edit.png" %}" alt="">
+                  <a href="/orcamento/gerar-pdf/{{ relatorio.number_budget }}">
+                    <img class="icons" src="{% static '/budget/img/download.png' %}" alt="Download">
                   </a>
-                  <a class="view-report" href="/budget/{{relatorio.number_budget}}/info">
+                  <a href="/budget/editar/{{ relatorio.number_budget }}/">
+                    <img class="icons" src="{% static '/budget/img/edit.png' %}" alt="Editar">
+                  </a>
+                  <a class="view-report" href="/budget/{{ relatorio.number_budget }}/info">
                     <img class="icons" src="{% static 'budget/img/view.png' %}" alt="Visualizar">
                   </a>
-                  <a class="delete-report" href="/budget/{{relatorio.number_budget}}/delete">
+                  <a class="delete-report" href="/budget/{{ relatorio.number_budget }}/delete">
                     <img class="icons" src="{% static 'budget/img/remove.png' %}" alt="Remover">
                   </a>
                 </td>
               </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination">
+          <span class="step-links">
+            {% if budget.has_previous %}
+            <a href="?page=1">Primeira</a>
+            <a href="?page={{ budget.previous_page_number }}">Anterior</a>
+            {% endif %}
+
+            <span>Página {{ budget.number }} de {{ budget.paginator.num_pages }}</span>
+
+            {% if budget.has_next %}
+            <a href="?page={{ budget.next_page_number }}">Próxima</a>
+            <a href="?page={{ budget.paginator.num_pages }}">Última</a>
+            {% endif %}
+          </span>
+        </div>
       </fieldset>
+      <br>
+      <a href="/budget/exportar/orcamentos">
+        <button class="enviar" type="submit">Gerar Relatório</button>
+      </a>
     </div>
   </main>
 
   <style>
-    /* Mantendo o estilo consistente */
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -97,66 +98,27 @@
     }
 
     .content {
-      padding-top: 60px;
-      width: 85vw;
-      min-height: 90vh;
+      padding-top: 80px;
+      width: 90%;
+      margin: auto;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin: auto;
-      padding: 1em;
-    }
-
-    .sub_menu {
-      display: flex;
       gap: 1em;
-      margin-bottom: 1em;
-    }
-    .sub_menu button {
-      padding: 0.7em 1.5em;
-      background-color: #007bff;
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
     }
 
     h1 {
-      font-size: 2em;
-      margin-bottom: 0.5em;
+      font-size: 1.8em;
       text-align: center;
     }
 
-    form button {
-      padding: 0.7em 1.5em;
-      background-color: #007bff;
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    form button:hover {
-      background-color: #0056b3;
-    }
-
-    form input, form select {
-      width: 70%;
-      height: 1.5em;
-      padding: 0.5em;
-      border-radius: 5px;
-      border: 1px solid #ddd;
-    }
-
     .infos {
-      width: 100%;
       border: 1px solid #ddd;
       border-radius: 10px;
       padding: 1em;
-      margin-top: 1em;
+    }
+
+    .table-container {
+      overflow-x: auto;
     }
 
     table {
@@ -167,23 +129,67 @@
     th, td {
       padding: 0.5em;
       text-align: left;
+      border: 1px solid #ddd;
     }
 
     th {
       background-color: #f1f1f1;
     }
-    .icons{
-      width: 2em;
-      margin-left: 2em;
+
+    .icons {
+      width: 24px;
+      margin-left: 8px;
     }
-    .actions_icons{
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .pagination a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .pagination a:hover {
+      text-decoration: underline;
+    }
+
+    .enviar {
+      padding: 0.7em 1.5em;
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
       border: none;
-      background-color: transparent;
+      border-radius: 5px;
       cursor: pointer;
     }
-  </style>
 
+    .enviar:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.5em;
+      }
+
+      table, th, td {
+        font-size: 0.9em;
+      }
+
+      .icons {
+        width: 20px;
+      }
+
+      .enviar {
+        font-size: 0.9em;
+      }
+    }
+  </style>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
+

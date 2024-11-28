@@ -1,3 +1,4 @@
+{% load static %}
 {% include "sales/partials/head.html" %}
 <body>
   <header>
@@ -31,18 +32,62 @@
       </div>
       <button class="botao-filtrar" type="submit">Filtrar</button>
     </form>
-
-    <!-- Resultados da consulta -->
-    <div class="resultado-consulta">
-      {% for venda in vendas %}
-        <div class="venda-item">
-          <a href="/sale/info/{{ venda.num_sale }}"><p class="num-venda">{{ venda.num_sale }}</p></a>
-          <p class="data-venda">{{ venda.data_venda }}</p>
-          <p class="cliente">{{ venda.cliente }}</p>
-          <p class="valor">{{ venda.valor }}</p>
-        </div>
-      {% endfor %}
+    <div class="table-container">
+      <table id="tabela-relatorios">
+        <thead>
+          <tr>
+            <th>Numero</th>
+            <th>Data</th>
+            <th>Cliente</th>
+            <th>CPF ou CNPJ</th>
+            <th>Valor</th>
+            <th>Opções</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for venda in vendas %}
+          <tr>
+            <td>{{ venda.num_sale }}</td>
+            <td>{{ venda.data_venda }}</td>
+            <td>{{ venda.cliente.nome }}</td>
+            <td>{{ venda.cliente.cpf_cnpj }}</td>
+            <td>{{ venda.valor }}</td>
+            <td>
+              
+              <a href="/sale/gerar-pdf/{{ venda.num_sale }}">
+                <img class="icons" src="{% static '/budget/img/download.png' %}" alt="Download">
+              </a>
+              <a class="view-report" href="/budget/{{ venda.number_budget }}/info">
+                <img class="icons" src="{% static 'budget/img/view.png' %}" alt="Visualizar">
+              </a>
+              
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
+    <div class="pagination">
+      <span class="step-links">
+        {% if budget.has_previous %}
+        <a href="?page=1">Primeira</a>
+        <a href="?page={{ venda.previous_page_number }}">Anterior</a>
+        {% endif %}
+
+        <span>Página {{ vendas.number }} de {{ vendas.paginator.num_pages }}</span>
+
+        {% if budget.has_next %}
+        <a href="?page={{ vendas.next_page_number }}">Próxima</a>
+        <a href="?page={{ vendas.paginator.num_pages }}">Última</a>
+        {% endif %}
+      </span>
+    </div>
+  </fieldset>
+  <br>
+  <a href="/sale/exportar/orcamentos">
+    <button class="enviar" type="submit">Gerar Relatório</button>
+  </a>
+</div>
   </main>
   
 
@@ -90,6 +135,10 @@
 
     .sub_menu button:hover {
       background-color: #0056b3;
+    }
+    .icons {
+      width: 24px;
+      margin-left: 8px;
     }
 
     h1 {
@@ -182,6 +231,64 @@
       margin: 0;
       font-size: 0.9em;
       color: #777;
+    }
+    .infos {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 1em;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 0.5em;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f1f1f1;
+    }
+
+    .icons {
+      width: 24px;
+      margin-left: 8px;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .pagination a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .pagination a:hover {
+      text-decoration: underline;
+    }
+
+    .enviar {
+      padding: 0.7em 1.5em;
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .enviar:hover {
+      background-color: #0056b3;
     }
   </style>
 </body>

@@ -13,6 +13,9 @@ from django.template.loader import render_to_string
 from django.http import HttpResponse
 from django.contrib import messages
 from sale.models import Sale, SaleInfo
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.core.paginator import Paginator
 
 
 
@@ -26,16 +29,20 @@ def home (request):
 
 
 def budget_search(request):
-  budget = BudgetInfo.objects.all().order_by('-data_orcamento')
-
-  clientes = Client.objects.all()
-  vendedor_db = Employee.objects.all()
-  print(budget)
-  return render(request, "budget/pages/search_budget.html",{
-     "budget":budget,
-     'clientes':clientes,
-    'vendedores': vendedor_db
-                                                            })
+    budget_list = BudgetInfo.objects.all().order_by('-data_orcamento')
+    clientes = Client.objects.all()
+    vendedor_db = Employee.objects.all()
+    
+    # Paginação
+    page_number = request.GET.get('page', 1)  # Página atual, padrão é 1
+    paginator = Paginator(budget_list, 10)  # 10 itens por página
+    budgets = paginator.get_page(page_number)
+    
+    return render(request, "budget/pages/search_budget.html", {
+        "budget": budgets,  # Passando o objeto paginado
+        'clientes': clientes,
+        'vendedores': vendedor_db
+    })
 
 
 @csrf_exempt
@@ -48,12 +55,20 @@ def search_budget_filter(request):
     vendedor = request.POST.get('vendedor')
     clientes = Client.objects.all()
     vendedor_db = Employee.objects.all()
-    budgets = obter_budget_filtradas(data_inicial, data_final, nome,cpf,vendedor,number_sale)
-    return render(request, "budget/pages/search_budget.html",{
-       "budget":budgets,
-       'clientes':clientes,
-       'vendedores': vendedor_db
-       })
+    
+    # Aplicar filtros personalizados
+    budgets_list = obter_budget_filtradas(data_inicial, data_final, nome, cpf, vendedor, number_sale)
+    
+    # Paginação
+    page_number = request.GET.get('page', 1)
+    paginator = Paginator(budgets_list, 10)  # Mostra 10 resultados por página
+    budgets = paginator.get_page(page_number)
+    
+    return render(request, "budget/pages/search_budget.html", {
+        "budget": budgets,  # Passando o objeto paginado
+        'clientes': clientes,
+        'vendedores': vendedor_db
+    })
 
 
 @csrf_exempt
@@ -262,42 +277,61 @@ def clear_cart(request):
 
 
 @csrf_exempt
-def gerar_relatorio(request):
-    # Carrega os dados necessários para o relatório
-    context = {
-        'dados_orcamento': 'Dados do orçamento aqui'  # Atualize com os dados reais do orçamento
-    }
-    html_string = render_to_string('budget/relatorio.html', context)
-    html = HTML(string=html_string)
+def gerar_pdf(request, number_budget):
+    # Dados para o template
+    budget = BudgetInfo.objects.get(number_budget= number_budget)
+    budget_info = Budget.objects.filter(number_budget=number_budget)
+     
+    context = {'budget': budget, 'budget_info': budget_info}
     
-    # Gera o PDF e retorna uma resposta
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as output:
-        html.write_pdf(output)
-        pdf_file_path = output.name
+    # Carregar o template HTML
+    template = get_template('budget/pages/orcamento_pdf.html')
+    html = template.render(context)
+    name_arquivo = f'{budget.number_budget} - {budget.cliente.nome}'
+    # Criar o PDF
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{name_arquivo}.pdf"'
 
-    # Renderiza o template do relatório com o botão de envio para WhatsApp
-    return render(request, 'budget/relatorio.html', {'pdf_file_path': pdf_file_path})
+    # Converter HTML para PDFS
+    pisa_status = pisa.CreatePDF(
+        html, dest=response
+    )
+
+    # Verificar erros
+    if pisa_status.err:
+        return HttpResponse('Erro ao gerar o PDF', status=500)
+
+    return response
+
 
 
 
 
 @csrf_exempt
-def enviar_whatsapp(request):
-    pdf_file_path = request.POST.get('pdf_file_path')
-    recipient_number = 'whatsapp:+55SEUNÚMERO'  # Substitua com o número de destino
+def exportar(request):
+    # Dados para o template
+    budget = BudgetInfo.objects.all().order_by('-data_orcamento')
+    data = datetime.now()
+    context = {'budget': budget}
+    
+    # Carregar o template HTML
+    template = get_template('budget/pages/relatorio.html')
+    html = template.render(context)
+    name_arquivo = f'{data}'
+    # Criar o PDF
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{name_arquivo}.pdf"'
 
-    account_sid = 'YOUR_TWILIO_ACCOUNT_SID'
-    auth_token = 'YOUR_TWILIO_AUTH_TOKEN'
-    client = Client(account_sid, auth_token)
-    
-    message = client.messages.create(
-        from_='whatsapp:+14155238886',  # Número do Twilio para WhatsApp
-        body='Segue o relatório em PDF.',
-        media_url=[pdf_file_path],
-        to=recipient_number
+    # Converter HTML para PDFS
+    pisa_status = pisa.CreatePDF(
+        html, dest=response
     )
-    
-    return HttpResponse(f"PDF enviado via WhatsApp com sucesso. ID da mensagem: {message.sid}")
+
+    # Verificar erros
+    if pisa_status.err:
+        return HttpResponse('Erro ao gerar o PDF', status=500)
+
+    return response
 
 
 def efetuar_venda(request, num_orcamento):
