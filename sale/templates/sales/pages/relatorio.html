@@ -30,13 +30,13 @@
             </tr>
           </thead>
           <tbody>
-            {% for relatorio in budget %}
+            {% for relatorio in sale %}
               <tr>
-                <td>{{ relatorio.number_budget }}</td>
-                <td>{{ relatorio.data_orcamento }}</td>
+                <td>{{ relatorio.num_sale }}</td>
+                <td>{{ relatorio.data_venda }}</td>
                 <td>{{ relatorio.cliente.nome }}</td>
-                <td>{{ relatorio.cpf_cnpj_cliente }}</td>
-                <td>{{ relatorio.total }}</td>
+                <td>{{ relatorio.cliente.cpf_cnpj }}</td>
+                <td>R$ {{ relatorio.valor|floatformat:2 }}</td>
               </tr>
             {% endfor %}
           </tbody>
@@ -48,60 +48,97 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Helvetica', Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
     }
 
     header {
-      color: black;
-      padding: 1em;
+      background-color: #f1f1f1;
+      color: #333;
+      padding: 1.5em;
       text-align: center;
-      border: solid 1px black;
+      border-bottom: 2px solid #ddd;
     }
 
     .company-header h1 {
       margin: 0;
-      font-size: 1.8em;
+      font-size: 2em;
+      font-weight: bold;
     }
 
     .company-header p {
-      margin: 0.2em 0;
-      font-size: 0.9em;
+      margin: 0.3em 0;
+      font-size: 0.95em;
     }
 
     .content {
-      padding-top: 2em;
-      width: 85vw;
-      margin: auto;
-      padding: 1em;
+      padding: 2em;
+      width: 90%;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     }
 
     h1 {
-      font-size: 2em;
-      margin-bottom: 1em;
+      font-size: 1.8em;
+      margin-bottom: 1.2em;
+      color: #444;
       text-align: center;
     }
 
     .infos {
-      width: 100%;
+      padding: 1.5em;
+      background-color: #f9f9f9;
       border: 1px solid #ddd;
       border-radius: 10px;
-      padding: 1em;
-      margin-top: 1em;
+      margin-top: 1.5em;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
+      margin: 1.5em 0;
+      border-radius: 8px;
+      overflow: hidden;
     }
-
+  
     th, td {
-      padding: 0.5em;
+      padding: 1em;
       text-align: left;
       border: 1px solid #ddd;
+      font-size: 0.9em;
     }
-
+  
     th {
+      background-color: #f4f4f4;
+      color: #333;
+      text-align: center;
+      font-weight: bold;
+    }
+  
+    tbody tr:nth-child(odd) {
+      background-color: #fafafa;
+    }
+  
+    tbody tr:nth-child(even) {
+      background-color: #fdfdfd;
+    }
+  
+    tbody tr:hover {
       background-color: #f1f1f1;
+    }
+  
+    td:nth-child(1), 
+    td:nth-child(2), 
+    td:nth-child(5) {
+      text-align: center;
+    }
+  
+    td {
+      font-size: 0.9em;
+      color: #444;
     }
   </style>
 

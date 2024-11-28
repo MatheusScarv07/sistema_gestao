@@ -16,7 +16,10 @@ from budget.models import Budget, BudgetInfo
 import random
 from random import randint
 from datetime import datetime
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 
 # Create your views here.
 def formatar_moeda(valor):
@@ -356,18 +359,44 @@ def enviar_orcamento(request):
         return HttpResponseBadRequest(f"An error occurred: {e}")
  
 def searchsales(request):
-    try: 
-        
-        vendas = SaleInfo.objects.all().order_by('-data_venda')
+    try:
+        vendas_list = SaleInfo.objects.select_related('cliente', 'vendedor').all().order_by('-data_venda')
         clientes = Client.objects.all()
-        vendedor = Employee.objects.all()
-        return render(request, 'sales/pages/searchsales.html', context={
-            'vendas':vendas,
+        vendedores = Employee.objects.all()
+
+        # Filtragem
+        cliente_id = request.GET.get('cliente')
+        vendedor_id = request.GET.get('vendedor')
+
+        if cliente_id:
+            vendas_list = vendas_list.filter(cliente__id=cliente_id)
+        if vendedor_id:
+            vendas_list = vendas_list.filter(vendedor__id=vendedor_id)
+
+        # Paginação
+        page_number = request.GET.get('page', 1)
+        paginator = Paginator(vendas_list, 10)
+
+        try:
+            vendas = paginator.get_page(page_number)
+        except PageNotAnInteger:
+            vendas = paginator.get_page(1)
+        except EmptyPage:
+            vendas = paginator.get_page(paginator.num_pages)
+
+        return render(request, 'sales/pages/searchsales.html', {
+            'vendas': vendas,
             'clientes': clientes,
-            'vendedores': vendedor
+            'vendedores': vendedores
         })
     except Exception as e:
-        ... 
+        # Log do erro para depuração
+        print(f"Erro ao processar a solicitação: {e}")
+        
+        # Renderizar uma página de erro
+        return render(request, 'sales/pages/error.html', {
+            'mensagem': f'Ocorreu um erro inesperado ao processar sua solicitação. Tente novamente mais tarde. {e}'
+        })
 
 def search_sale_by_number(request, num_venda):
     try:
@@ -396,7 +425,6 @@ def search_sales_filter(request):
     cpf = request.POST.get('cpf')
     number_sale = request.POST.get('number_sale')
     vendedor = request.POST.get('vendedor')
-    print(f'View: {vendedor}')
     clientes = Client.objects.all()
     vendedor_db = Employee.objects.all()
     vendas = obter_vendas_filtradas(data_inicial, data_final, nome,cpf,vendedor,number_sale)
@@ -406,5 +434,56 @@ def search_sales_filter(request):
             'vendedores': vendedor_db
         })
 
-
+@csrf_exempt
+def gerar_pdf(request, num_sale):
+    # Dados para o template
+    sale = SaleInfo.objects.get(num_sale= num_sale)
+    sale_info = Sale.objects.filter(num_sale=num_sale)
+     
+    context = {'sale': sale, 'sale_info': sale_info}
     
+    # Carregar o template HTML
+    template = get_template('sales/pages/comprovante_venda.html')
+    html = template.render(context) 
+    name_arquivo = f'V - {sale.num_sale} - {sale.cliente.nome}'
+    # Criar o PDF
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{name_arquivo}.pdf"'
+
+    # Converter HTML para PDFS
+    pisa_status = pisa.CreatePDF(
+        html, dest=response
+    )
+
+    # Verificar erros
+    if pisa_status.err:
+        return HttpResponse('Erro ao gerar o PDF', status=500)
+
+    return response
+
+
+@csrf_exempt
+def exportar(request):
+    # Dados para o template
+    sale = SaleInfo.objects.all().order_by('-data_venda')
+    data = datetime.now()
+    context = {'sale': sale}
+    
+    # Carregar o template HTML
+    template = get_template('sales/pages/relatorio.html')
+    html = template.render(context)
+    name_arquivo = f'{data}'
+    # Criar o PDF
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{name_arquivo}.pdf"'
+
+    # Converter HTML para PDFS
+    pisa_status = pisa.CreatePDF(
+        html, dest=response
+    )
+
+    # Verificar erros
+    if pisa_status.err:
+        return HttpResponse('Erro ao gerar o PDF', status=500)
+
+    return response  
