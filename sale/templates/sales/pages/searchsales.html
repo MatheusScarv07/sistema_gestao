@@ -1,159 +1,296 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    {% include "sales/partials/head.html" %}
-    <style>
-        /* Estilização geral */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
 
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background-color: #007bff;
-            padding: 1em;
-            color: white;
-            text-align: center;
-            z-index: 1000;
-        }
-
-        main {
-            margin-top: 100px; /* Mais espaço abaixo do header */
-        }
-
-        h1 {
-            font-size: 2em;
-            margin-bottom: 1em;
-            text-align: center;
-        }
-
-        .form-filtro {
-            display: flex;
-            flex-direction: column;
-            gap: 1em;
-            align-items: center;
-            margin-bottom: 1.5em;
-        }
-
-        .input-group {
-            display: flex;
-            gap: 1em;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .input-group input,
-        .input-group select {
-            padding: 0.5em;
-            font-size: 1em;
-            width: 12em;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .botao-filtrar {
-            padding: 0.7em 1.5em;
-            font-weight: bold;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .botao-filtrar:hover {
-            background-color: #0056b3;
-        }
-
-        .resultado-consulta {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 85vw;
-            margin: 0 auto;
-        }
-
-        .venda-item {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1em;
-            padding: 1em;
-            width: 100%;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .venda-item p {
-            margin: 0;
-            font-size: 1em;
-            text-align: center;
-        }
-
-        .num-venda {
-            font-weight: bold;
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        .num-venda:hover {
-            text-decoration: underline;
-        }
-
-        footer {
-            margin-top: 2em;
-            padding: 1em;
-            text-align: center;
-            background-color: #f1f1f1;
-        }
-    </style>
-</head>
+{% load static %}
+{% include "sales/partials/head.html" %}
 <body>
-    <header>
-        {% include "global/partials/header.html" %}
-    </header>
-    <main>
-        <h1>Consultar Vendas</h1>
+  <header>
+    {% include "global/partials/header.html" %}
+  </header>
+  
+  <main>
+    
 
-        <!-- Formulário de filtro -->
-        <form class="form-filtro" action="/sale/filtrar_vendas/" method="post">
-            <div class="input-group">
-                <input type="date" name="date_inicial" placeholder="Data inicial">
-                <input type="date" name="date_final" placeholder="Data final">
-                <select name="cliente">
-                    <option value="">Cliente</option>
-                    {% for cliente in clientes %}
-                    <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
-                    {% endfor %}
-                </select>
-                <select name="vendedor">
-                    <option value="">Vendedor</option>
-                    {% for vendedor in vendedores %}
-                    <option value="{{ vendedor.id }}">{{ vendedor.nome }}</option>
-                    {% endfor %}
-                </select>
-                <input type="text" name="cpf" placeholder="CPF">
-                <input type="text" name="number_sale" placeholder="Número da Venda">
-            </div>
-            <button class="botao-filtrar" type="submit">Filtrar</button>
-        </form>
+    <h1>Consultar Vendas</h1>
 
-        <!-- Resultados da consulta -->
-        <div class="resultado-consulta">
-            {% for venda in vendas %}
-            <div class="venda-item">
-                <a href="/sale/info/{{ venda.num_sale }}" class="num-venda">
-                    <p>{{ venda.num_sale }}</p>
-                </a>
-                <p class="data-venda">{{ venda.data_venda }}</p>
-                <p class="cliente">{{ venda.cliente }}</p>
-                <p class="valor">{{ venda.valor }}</p>
-            </div>
-            {% endfor %}
-        </div>
-    </main>
-    <footer>Footer aqui</footer>
+    <!-- Formulário de filtro -->
+    <form class="form-filtro" action="/sale/filtrar_vendas/" method='post'>
+      <div class="input-group">
+        <input type="date" name="date_inicial" placeholder="Data inicial">
+        <input type="date" name="date_final" placeholder="Data final">
+        <select name="cliente" id="">
+          <option value="">Cliente</option>
+          {% for cliente in clientes %}
+            <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
+          {% endfor %}
+        </select>
+        <select name="vendedor" id="">
+          <option value="">Vendedor</option>
+          {% for vendedor in vendedores %}
+            <option value="{{ vendedor.id }}">{{ vendedor.nome }}</option>
+          {% endfor %}
+        </select>
+        <input type="text" name="cpf" placeholder="CPF">
+        <input type="text" name="number_sale" placeholder="Número da Venda">
+      </div>
+      <button class="botao-filtrar" type="submit">Filtrar</button>
+    </form>
+    <div class="table-container">
+      <table id="tabela-relatorios">
+        <thead>
+          <tr>
+            <th>Numero</th>
+            <th>Data</th>
+            <th>Cliente</th>
+            <th>CPF ou CNPJ</th>
+            <th>Valor</th>
+            <th>Opções</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for venda in vendas %}
+          <tr>
+            <td>{{ venda.num_sale }}</td>
+            <td>{{ venda.data_venda }}</td>
+            <td>{{ venda.cliente.nome }}</td>
+            <td>{{ venda.cliente.cpf_cnpj }}</td>
+            <td>{{ venda.valor }}</td>
+            <td>
+              
+              <a href="/sale/gerar-pdf/{{ venda.num_sale }}">
+                <img class="icons" src="{% static '/budget/img/download.png' %}" alt="Download">
+              </a>
+              <a class="view-report" href="/budget/{{ venda.number_budget }}/info">
+                <img class="icons" src="{% static 'budget/img/view.png' %}" alt="Visualizar">
+              </a>
+              
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination">
+      <span class="step-links">
+        {% if budget.has_previous %}
+        <a href="?page=1">Primeira</a>
+        <a href="?page={{ venda.previous_page_number }}">Anterior</a>
+        {% endif %}
+
+        <span>Página {{ vendas.number }} de {{ vendas.paginator.num_pages }}</span>
+
+        {% if budget.has_next %}
+        <a href="?page={{ vendas.next_page_number }}">Próxima</a>
+        <a href="?page={{ vendas.paginator.num_pages }}">Última</a>
+        {% endif %}
+      </span>
+    </div>
+  </fieldset>
+  <br>
+  <a href="/sale/exportar/orcamentos">
+    <button class="enviar" type="submit">Gerar Relatório</button>
+  </a>
+</div>
+  </main>
+  
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #007bff;
+      padding: 1em;
+      color: white;
+      text-align: center;
+      z-index: 1000;
+    }
+
+    main {
+      padding-top: 80px;
+      text-align: center;
+      width: 85vw;
+      margin: auto;
+    }
+
+    .sub_menu {
+      display: flex;
+      justify-content: center;
+      gap: 1em;
+      margin-bottom: 1.5em;
+    }
+
+    .sub_menu button {
+      padding: 0.7em 1.5em;
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .sub_menu button:hover {
+      background-color: #0056b3;
+    }
+    .icons {
+      width: 24px;
+      margin-left: 8px;
+    }
+
+    h1 {
+      margin-bottom: 1.5em;
+      font-size: 2em;
+      color: #333;
+    }
+
+    .form-filtro {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+      align-items: center;
+      margin-bottom: 1.5em;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 1em;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .input-group input,
+    .input-group select {
+      padding: 0.5em;
+      font-size: 1em;
+      width: 12em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .botao-filtrar {
+      padding: 0.5em 1em;
+      font-weight: bold;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .botao-filtrar:hover {
+      background-color: #0056b3;
+    }
+
+    .resultado-consulta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .venda-item {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1em;
+      padding: 1em;
+      width: 100%;
+      max-width: 800px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      margin-bottom: 1em;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .venda-item p {
+      margin: 0;
+      font-size: 1em;
+      text-align: center;
+    }
+
+    .num-venda {
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1em;
+      background-color: #f1f1f1;
+      border-top: 1px solid #ddd;
+      margin-top: 2em;
+      width: 100%;
+    }
+
+    footer p {
+      margin: 0;
+      font-size: 0.9em;
+      color: #777;
+    }
+    .infos {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 1em;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 0.5em;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f1f1f1;
+    }
+
+    .icons {
+      width: 24px;
+      margin-left: 8px;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .pagination a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .pagination a:hover {
+      text-decoration: underline;
+    }
+
+    .enviar {
+      padding: 0.7em 1.5em;
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .enviar:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </body>
 </html>

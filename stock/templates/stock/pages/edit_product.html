@@ -5,7 +5,9 @@
     {% include "stock/partials/head.html" %}
     <title>Editar Produto</title>
     <style>
+
         /* Estilização geral */
+
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -30,6 +32,26 @@
             align-items: center;
             justify-content: center;
             min-height: calc(100vh - 120px);
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #007bff;
+            padding: 1em;
+            color: white;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        main {
+            width: 100%;
+            padding-top: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .container {
@@ -104,6 +126,20 @@
 
         .cancel-btn:hover {
             background-color: #c9302c;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1em;
+            background-color: #f1f1f1;
+            border-top: 1px solid #ddd;
+            margin-top: 2em;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #777;
         }
     </style>
 </head>

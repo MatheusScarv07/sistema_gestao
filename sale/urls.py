@@ -1,5 +1,5 @@
 
-from sale.views import home, new_sale, searchsales, get_product, cart, cart_products, excluir_produto,enviar_orcamento, efetuar_venda, search_sale_by_number, search_sales_filter
+from sale.views import home, new_sale, searchsales, get_product, cart, cart_products, excluir_produto,enviar_orcamento, efetuar_venda, search_sale_by_number, search_sales_filter, gerar_pdf, exportar
 from django.urls import path
 
 urlpatterns = [
@@ -13,5 +13,7 @@ urlpatterns = [
     path('sale/new_sale/concluido/', efetuar_venda),
     path('sale/salvar-carrinho/enviar_orcamento',enviar_orcamento),
     path('sale/info/<int:num_venda>', search_sale_by_number),
-    path('sale/filtrar_vendas/',search_sales_filter )
+    path('sale/filtrar_vendas/',search_sales_filter ),
+    path('sale/gerar-pdf/<int:num_sale>', gerar_pdf, name='gerar_orcamento_pdf'),
+    path('sale/exportar/orcamentos', exportar),
 ]

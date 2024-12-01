@@ -2,7 +2,9 @@
 {% include "sales/partials/head.html" %}
 <body>
   
-  {% include "global/partials/header.html" %}
+  <header>
+    {% include "global/partials/header.html" %}
+  </header>
   <main>
     <div class="content">
       <div class="sub_menu">
@@ -76,6 +78,17 @@
   </main>
 
   <style>
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #007bff;
+      padding: 1em;
+      color: white;
+      text-align: center;
+      z-index: 1000;
+  }
     .content {
       width: 85vw;
       display: flex;
