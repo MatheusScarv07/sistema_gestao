@@ -58,6 +58,9 @@
             background-color: #f1f1f1;
         }
 
+
+        button {
+            padding: 0.7em 1.5em;
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
@@ -77,6 +80,7 @@
         }
 
         td button:hover {
+
             background-color: #0056b3;
         }
     </style>
@@ -84,44 +88,49 @@
 <body>
     <header>
         {% include "global/partials/header.html" %}
-      </header>
-    
-    <div class="content">
+
+    </header>
+
+    <main class="content">
         <h1>Clientes com Pagamento Pendente</h1>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID Cliente</th>
-                    <th>Nome Cliente</th>
-                    <th>CPF/CNPJ</th>
-                    <th>Valor da Dívida</th>
-                    <th>Data da Venda</th>
-                    <th>Tipo de Pagamento</th>
-                    <th>Status</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for pagamento in pagamentos_pendentes %}
-                <tr>
-                    <td>{{ pagamento.cliente.id }}</td>
-                    <td>{{ pagamento.cliente.nome }}</td>
-                    <td>{{ pagamento.cpf_cnpj }}</td>
-                    <td>{{ pagamento.valor }}</td>
-                    <td>{{ pagamento.data_venda }}</td>
-                    <td>{{ pagamento.tipo_pagamento }}</td>
-                    <td>{{ pagamento.status }}</td>
-                    <td>
-                        <a href="{% url 'receber_pagamento' pagamento.id %}">
-                            <button>Receber Pagamento</button>
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+        <fieldset class="infos">
+            <legend>Informações de Pagamento</legend>
+            <table id="tabela-pendentes">
+                <thead>
+                    <tr>
+                        <th>ID Cliente</th>
+                        <th>Nome Cliente</th>
+                        <th>CPF/CNPJ</th>
+                        <th>Valor da Dívida</th>
+                        <th>Data da Venda</th>
+                        <th>Tipo de Pagamento</th>
+                        <th>Status</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pagamento in pagamentos_pendentes %}
+                    <tr>
+                        <td>{{ pagamento.cliente.id }}</td>
+                        <td>{{ pagamento.cliente.nome }}</td>
+                        <td>{{ pagamento.cpf_cnpj }}</td>
+                        <td>{{ pagamento.valor }}</td>
+                        <td>{{ pagamento.data_venda }}</td>
+                        <td>{{ pagamento.tipo_pagamento }}</td>
+                        <td>{{ pagamento.status }}</td>
+                        <td>
+                            <a href="{% url 'receber_pagamento' pagamento.id %}">
+                                <button>Receber Pagamento</button>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </fieldset>
+    </main>
+
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

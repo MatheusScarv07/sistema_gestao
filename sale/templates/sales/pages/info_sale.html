@@ -1,17 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes da Venda</title>
+    {% include "sales/partials/head.html" %}
     <style>
-        /* Estilo geral */
+        /* Estilização geral */
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
+            font-family: Arial, sans-serif;
         }
 
         header {
@@ -27,55 +23,33 @@
         }
 
         main {
-            margin: 80px auto 0 auto;
-            width: 90%;
-            max-width: 1200px;
-        }
 
-        .sub_menu {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 2em;
-            gap: 1em;
-        }
-
-        .sub_menu a button {
-            padding: 0.8em 1.2em;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1em;
-            text-transform: uppercase;
-        }
-
-        .sub_menu a button:hover {
-            background-color: #0056b3;
+            margin-top: 120px; /* Espaçamento para descer o conteúdo */
+            width: 85vw;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         h1 {
+            font-size: 2em;
             text-align: center;
             margin-bottom: 1em;
         }
 
-        .product-details,
-        .payment-history {
-            margin: 2em 0;
-            padding: 1.5em;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+        div {
+            margin-bottom: 1.5em;
         }
 
-        .product-details h2,
-        .payment-history h3 {
-            margin-bottom: 1em;
-            color: #007bff;
-        }
-
-        .product-details p {
+        p {
             margin: 0.5em 0;
+            font-size: 1em;
+        }
+
+        h3 {
+            margin-bottom: 1em;
+            font-size: 1.5em;
+            text-align: center;
         }
 
         table {
@@ -83,62 +57,50 @@
             border-collapse: collapse;
             margin-top: 1em;
         }
-
-        table thead th {
-            background-color: #007bff;
-            color: white;
-            padding: 0.8em;
+        th, td {
+            padding: 0.5em;
             text-align: left;
-        }
-
-        table tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        table tbody td {
-            padding: 0.8em;
             border: 1px solid #ddd;
         }
 
-        footer {
-            text-align: center;
-            padding: 1em;
+        th {
             background-color: #f1f1f1;
-            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        footer {
             margin-top: 2em;
-            font-size: 0.9em;
-            color: #777;
+            padding: 1em;
+            text-align: center;
+            background-color: #f1f1f1;
         }
     </style>
 </head>
 <body>
-    <!-- Cabeçalho global -->
+
     <header>
         {% include "global/partials/header.html" %}
     </header>
-
     <main>
-        <!-- Submenu -->
+        <h1>{{ nome }} - {{ num_venda }}</h1>
         
-
-        <!-- Detalhes da venda -->
-        <h1>{{nome}} - {{num_venda}}</h1>
-
-        <div class="product-details">
-            <h2>Produtos</h2>
+        <div>
             {% for produto in products %}
-            <p><strong>Venda Nº:</strong> {{produto.num_sale}}</p>
-            <p><strong>Data:</strong> {{produto.data_venda}}</p>
-            <p><strong>Produto:</strong> {{produto.produto}}</p>
-            <p><strong>Valor Unitário:</strong> R$ {{produto.valor_unitario}}</p>
-            <p><strong>Quantidade:</strong> {{produto.quantidade}}</p>
-            <p><strong>Valor Total:</strong> R$ {{produto.valor_total}}</p>
+            <p><strong>Venda Nº:</strong> {{ produto.num_sale }}</p>
+            <p><strong>Data da Venda:</strong> {{ produto.data_venda }}</p>
+            <p><strong>Produto:</strong> {{ produto.produto }}</p>
+            <p><strong>Valor Unitário:</strong> {{ produto.valor_unitario }}</p>
+            <p><strong>Quantidade:</strong> {{ produto.quantidade }}</p>
+            <p><strong>Valor Total:</strong> {{ produto.valor_total }}</p>
             <hr>
             {% endfor %}
         </div>
+        <div>
 
-        <!-- Histórico de pagamentos -->
-        <div class="payment-history">
             <h3>Histórico de Pagamento</h3>
             <table>
                 <thead>
@@ -151,9 +113,10 @@
                 <tbody>
                     {% for pagamento in pagamentos %}
                     <tr>
-                        <td>{{pagamento.data}}</td>
-                        <td>{{pagamento.type}}</td>
-                        <td>R$ {{pagamento.valor}}</td>
+
+                        <td>{{ pagamento.data }}</td>
+                        <td>{{ pagamento.type }}</td>
+                        <td>{{ pagamento.valor }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -162,6 +125,5 @@
     </main>
 
     <!-- Rodapé -->
-    
 </body>
 </html>
