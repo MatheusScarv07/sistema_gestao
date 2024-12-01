@@ -1,27 +1,96 @@
-{% include "supplier/partials/head.html" %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    {% include "supplier/partials/head.html" %}
+    <style>
+        /* Mantendo o estilo consistente */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #007bff;
+            padding: 1em;
+            color: white;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        main {
+            padding-top: 80px; /* Ajuste conforme a altura do seu cabeçalho */
+        }
+
+        .content {
+            width: 85vw;
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            margin: auto;
+            padding: 1em;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 0.5em;
+            text-align: center;
+        }
+
+        p {
+            font-size: 1em;
+            margin: 0.3em 0;
+        }
+
+        button {
+            padding: 0.7em 1.5em;
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 1em;
+            text-align: center;
+            background-color: #f1f1f1;
+            width: 100%;
+        }
+    </style>
+</head>
 <body>
-
-
-  {% include "global/partials/header.html" %}
+    <header>
+        {% include "global/partials/header.html" %}
+    </header>
 
     <main>
-      <div class="content">
-        <div>
-            <a href="/supplier"><button>Voltar</button></a>
+        <div class="content">
+            <div>
+                <a href="/supplier"><button>Voltar</button></a>
+            </div>
+            <div>
+                <h2>{{ supplier.nome }}</h2>
+                <p><strong>Email:</strong> {{ supplier.email }}</p>
+                <p><strong>Contato:</strong> {{ supplier.contato }}</p>
+                <p><strong>CNPJ:</strong> {{ supplier.cnpj }}</p>
+                <p><strong>RG:</strong> {{ supplier.rg }}</p>
+                <p><strong>IE:</strong> {{ supplier.ie }}</p>
+                <p><strong>Endereço:</strong> {{ supplier.rua }}, {{ supplier.numero }}, {{ supplier.bairro }}, {{ supplier.cidade }}, {{ supplier.estado }}, {{ supplier.cep }}</p>
+            </div>
         </div>
-          <div>
-            <h2>{{supplier.nome}}</h2>
-            <p>{{supplier.email}}</p>
-            <p>{{supplier.contato}}</p>
-            <p>{{supplier.cnpj}}</p>
-            <p>{{supplier.rg}}</p>
-            <p>{{supplier.ie}}</p>
-            <p>{{supplier.rua}}, {{supplier.numero}}, {{supplier.bairro}}, {{supplier.cidade}}, {{supplier.estado}}, {{supplier.cep}}</p>
-          </div>
-          
-      </div>
-       <footer>footer aqui</footer>
+        <footer>footer aqui</footer>
     </main>
-    
 </body>
 </html>

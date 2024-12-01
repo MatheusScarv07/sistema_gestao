@@ -1,47 +1,126 @@
-{% include "sales/partials/head.html" %}
-<body>
-  {% include "global/partials/header.html" %}
-  <main>
-    <div class="sub_menu">
-      <a href="/sales"><button>Painel</button></a>
-      <a href="/sale/new-sale"><button>Nova Venda</button></a>
-      <a href="/sales/searchsales"><button>Consultar Vendas</button></a>
-    </div>
-    <h1>{{nome}} - {{num_venda}}</h1>
-    <div>
-      {% for produto in products  %}
-      <p>{{produto.num_sale}}</p>
-      <p>{{produto.data_venda}}</p>
-      <p>{{produto.produto}}</p>
-      <p>{{produto.valor_unitario}}</p>
-      <p>{{produto.quantidade}}</p>
-      <p>{{produto.valor_total}}</p>
-      {% endfor %}
-    </div>
-    <div>
-      <h3>Historico de pagamento</h3>
-      
-      <table>
-        <thead>
-          <th>Data</th>
-          <th>Tipo pagamento</th>
-          <th>Valor</th>
-        </thead>
-        <tbody>
-          {% for pagamento in pagamentos  %}
-          <tr>
-            <td>{{pagamento.data}}</td>
-            <td>{{pagamento.type}}</td>
-            <td>{{pagamento.valor}}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      
-    </div>
-  </main>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    {% include "sales/partials/head.html" %}
+    <style>
+        /* Estilização geral */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
 
-  <footer></footer>
-  
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #007bff;
+            padding: 1em;
+            color: white;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        main {
+            margin-top: 120px; /* Espaçamento para descer o conteúdo */
+            width: 85vw;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h1 {
+            font-size: 2em;
+            text-align: center;
+            margin-bottom: 1em;
+        }
+
+        div {
+            margin-bottom: 1.5em;
+        }
+
+        p {
+            margin: 0.5em 0;
+            font-size: 1em;
+        }
+
+        h3 {
+            margin-bottom: 1em;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1em;
+        }
+
+        th, td {
+            padding: 0.5em;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f1f1f1;
+            text-align: center;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        footer {
+            margin-top: 2em;
+            padding: 1em;
+            text-align: center;
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        {% include "global/partials/header.html" %}
+    </header>
+    <main>
+        <h1>{{ nome }} - {{ num_venda }}</h1>
+        
+        <div>
+            {% for produto in products %}
+            <p><strong>Venda Nº:</strong> {{ produto.num_sale }}</p>
+            <p><strong>Data da Venda:</strong> {{ produto.data_venda }}</p>
+            <p><strong>Produto:</strong> {{ produto.produto }}</p>
+            <p><strong>Valor Unitário:</strong> {{ produto.valor_unitario }}</p>
+            <p><strong>Quantidade:</strong> {{ produto.quantidade }}</p>
+            <p><strong>Valor Total:</strong> {{ produto.valor_total }}</p>
+            <hr>
+            {% endfor %}
+        </div>
+
+        <div>
+            <h3>Histórico de Pagamento</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Tipo de Pagamento</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pagamento in pagamentos %}
+                    <tr>
+                        <td>{{ pagamento.data }}</td>
+                        <td>{{ pagamento.type }}</td>
+                        <td>{{ pagamento.valor }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <footer>
+        <p>Footer aqui</p>
+    </footer>
 </body>
 </html>
