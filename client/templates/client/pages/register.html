@@ -171,6 +171,91 @@
         form button:hover {
             background-color: #0056b3;
         }
+        @media (max-width: 1024px) {
+            .content {
+              width: 95vw;
+              max-width: 500px;
+            }
+        
+            form {
+              max-width: 500px;
+              gap: 0.8em;
+            }
+        
+            h1 {
+              font-size: 1.8em;
+            }
+        
+            form input, 
+            form select {
+              font-size: 0.95em;
+            }
+        
+            form button {
+              font-size: 1em;
+              padding: 8px;
+            }
+          }
+        
+          @media (max-width: 768px) {
+            .content {
+              width: 90vw;
+              max-width: 400px;
+            }
+        
+            h1 {
+              font-size: 1.5em;
+            }
+        
+            form {
+              max-width: 400px;
+              gap: 0.7em;
+            }
+        
+            form input, 
+            form select {
+              font-size: 0.9em;
+            }
+        
+            form button {
+              font-size: 0.9em;
+              padding: 7px;
+            }
+          }
+        
+          @media (max-width: 480px) {
+            body {
+              padding: 10px;
+            }
+        
+            .content {
+              width: 100%;
+              max-width: 350px;
+            }
+        
+            h1 {
+              font-size: 1.3em;
+            }
+        
+            form {
+              max-width: 350px;
+              gap: 0.6em;
+            }
+        
+            form input, 
+            form select {
+              font-size: 0.85em;
+            }
+        
+            form button {
+              font-size: 0.85em;
+              padding: 6px;
+            }
+        
+            .messages .message {
+              font-size: 0.9em;
+            }
+          }
     </style>
 
     <script src="{% static 'client/js/client.js' %}"></script>

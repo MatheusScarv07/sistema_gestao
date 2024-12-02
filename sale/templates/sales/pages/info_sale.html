@@ -99,16 +99,111 @@
             padding: 0.8em;
             border: 1px solid #ddd;
         }
+        /* Responsividade */
+@media (max-width: 768px) {
+    /* Ajustes no conteúdo principal */
+    main {
+        width: 95%; /* Ajusta a largura para caber melhor em telas menores */
+    }
 
-        footer {
-            text-align: center;
-            padding: 1em;
-            background-color: #f1f1f1;
-            border-top: 1px solid #ddd;
-            margin-top: 2em;
-            font-size: 0.9em;
-            color: #777;
-        }
+    /* Ajustes no submenu */
+    .sub_menu {
+        flex-direction: column;
+        gap: 10px; /* Alinha os botões verticalmente */
+        margin-bottom: 1.5em;
+    }
+
+    .sub_menu a button {
+        width: 100%; /* Faz os botões ocuparem toda a largura da tela */
+    }
+
+    /* Ajustes nos detalhes dos produtos */
+    .product-details p {
+        font-size: 0.9em; /* Reduz o tamanho da fonte para caber melhor */
+    }
+
+    /* Ajustes no título */
+    h1 {
+        font-size: 1.6em;
+    }
+
+    /* Ajustes na tabela do histórico de pagamentos */
+    table {
+        width: 100%;
+    }
+
+    th, td {
+        padding: 0.6em;
+    }
+
+    th {
+        font-size: 0.9em;
+    }
+
+    td {
+        font-size: 0.85em;
+    }
+
+    /* Ajuste no espaçamento das seções */
+    .product-details, .payment-history {
+        padding: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Ajustes para telas menores, como celulares */
+    main {
+        width: 100%;
+        margin: 10px auto;
+    }
+
+    /* Ajuste no submenu */
+    .sub_menu {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .sub_menu a button {
+        width: 100%;
+        padding: 1em;
+    }
+
+    /* Ajuste nas cartas de detalhes dos produtos */
+    .product-details p {
+        font-size: 0.8em;
+    }
+
+    /* Ajuste no título */
+    h1 {
+        font-size: 1.4em;
+    }
+
+    /* Ajuste na tabela */
+    table {
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    th, td {
+        padding: 0.5em;
+    }
+
+    th {
+        font-size: 0.8em;
+    }
+
+    td {
+        font-size: 0.75em;
+    }
+
+    /* Ajuste no espaçamento das seções */
+    .product-details, .payment-history {
+        padding: 1em;
+    }
+}
+
+
+        
     </style>
 </head>
 <body>

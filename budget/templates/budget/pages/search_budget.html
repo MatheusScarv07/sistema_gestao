@@ -169,10 +169,27 @@
     .enviar:hover {
       background-color: #0056b3;
     }
+    @media (max-width: 1024px) {
+      h1 {
+        font-size: 1.6em;
+      }
+
+      table, th, td {
+        font-size: 0.95em;
+      }
+
+      .icons {
+        width: 22px;
+      }
+
+      .enviar {
+        font-size: 1em;
+      }
+    }
 
     @media (max-width: 768px) {
       h1 {
-        font-size: 1.5em;
+        font-size: 1.4em;
       }
 
       table, th, td {
@@ -185,6 +202,24 @@
 
       .enviar {
         font-size: 0.9em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .content {
+        width: 95%;
+      }
+
+      table, th, td {
+        font-size: 0.8em;
+      }
+
+      .icons {
+        width: 18px;
+      }
+
+      .enviar {
+        font-size: 0.8em;
       }
     }
   </style>

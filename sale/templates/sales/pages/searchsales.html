@@ -218,20 +218,7 @@
       color: #007bff;
     }
 
-    footer {
-      text-align: center;
-      padding: 1em;
-      background-color: #f1f1f1;
-      border-top: 1px solid #ddd;
-      margin-top: 2em;
-      width: 100%;
-    }
-
-    footer p {
-      margin: 0;
-      font-size: 0.9em;
-      color: #777;
-    }
+   
     .infos {
       border: 1px solid #ddd;
       border-radius: 10px;
@@ -290,6 +277,106 @@
     .enviar:hover {
       background-color: #0056b3;
     }
+    /* Responsividade para tablets e smartphones */
+  @media (max-width: 1024px) {
+    main {
+      width: 95vw;
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 10em;
+    }
+
+    .venda-item {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      font-size: 0.9em;
+    }
+
+    .pagination {
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .botao-filtrar,
+    .enviar {
+      font-size: 0.9em;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .input-group {
+      flex-direction: column;
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 100%;
+    }
+
+    .venda-item {
+      grid-template-columns: 1fr;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    .pagination {
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .botao-filtrar,
+    .enviar {
+      font-size: 1em;
+    }
+  }
+
+  @media (max-width: 480px) {
+    header {
+      padding: 0.5em;
+    }
+
+    h1 {
+      font-size: 1.5em;
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      padding: 0.8em;
+    }
+
+    .botao-filtrar,
+    .enviar {
+      width: 100%;
+    }
+
+    .table-container {
+      padding: 0 10px;
+    }
+
+    .pagination {
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    table {
+      font-size: 0.8em;
+    }
+
+    .sub_menu button {
+      padding: 0.5em 1em;
+    }
+  }
   </style>
 </body>
 </html>

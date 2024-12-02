@@ -59,7 +59,7 @@
         </form>
       </div>
     </div>
-    <footer>footer</footer>
+    
   </main>
 
   <style>
@@ -115,6 +115,79 @@
           text-align: center;
           border-top: 1px solid #ddd;
       }
+      /* Responsividade */
+    @media (max-width: 1024px) {
+        .content {
+            width: 90%;
+        }
+
+        .styled-button {
+            padding: 0.6em 1.2em;
+        }
+
+        h3 {
+            font-size: 1.3em;
+        }
+
+        .card_datas {
+            margin-bottom: 0.8em;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .content {
+            width: 95%;
+            margin-top: 6em; /* Ajusta o espaço para caber em telas menores */
+        }
+
+        .sub_menu {
+            flex-direction: column;
+            gap: 10px; /* Ajusta o espaçamento entre os botões */
+        }
+
+        .styled-button {
+            width: 100%;
+            padding: 0.7em 1.5em;
+            font-size: 1.1em;
+        }
+
+        h3 {
+            font-size: 1.2em;
+        }
+
+        .card_datas {
+            width: 100%;
+        }
+
+        footer {
+            padding: 1em 0;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .content {
+            width: 100%;
+            margin-top: 7em; /* Ajusta o espaço superior para telas muito pequenas */
+        }
+
+        .styled-button {
+            width: 100%;
+            padding: 0.8em 1.5em;
+            font-size: 1.2em;
+        }
+
+        h3 {
+            font-size: 1.1em;
+        }
+
+        .card_datas {
+            width: 100%;
+        }
+
+        footer {
+            padding: 1em 0;
+        }
+    }
   </style>
 
   <script>

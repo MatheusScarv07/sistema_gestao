@@ -6,62 +6,75 @@
     {% include "global/partials/header.html" %}
   </header>
 
-  <main>
-      <!-- Título da página -->
-      <h1>Relatórios de Orçamento</h1>
-      
-      <!-- Formulário de seleção de relatórios -->
-    
-          <fieldset class="area-relatorio">
-            <legend>Selecionar Relatório</legend>
-            <td>{{ budget.number_budget }}</td>
-            <td>{{ budget.data_orcamento }}</td>
-            <td>{{ budget.cliente.nome }}</td>
-            <td>{{budget.cpf_cnpj_cliente}}</td>
-            <td>{{budget.total}}</td>
+  <main class="content">
+    <!-- Título da página -->
+    <h1>Relatórios de Orçamento</h1>
 
-          </fieldset>
-      </form>
+    <!-- Área de detalhes do orçamento principal -->
+    <fieldset class="area-relatorio">
+      <legend>Detalhes do Orçamento</legend>
+      <table class="info-principal">
+        <tr>
+          <td>Número:</td>
+          <td>{{ budget.number_budget }}</td>
+        </tr>
+        <tr>
+          <td>Data:</td>
+          <td>{{ budget.data_orcamento }}</td>
+        </tr>
+        <tr>
+          <td>Cliente:</td>
+          <td>{{ budget.cliente.nome }}</td>
+        </tr>
+        <tr>
+          <td>CPF/CNPJ:</td>
+          <td>{{ budget.cpf_cnpj_cliente }}</td>
+        </tr>
+        <tr>
+          <td>Total:</td>
+          <td>{{ budget.total }}</td>
+        </tr>
+      </table>
+    </fieldset>
 
-      <!-- Tabela de relatórios recentes -->
-      <fieldset class="infos">
-        <legend>Itens</legend>
-        <table id="tabela-relatorios">
-          <thead>
+    <!-- Tabela de itens do orçamento -->
+    <fieldset class="infos">
+      <legend>Itens do Orçamento</legend>
+      <table id="tabela-relatorios">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Descrição</th>
+            <th>Código</th>
+            <th>Quantidade</th>
+            <th>Valor Unitário</th>
+            <th>Valor Total</th>
+            <th>Opções</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for relatorio in budget_info %}
             <tr>
-              <th>ID</th>
-              <th>Descrição</th>
-              <th>Codigo</th>
-              <th>Quantidade</th>
-              <th>Valor Uni</th>
-              <th>Valor_total</th>
-              <th>Opções</th>
+              <td>{{ relatorio.produto.id }}</td>
+              <td>{{ relatorio.produto.nome }}</td>
+              <td>{{ relatorio.produto.codigo }}</td>
+              <td>{{ relatorio.quantidade }}</td>
+              <td>{{ relatorio.valor_unitario }}</td>
+              <td>{{ relatorio.valor_total }}</td>
+              <td>
+                <a class="delete-report" href="/budget/excluir_relatorio/{{ relatorio.id }}">
+                  <img class="icons" src="{% static 'budget/img/remove.png' %}" alt="Remover">
+                </a>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {% for relatorio in budget_info %}
-              <tr>
-                <td>{{relatorio.produto.id}}</td>
-                <td>{{relatorio.produto.nome}}</td>
-                <td>{{relatorio.produto.codigo}}</td>
-                <td>{{relatorio.quantidade}}</td>
-                <td>{{relatorio.valor_unitario}}</td>
-                <td>{{relatorio.valor_total}}</td>
-                <td>
-                  <a class="delete-report" href="/budget/excluir_relatorio/{{ relatorio.id }}">
-                    <img class="icons" src="{% static 'budget/img/remove.png' %}" alt="Remover">
-                  </a>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </fieldset>
-    </div>
+          {% endfor %}
+        </tbody>
+      </table>
+    </fieldset>
   </main>
 
   <style>
-    /* Mantendo o estilo consistente */
+    /* Estilo Geral */
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -80,66 +93,27 @@
     }
 
     .content {
-      padding-top: 60px;
-      width: 85vw;
-      min-height: 90vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      padding-top: 80px;
+      width: 85%;
       margin: auto;
-      padding: 1em;
-    }
-
-    .sub_menu {
-      display: flex;
-      gap: 1em;
-      margin-bottom: 1em;
-    }
-    .sub_menu button {
-      padding: 0.7em 1.5em;
-      background-color: #007bff;
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
     }
 
     h1 {
       font-size: 2em;
-      margin-bottom: 0.5em;
+      margin-bottom: 1em;
       text-align: center;
     }
 
-    form button {
-      padding: 0.7em 1.5em;
-      background-color: #007bff;
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    form button:hover {
-      background-color: #0056b3;
-    }
-
-    form input, form select {
-      width: 70%;
-      height: 1.5em;
-      padding: 0.5em;
-      border-radius: 5px;
-      border: 1px solid #ddd;
-    }
-
-    .infos {
-      width: 100%;
+    fieldset {
       border: 1px solid #ddd;
       border-radius: 10px;
       padding: 1em;
       margin-top: 1em;
+    }
+
+    legend {
+      font-weight: bold;
+      font-size: 1.2em;
     }
 
     table {
@@ -150,19 +124,46 @@
     th, td {
       padding: 0.5em;
       text-align: left;
+      border-bottom: 1px solid #ddd;
     }
 
     th {
       background-color: #f1f1f1;
     }
-    .icons{
-      width: 2em;
-      margin-left: 2em;
+
+    .icons {
+      width: 1.5em;
     }
-    .actions_icons{
-      border: none;
-      background-color: transparent;
-      cursor: pointer;
+
+    /* Responsividade */
+    @media (max-width: 1024px) {
+      .content {
+        width: 90%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      table {
+        font-size: 0.9em;
+      }
+
+      th, td {
+        padding: 0.3em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5em;
+      }
+
+      table {
+        font-size: 0.8em;
+      }
+
+      .icons {
+        width: 1em;
+      }
     }
   </style>
 

@@ -95,6 +95,68 @@
             font-size: 2em;
             margin-bottom: 0.5em;
         }
+        /* Responsividade */
+@media (max-width: 768px) {
+    /* Ajuste no conteúdo */
+    .content {
+        width: 90vw; /* Aumenta a largura para telas menores */
+        margin-left: 5vw; /* Ajuste a margem esquerda para centralizar melhor */
+    }
+
+    /* Ajustes no formulário */
+    form {
+        width: 100%; /* Faz o formulário ocupar toda a largura disponível */
+    }
+
+    form input, form select {
+        width: 90%; /* Ajusta a largura dos campos de entrada */
+    }
+
+    /* Ajuste no título */
+    h1 {
+        font-size: 1.8em; /* Reduz o tamanho do título */
+        text-align: center;
+    }
+
+    /* Ajuste nos botões */
+    .back-button, form button {
+        width: 100%; /* Faz o botão ocupar toda a largura */
+        padding: 1em;
+    }
+
+    /* Ajuste no cabeçalho */
+    header {
+        padding: 0.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Ajustes para telas menores (exemplo de celular) */
+    .content {
+        width: 100%; /* O conteúdo ocupa toda a tela */
+        margin-left: 0; /* Remove a margem esquerda */
+    }
+
+    /* Ajustes no formulário */
+    form input, form select {
+        width: 90%; /* Ajusta a largura para caber melhor */
+        padding: 0.8em; /* Aumenta o padding dos inputs */
+    }
+
+    .back-button, form button {
+        width: 100%; /* Faz o botão ocupar toda a largura */
+        padding: 1em;
+    }
+
+    h1 {
+        font-size: 1.6em; /* Reduz ainda mais o tamanho do título */
+    }
+
+    header {
+        padding: 0.5em; /* Reduz o padding do header */
+    }
+}
+
     </style>
     
     

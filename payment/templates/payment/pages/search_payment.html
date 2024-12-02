@@ -147,6 +147,83 @@
             text-align: center; /* Centraliza o footer */
             padding: 1em 0; /* Espaço em volta do footer */
         }
+        /* Responsividade */
+    @media (max-width: 1024px) {
+        main {
+            width: 90%;
+            margin-top: 100px; /* Ajusta o espaço superior */
+        }
+
+        .container {
+            padding: 0 10px;
+        }
+
+        .search-form {
+            width: 100%;
+        }
+
+        button {
+            padding: 0.6em 1.2em;
+        }
+
+        input {
+            padding: 0.6em;
+        }
+    }
+
+    @media (max-width: 768px) {
+        main {
+            width: 100%;
+            margin-top: 120px;
+        }
+
+        .search-form {
+            width: 100%;
+            gap: 8px;
+        }
+
+        input {
+            padding: 0.7em;
+            font-size: 1em;
+        }
+
+        button {
+            width: 100%;
+            padding: 0.7em 1.5em;
+            font-size: 1em;
+        }
+
+        table {
+            font-size: 0.9em;
+        }
+    }
+
+    @media (max-width: 480px) {
+        main {
+            width: 100%;
+            margin-top: 130px;
+        }
+
+        .search-form {
+            width: 100%;
+            gap: 8px;
+        }
+
+        input {
+            padding: 0.6em;
+            font-size: 0.9em;
+        }
+
+        button {
+            width: 100%;
+            padding: 0.8em 1.6em;
+            font-size: 1.1em;
+        }
+
+        table {
+            font-size: 0.8em;
+        }
+    }
     </style>
 </body>
 </html>

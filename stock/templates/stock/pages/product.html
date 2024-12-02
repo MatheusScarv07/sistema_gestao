@@ -135,6 +135,67 @@
     .estoque-tabela tbody tr:hover {
       background-color: #eaeaea;
     }
+    /* Responsividade */
+@media (max-width: 768px) {
+    /* Ajustes no conteúdo */
+    .content {
+        width: 95vw; /* Reduzir largura para telas menores */
+        padding: 1em;
+    }
+
+    /* Ajustes na tabela */
+    .estoque-tabela {
+        width: 100%; /* A tabela ocupa 100% da largura */
+        font-size: 0.9em; /* Reduzir o tamanho da fonte para telas pequenas */
+    }
+
+    .estoque-tabela th, .estoque-tabela td {
+        padding: 0.6em; /* Ajusta o padding para telas menores */
+    }
+
+    .estoque-tabela td {
+        word-wrap: break-word; /* Quebra o texto longos em células */
+        overflow-wrap: break-word;
+    }
+
+    /* Ajustes nos botões */
+    .btn-editar {
+        padding: 0.5em;
+        font-size: 0.9em; /* Ajusta o tamanho do texto nos botões */
+    }
+
+    /* Ajustes no cabeçalho */
+    header {
+        padding: 0.8em; /* Reduzir o padding do cabeçalho para telas menores */
+    }
+}
+
+@media (max-width: 480px) {
+    /* Ajustes em telas menores (exemplo de celular) */
+    .content {
+        padding: 0.5em;
+    }
+
+    /* Ajustes na tabela */
+    .estoque-tabela {
+        font-size: 0.8em; /* Reduzir ainda mais o tamanho da fonte */
+    }
+
+    .estoque-tabela th, .estoque-tabela td {
+        padding: 0.5em; /* Menos padding nas células */
+    }
+
+    /* Ajustes nos botões */
+    .btn-editar {
+        padding: 0.4em;
+        font-size: 0.8em;
+    }
+
+    /* Ajuste no cabeçalho */
+    header {
+        padding: 0.5em;
+    }
+}
   </style>
 </body>
 </html>

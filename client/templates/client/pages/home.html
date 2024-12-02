@@ -183,6 +183,82 @@
             background-color: transparent;
             cursor: pointer;
           }
+          /* Responsividade */
+    @media (max-width: 1024px) {
+        main {
+            margin-left: 0; /* Remover o espaço da sidebar em telas menores */
+            padding: 20px 10px;
+        }
+
+        .content {
+            width: 90%;
+        }
+
+        .filter form {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .filter input[type="text"] {
+            width: 100%; /* Campo de filtro ocupa toda a largura */
+        }
+
+        .filter button {
+            width: 100%; /* Botão de filtro ocupa toda a largura */
+            margin-top: 10px;
+        }
+
+        table {
+            font-size: 0.9em;
+        }
+
+        .content a button {
+            width: 100%; /* Botão de cadastro ocupa toda a largura */
+        }
+    }
+
+    @media (max-width: 768px) {
+        .filter input[type="text"], .filter button {
+            width: 100%;
+        }
+
+        table th, table td {
+            padding: 8px;
+        }
+
+        .icons {
+            width: 1.5em;
+        }
+
+        .actions_icons {
+            margin-left: 10px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .content {
+            padding: 15px;
+        }
+
+        .filter input[type="text"], .filter button {
+            padding: 10px;
+            font-size: 0.9em;
+        }
+
+        .content a button {
+            padding: 12px;
+            font-size: 0.9em;
+        }
+
+        table th, table td {
+            font-size: 0.8em;
+            padding: 8px;
+        }
+
+        .icons {
+            width: 1.2em;
+        }
+    }
     </style>
 </head>
 <body>

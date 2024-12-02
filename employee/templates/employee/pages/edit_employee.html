@@ -121,6 +121,87 @@
             margin: 0.5em 0;
             text-align: center;
         }
+        @media (max-width: 1024px) {
+            .content {
+              width: 95vw;
+              margin-top: 6em; /* Ajusta para telas menores */
+              gap: 0.8em;
+            }
+        
+            .form {
+              width: 100%;
+              max-width: 500px;
+              padding: 15px;
+              gap: 0.8em;
+            }
+        
+            h1 {
+              font-size: 1.8em;
+            }
+        
+            .styled-button, 
+            .cancel-button {
+              font-size: 1em;
+              padding: 0.6em 1.2em;
+            }
+          }
+        
+          @media (max-width: 768px) {
+            .content {
+              width: 90vw;
+              margin-top: 6em;
+            }
+        
+            .form {
+              width: 100%;
+              max-width: 400px;
+              padding: 10px;
+              gap: 0.7em;
+            }
+        
+            h1 {
+              font-size: 1.5em;
+            }
+        
+            .styled-button, 
+            .cancel-button {
+              font-size: 0.9em;
+              padding: 0.5em 1em;
+            }
+          }
+        
+          @media (max-width: 480px) {
+            .content {
+              width: 100%;
+              margin-top: 6em;
+              gap: 0.6em;
+            }
+        
+            h1 {
+              font-size: 1.3em;
+            }
+        
+            .form {
+              width: 100%;
+              max-width: 350px;
+              padding: 8px;
+              gap: 0.6em;
+            }
+        
+            .styled-button, 
+            .cancel-button {
+              font-size: 0.85em;
+              padding: 0.5em 0.8em;
+            }
+        
+            .cancel-button {
+              font-size: 0.8em;
+            }
+        
+            .form-input {
+              gap: 0.5em;
+            }
+          }
 
     </style>
 
