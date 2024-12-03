@@ -1,64 +1,206 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    {% load static %}
+    {% include "stock/partials/head.html" %}
     <title>Editar Orçamento</title>
+    <style>
+        /* Estilização geral */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #007bff;
+            padding: 1em;
+            color: white;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        main {
+            margin-top: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 120px);
+        }
+        .back-button {
+            text-align: center; /* Alinha o botão à direita */
+    padding-right: 10%; /* Ajusta a distância da borda direita */
+      margin-bottom: 1.5em;
+    }
+
+    .back-button button {
+      padding: 0.7em 1.5em;
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .back-button button:hover {
+      background-color: #0056b3;
+    }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            padding: 2em;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 1em;
+        }
+
+        label {
+            display: block;
+            margin-top: 1em;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 0.8em;
+            margin-top: 0.3em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        .item-orcamento {
+            margin-bottom: 1.5em;
+            padding: 1em;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        .item-orcamento label {
+            margin-top: 0.5em;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2em;
+        }
+
+        button[type="submit"],
+        .cancel-btn {
+            padding: 0.8em 1.2em;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        button[type="submit"] {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        .cancel-btn {
+            background-color: #d9534f;
+            color: #fff;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .cancel-btn:hover {
+            background-color: #c9302c;
+        }
+
+       
+    </style>
     <script>
         // Função para atualizar os valores totais de cada item e do orçamento
         function atualizarTotais() {
             let totalOrcamento = 0;
 
-            // Itera sobre todos os itens do orçamento
             document.querySelectorAll('.item-orcamento').forEach(item => {
                 const quantidadeInput = item.querySelector('.quantidade');
                 const valorUnitarioInput = item.querySelector('.valor-unitario');
                 const valorTotalInput = item.querySelector('.valor-total');
 
-                // Obtém valores e converte para float, trocando vírgula por ponto se necessário
                 let quantidade = parseInt(quantidadeInput.value) || 0;
                 let valorUnitario = parseFloat(valorUnitarioInput.value.replace(',', '.')) || 0;
 
-                // Calcula o valor total do item
                 let valorTotal = quantidade * valorUnitario;
                 valorTotalInput.value = valorTotal.toFixed(2).replace('.', ',');
 
-                // Adiciona ao total do orçamento
                 totalOrcamento += valorTotal;
             });
 
-            // Atualiza o total do orçamento no campo principal
             document.querySelector('#total-orcamento').value = totalOrcamento.toFixed(2).replace('.', ',');
         }
     </script>
 </head>
 <body>
-    <h1>Editar Orçamento - Número {{ budget.number_budget }}</h1>
+    <header>
+        {% include "global/partials/header.html" %}
+    </header>
+    <main>
+        <div class="back-button">
+            <a href="{% url 'ver_orcamentos' %}">
+                <button>Voltar</button>
+            </a>
+        </div>
+        
+        <div class="container">
+            <h1>Editar Orçamento - Número {{ budget.number_budget }}</h1>
 
-    <!-- Formulário de edição para o orçamento principal -->
-    <form method="post" action="{% url 'salvar_orcamento' number_budget=budget.number_budget %}">
-        {% csrf_token %}
-        <h2>Orçamento Principal</h2>
-        <label>Total:</label>
-        <input type="text" id="total-orcamento" name="total" value="{{ budget.total }}" readonly><br>
-    
-        <h2>Itens do Orçamento</h2>
-        {% for item in budget_items %}
-            <div class="item-orcamento">
-                <label>Produto:</label>
-                <input type="text" value="{{ item.produto.nome }}" readonly><br>
+            <!-- Formulário de edição para o orçamento principal -->
+            <form method="post" action="{% url 'salvar_orcamento' number_budget=budget.number_budget %}">
+                {% csrf_token %}
+                <h2>Orçamento Principal</h2>
+                <label for="total-orcamento">Total:</label>
+                <input type="text" id="total-orcamento" name="total" value="{{ budget.total }}" readonly>
 
-                <label>Quantidade:</label>
-                <input type="number" class="quantidade" name="quantidade_{{ item.id }}" value="{{ item.quantidade }}" oninput="atualizarTotais()"><br>
+                <h2>Itens do Orçamento</h2>
+                {% for item in budget_items %}
+                    <div class="item-orcamento">
+                        <label>Produto:</label>
+                        <input type="text" value="{{ item.produto.nome }}" readonly>
 
-                <label>Valor Unitário:</label>
-                <input type="text" class="valor-unitario" name="valor_unitario_{{ item.id }}" value="{{ item.valor_unitario }}" oninput="atualizarTotais()"><br>
+                        <label>Quantidade:</label>
+                        <input type="number" class="quantidade" name="quantidade_{{ item.id }}" value="{{ item.quantidade }}" oninput="atualizarTotais()">
 
-                <label>Valor Total:</label>
-                <input type="text" class="valor-total" value="{{ item.valor_total }}" readonly><br>
-            </div>
-            <hr>
-        {% endfor %}
-    
-        <button type="submit">Salvar Alterações</button>
-    </form>
+                        <label>Valor Unitário:</label>
+                        <input type="text" class="valor-unitario" name="valor_unitario_{{ item.id }}" value="{{ item.valor_unitario }}" oninput="atualizarTotais()">
+
+                        <label>Valor Total:</label>
+                        <input type="text" class="valor-total" value="{{ item.valor_total }}" readonly>
+                    </div>
+                {% endfor %}
+
+                <div class="actions">
+                    <button type="submit">Salvar Alterações</button>
+                    <a href="{% url 'ver_orcamentos' %}" class="cancel-btn">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </main>
 </body>
 </html>

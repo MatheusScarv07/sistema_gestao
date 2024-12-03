@@ -3,115 +3,223 @@
   <header>
     {% include "global/partials/header.html" %}
   </header>
+
   <main>
-    <div class="sub_menu">
-      <a href="/receive/home"><button>Painel</button></a>
-      <a href="/receive/searchreceive"><button>Consultar Vendas</button></a>
-    </div>
+    <div class="content">
+      <!-- Título da página -->
+      <h1>Buscar Devedores</h1>
 
-    <h1>Buscar Devedores</h1>
+      <!-- Formulário de filtro -->
+      <fieldset class="infos">
+        <legend>Filtros de Busca</legend>
+        <form class="form-filtro" action="/receive/filtrar_vendas/" method='post'>
+          {% csrf_token %}
+          <div class="input-group">
+            <input type="date" name="date_inicial" placeholder="Data inicial">
+            <input type="date" name="date_final" placeholder="Data final">
+            <select name="cliente">
+              <option value="">Cliente</option>
+              {% for cliente in clientes %}
+                <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
+              {% endfor %}
+            </select>
+            <input type="text" name="cpf" placeholder="CPF">
+            <input type="text" name="number_sale" placeholder="Número da Venda">
+          </div>
+          <button class="botao-filtrar" type="submit">Filtrar</button>
+        </form>
+      </fieldset>
 
-    <!-- Formulário de filtro -->
-    <form class="form-filtro" action="/receive/filtrar_vendas/" method='post'>
-      <div class="input-group">
-        <input type="date" name="date_inicial" placeholder="Data inicial">
-        <input type="date" name="date_final" placeholder="Data final">
-        <select name="cliente">
-          <option value="">Cliente</option>
-          {% for cliente in clientes %}
-            <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
-          {% endfor %}
-        </select>
-        <input type="text" name="cpf" placeholder="CPF">
-        <input type="text" name="number_sale" placeholder="Número da Venda">
-      </div>
-      <button class="botao-filtrar" type="submit">Filtrar</button>
-    </form>
-
-    <!-- Resultados da busca -->
-    <div class="resultado-consulta">
-      {% for receive in receives %}
-        <div class="devedor-item">
-          <a href="/sale/info/{{ receive.num_sale.num_sale }}">
-            <p class="num-venda">{{ receive.num_sale.num_sale }}</p>
-          </a>
-          <p class="data-venda">{{ receive.data_venda }}</p>
-          <p class="cliente">{{ receive.cliente }}</p>
-          <p class="valor">{{ receive.valor }}</p>
+      <!-- Resultados da busca -->
+      <fieldset class="infos">
+        <legend>Resultados da Consulta</legend>
+        <div class="resultado-consulta table-container">
+          <table id="tabela-devedores">
+            <thead>
+              <tr>
+                <th>Número da Venda</th>
+                <th>Data</th>
+                <th>Cliente</th>
+                <th>Valor</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for receive in receives %}
+                <tr>
+                  <td>
+                    <a href="/sale/info/{{ receive.num_sale.num_sale }}" class="num-venda">
+                      {{ receive.num_sale.num_sale }}
+                    </a>
+                  </td>
+                  <td>{{ receive.data_venda }}</td>
+                  <td>{{ receive.cliente }}</td>
+                  <td>{{ receive.valor }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
-      {% endfor %}
+      </fieldset>
     </div>
   </main>
-  <footer></footer>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #007bff;
+      padding: 1em;
+      color: white;
+      text-align: center;
+      z-index: 1000;
+    }
+
+    .content {
+      padding-top: 80px;
+      width: 90%;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+    }
+
+    h1 {
+      font-size: 1.8em;
+      text-align: center;
+    }
+
+    .infos {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 1em;
+    }
+
+    .form-filtro {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+      align-items: center;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 1em;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .input-group input,
+    .input-group select {
+      padding: 0.5em;
+      font-size: 1em;
+      width: 12em;
+    }
+
+    .botao-filtrar {
+      padding: 0.7em 1.5em;
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .botao-filtrar:hover {
+      background-color: #0056b3;
+    }
+
+    .resultado-consulta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 0.5em;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f1f1f1;
+    }
+
+    .num-venda {
+      font-weight: bold;
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .num-venda:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsividade */
+    @media (max-width: 1024px) { /* Tablets */
+      h1 {
+        font-size: 1.5em;
+      }
+
+      .input-group input,
+      .input-group select {
+        width: 10em;
+        font-size: 0.9em;
+      }
+
+      table th, table td {
+        font-size: 0.9em;
+        padding: 0.4em;
+      }
+    }
+
+    @media (max-width: 768px) { /* Smartphones */
+      h1 {
+        font-size: 1.2em;
+      }
+
+      .content {
+        width: 95%;
+        padding: 1em;
+      }
+
+      .input-group {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .input-group input,
+      .input-group select {
+        width: 100%;
+        font-size: 0.8em;
+        margin-bottom: 0.5em;
+      }
+
+      .botao-filtrar {
+        width: 100%;
+        padding: 0.6em;
+        font-size: 0.9em;
+      }
+
+      table {
+        font-size: 0.8em;
+      }
+
+      .infos {
+        padding: 0.8em;
+      }
+    }
+  </style>
 </body>
-</html>
-
-<style>
-  /* Estilização do conteúdo */
-  .sub_menu {
-    display: flex;
-    justify-content: center;
-    gap: 1em;
-    margin-bottom: 1.5em;
-  }
-
-  .form-filtro {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-    align-items: center;
-    margin-bottom: 1.5em;
-  }
-
-  .input-group {
-    display: flex;
-    gap: 1em;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .input-group input,
-  .input-group select {
-    padding: 0.5em;
-    font-size: 1em;
-    width: 12em;
-  }
-
-  .botao-filtrar {
-    padding: 0.5em 1em;
-    font-weight: bold;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .resultado-consulta {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 85vw;
-    margin: 0 auto;
-  }
-
-  .devedor-item {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1em;
-    padding: 1em;
-    width: 100%;
-    border-bottom: 1px solid #ddd;
-  }
-
-  .devedor-item p {
-    margin: 0;
-    font-size: 1em;
-    text-align: center;
-  }
-
-  .num-venda {
-    font-weight: bold;
-    color: #007bff;
-  }
-</style>

@@ -7,7 +7,8 @@
   <main>
     <div class="content">
       <!-- Botão de voltar -->
-      
+      <a href="{% url 'consultar_cliente' %}" class="back-button">
+        <button class="back-button">Voltar</button>
       
       <!-- Informações do cliente -->
       <div class="client-info">
@@ -26,9 +27,7 @@
     </div>
   </main>
 
-  <footer>
-    <p>&copy; {{ current_year }} - Sua Empresa</p>
-  </footer>
+  
 
   <style>
     body {
