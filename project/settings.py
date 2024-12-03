@@ -143,3 +143,10 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = '/login/'  # Altere para o caminho do seu login, se necessário
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Sessões armazenadas no banco
+SESSION_COOKIE_AGE = 0  # Torna a sessão expirar quando o navegador é fechado
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Fecha a sessão ao fechar o navegador
+

@@ -5,14 +5,15 @@ from supplier.models import Supplier
 from stock.models import Stock
 from nfe.models import NFE, NFECartTemp, NFEInfo
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, Http404
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
-
+@login_required
 def home (request):
     return render(request, 'nfe/pages/home.html')
 
-@csrf_exempt
+@login_required
 def new_NFE(request):
     fornecedores = Supplier.objects.all()
     carts = NFECartTemp.objects.all()
@@ -25,6 +26,7 @@ def new_NFE(request):
         'response': response
     })
 
+@login_required
 def get_product(request, product_id):
     try:
         # Busque o produto no banco de dados
@@ -39,7 +41,7 @@ def get_product(request, product_id):
     except Stock.DoesNotExist:
         return JsonResponse({'error': 'Produto não encontrado'}, status=404)
     
-@csrf_exempt
+@login_required
 def cart(request):
     response = ''
     if request.method == 'POST':
@@ -117,7 +119,7 @@ def cart(request):
         return JsonResponse({'error': 'Método não permitido'}, status=405)
     
 
-@csrf_exempt
+@login_required
 def excluir_produto(request, id):
     try:
         produto = NFECartTemp.objects.get(id=id)
@@ -151,7 +153,7 @@ def excluir_produto(request, id):
     except NFECartTemp.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Produto não encontrado'})
 
-@csrf_exempt
+@login_required
 def efetuar_entrada(request):
     try:
         carrinho = NFECartTemp.objects.all()
@@ -205,7 +207,7 @@ def efetuar_entrada(request):
         # Handle exceptions appropriately, e.g., return an error response
         return HttpResponseBadRequest(f"An error occurred: {e}")
 
-
+@login_required
 def search_nfes(request):
     compras = NFEInfo.objects.all()
     fornecedores = Supplier.objects.all()
@@ -215,6 +217,7 @@ def search_nfes(request):
         'notas':compras
     })
 
+@login_required
 def info_nfe(request, num_nota):
     # Tenta recuperar as informações da NFE
     try:

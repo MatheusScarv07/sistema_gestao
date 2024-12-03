@@ -16,18 +16,20 @@ from sale.models import Sale, SaleInfo
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 
 
 
 # Create your views here.
+@login_required
 def home (request):
   return render (request, 'budget/pages/home.html')
 
 
 
 
-
+@login_required
 def budget_search(request):
     budget_list = BudgetInfo.objects.all().order_by('-data_orcamento')
     clientes = Client.objects.all()
@@ -44,8 +46,7 @@ def budget_search(request):
         'vendedores': vendedor_db
     })
 
-
-@csrf_exempt
+@login_required
 def search_budget_filter(request):
     data_inicial = request.POST.get('date_inicial')
     data_final = request.POST.get('date_final')
@@ -70,8 +71,7 @@ def search_budget_filter(request):
         'vendedores': vendedor_db
     })
 
-
-@csrf_exempt
+@login_required
 def new_budget(request):
     clients = Client.objects.all()
     carts = CartTempBudget.objects.all()
@@ -88,7 +88,7 @@ def new_budget(request):
         'produtos_estoque': produtos
     })
 
-@csrf_exempt
+@login_required
 def enviar_orcamento(request):
     try:
         if request.method == 'POST':
@@ -151,7 +151,7 @@ def enviar_orcamento(request):
         return HttpResponseBadRequest(f"An error occurred: {e}")
     
 
-@csrf_exempt
+@login_required
 def cart(request):
     if request.method == 'POST':
         cliente_id = request.POST.get('cliente')
@@ -205,7 +205,7 @@ def cart(request):
     else:
         return JsonResponse({'error': 'Método não permitido'}, status=405)
 
-
+@login_required
 def render_cart_page(request, cliente=None, vendedor=None):
     # Renderiza o template com o contexto correto
     return render(
@@ -224,7 +224,7 @@ def render_cart_page(request, cliente=None, vendedor=None):
 
 
 
-@csrf_exempt
+@login_required
 def excluir_produto(request, id):
     try:
         produto = CartTempBudget.objects.get(id=id)
@@ -266,7 +266,7 @@ def excluir_produto(request, id):
     except CartTempBudget.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Produto não encontrado'})
 
-@csrf_exempt 
+@login_required
 def clear_cart(request):
     # Remove todos os itens do carrinho para o cliente especificado
     CartTempBudget.objects.all().delete()
@@ -276,7 +276,7 @@ def clear_cart(request):
 
 
 
-@csrf_exempt
+@login_required
 def gerar_pdf(request, number_budget):
     # Dados para o template
     budget = BudgetInfo.objects.get(number_budget= number_budget)
@@ -307,7 +307,7 @@ def gerar_pdf(request, number_budget):
 
 
 
-@csrf_exempt
+@login_required
 def exportar(request):
     # Dados para o template
     budget = BudgetInfo.objects.all().order_by('-data_orcamento')
@@ -333,7 +333,7 @@ def exportar(request):
 
     return response
 
-
+@login_required
 def efetuar_venda(request, num_orcamento):
     try:
         # Tente obter as informações do orçamento
@@ -408,7 +408,7 @@ def efetuar_venda(request, num_orcamento):
     except Exception as e:
         return HttpResponseBadRequest(f"Ocorreu um erro inesperado: {e}")
     
-
+@login_required
 def page_details(request, number_budget):
     budget = BudgetInfo.objects.get(number_budget= number_budget)
     budget_info = Budget.objects.filter(number_budget=number_budget)
@@ -418,6 +418,7 @@ def page_details(request, number_budget):
         'budget_info': budget_info
     })
 
+@login_required
 def delete_budget(request, number_budget):
     try:
         # Tenta obter o orçamento e os itens do orçamento
@@ -435,7 +436,7 @@ def delete_budget(request, number_budget):
     except Exception as e:
         return HttpResponseBadRequest(f"Ocorreu um erro inesperado: {e}")
     
-
+@login_required
 def editar_orcamento(request, number_budget):
     try:
         # Tenta obter o orçamento principal
@@ -454,7 +455,8 @@ def editar_orcamento(request, number_budget):
         return HttpResponseBadRequest("Orçamento não encontrado.")
     except Exception as e:
         return HttpResponseBadRequest(f"Ocorreu um erro inesperado: {e}")
-    
+
+@login_required   
 def salvar_orcamento(request, number_budget):
     if request.method == 'POST':
         try:

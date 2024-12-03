@@ -2,16 +2,25 @@
 <body>
 
    <div class="container">
+
     <div class="login-box">
       <h2>Login</h2>
+      {% if messages %}
+  <ul>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
       <form action="" method="post">
+        {% csrf_token %}
         <div class="input-box">
-          <input type="email" name="" id="">
-          <label for="">Email</label>
+          <input type="text" name="username" id="username" required>
+          <label for="email">Usuario</label>
         </div>
         <div class="input-box">
-          <input type="password" name="" id="">
-          <label for="">Senha</label>
+          <input type="password" name="password" id="password" required>
+          <label for="senha">Senha</label>
         </div>
         <button type="submit" class="btn">Login</button>
         <div class="signup-link">

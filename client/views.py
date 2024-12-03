@@ -9,10 +9,12 @@ from datetime import datetime
 from brasilapy import BrasilAPI
 import re
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 
 control_client = ControlClient()
 
+@login_required
 def home(request):
       # Crie uma instância da classe ControlClient
     clients = Client.objects.all() # Chame o método get_all da instância
@@ -21,6 +23,7 @@ def home(request):
         'clientes':clients
     } )
 
+@login_required
 def details_client(request, id):
     data = control_client.get_by_id(id)
     print(data)
@@ -28,6 +31,7 @@ def details_client(request, id):
         'client': data
     })
 
+@login_required
 def register(request):
     estados = control_client.get_estados()
     print(estados)
@@ -35,6 +39,7 @@ def register(request):
         'estados': estados
     })
 
+@login_required
 def get_endereco(request, cep):
     try:
         # Valida o formato do CEP (BR: 8 dígitos numéricos)
@@ -68,7 +73,7 @@ def get_endereco(request, cep):
         # Captura qualquer outra exceção inesperada
         return JsonResponse({'error': 'Ocorreu um erro inesperado'}, status=500)
 
-@csrf_exempt
+@login_required
 def cadastrar(request):
     try:
         clients = Client.objects.all()
@@ -124,7 +129,7 @@ def cadastrar(request):
         messages.error(request, f'Erro ao processar sua solicitação. Detalhes: {e}')
         return render(request, 'client/pages/register.html', context={'clientes': clients})
     
-
+@login_required
 def delete_client(request, id):
     # Verifica se a requisição é do tipo POST
     if request.method == "POST":
@@ -134,6 +139,7 @@ def delete_client(request, id):
 
     return redirect('consultar_cliente')  # Redireciona caso a requisição não seja POST
 
+@login_required
 def edit_client(request, id):
     cliente = get_object_or_404(Client, id=id)  # Obtém o cliente pelo ID
 

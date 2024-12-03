@@ -4,13 +4,14 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import UpdateView
 from .models import Employee
 from .forms import EmployeeForm
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def home(request):
     return render(request, 'employee/pages/home.html')  # Página inicial
 
 
-
+@login_required
 def new_employee(request):
     if request.method == 'POST':
         nome = request.POST.get('name')
@@ -27,7 +28,7 @@ def new_employee(request):
 
 
 
-
+@login_required
 def search_employee(request):
     employees = Employee.objects.all()
 
@@ -43,6 +44,8 @@ def search_employee(request):
 
     return render(request, 'employee/pages/search_employee.html', {'employees': employees})
 
+
+@login_required
 def edit_employee(request, id):
     # Obtém o funcionário pelo ID
     employee = get_object_or_404(Employee, id=id)
@@ -59,6 +62,8 @@ def edit_employee(request, id):
 
     return render(request, 'employee/pages/edit_employee.html', {'form': form, 'employee': employee})
 
+
+@login_required
 def inativar_employee(request, id):
     # Verifica se a requisição é do tipo POST
     if request.method == "POST":
@@ -69,7 +74,7 @@ def inativar_employee(request, id):
 
     return redirect('search_employee')  # Redireciona se a requisição não for POST
 
-
+@login_required
 def ativar_employee(request, id):
     # Verifica se a requisição é do tipo POST
     if request.method == "POST":

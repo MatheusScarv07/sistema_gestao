@@ -5,12 +5,14 @@ from .models import Receive, PaymentHistory, PaymentType
 from sale.models import SaleInfo
 from client.models import Client
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
-
+@login_required
 def home (request):
   return render (request, 'receive/pages/home.html')
 
+@login_required
 def receive_page(request, num_venda):
     num_venda = num_venda
     # Supondo que `num_venda` já tenha sido passado para a função
@@ -29,6 +31,7 @@ def receive_page(request, num_venda):
         'tipos_pagamento': types_payment
     })
 
+@login_required
 def makePayment(request):
     if request.method == 'POST':
         # Coletando os dados do formulário
@@ -110,9 +113,11 @@ def makePayment(request):
 
     return redirect('new_sale')
 
+@login_required
 def info_receive(request):
   return render(request, 'receive/pages/info_receive.html')
 
+@login_required
 def search_receive(request):
   try: 
         receives = Receive.objects.filter(status="Pendente")
@@ -126,12 +131,14 @@ def search_receive(request):
   except Exception as e:
         ...
 
+@login_required
 def clientes_pendentes(request):
     # Filtra os pagamentos pendentes
     pagamentos_pendentes = Receive.objects.filter(status='Pendente')
 
     return render(request, 'receive/pages/clientes_pendentes.html', {'pagamentos_pendentes': pagamentos_pendentes})
 
+@login_required
 def receber_pagamento(request, receive_id):
     # Obter a informação de pagamento a partir do ID
     pagamento = Receive.objects.get(id=receive_id)

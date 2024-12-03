@@ -4,17 +4,21 @@ from django.contrib import messages
 from datetime import datetime
 from django.http import JsonResponse
 from brasilapy import BrasilAPI
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required
 def home(request):
     fornecedores = Supplier.objects.all()
     return render(request, 'supplier/pages/home.html', context={
         'fornecedores': fornecedores
     })
 
+@login_required
 def page_register(request):
     return render (request, 'supplier/pages/register.html')
 
+@login_required
 def register(request):
     if request.method == 'POST':
         nome_form = request.POST.get('name')
@@ -84,6 +88,7 @@ def register(request):
         print(f"Erro: {e.__class__.__name__} - {e}")  # Tipo de erro e mensagem
         return JsonResponse({'error': 'Ocorreu um erro inesperado'}, status=500) """
 
+@login_required
 def details_client(request, id):
     data = Supplier.objects.get(id=id)
     return render(request, 'supplier/pages/details_supplier.html', context={
@@ -92,11 +97,7 @@ def details_client(request, id):
 
 
 
-
-
-
-
-
+@login_required
 def listar_fornecedores(request):
     # Variáveis para armazenar os dados de filtro
     nome = request.POST.get('nome', '')
@@ -114,7 +115,7 @@ def listar_fornecedores(request):
     return render(request, 'supplier/pages/home.html', {'fornecedores': fornecedores})
 
 
-
+@login_required
 def detalhes_fornecedor(request, id):
     fornecedor = get_object_or_404(Supplier, id=id)  # Buscar fornecedor pelo ID
     return render(request, 'supplier/details_supplier.html', {'fornecedor': fornecedor})
