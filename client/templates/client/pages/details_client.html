@@ -26,9 +26,7 @@
     </div>
   </main>
 
-  <footer>
-    <p>&copy; {{ current_year }} - Sua Empresa</p>
-  </footer>
+ 
 
   <style>
     body {
@@ -49,11 +47,11 @@
     }
 
     main {
-      padding-top: 80px;
+      padding-top: 200px; /* Aumentei o espaço para descer mais */
       text-align: center;
       width: 85vw;
       margin: auto;
-    }
+  }
 
     .content {
       display: flex;
@@ -119,6 +117,68 @@
       margin: 0;
       font-size: 0.9em;
       color: #777;
+    }
+
+    @media (max-width: 1024px) {
+      .client-info {
+        padding: 1.5em;
+        font-size: 0.95em;
+      }
+  
+      .client-info h2 {
+        font-size: 1.5em;
+      }
+  
+      .client-info p {
+        font-size: 0.9em;
+      }
+  
+      main {
+        width: 90vw;
+      }
+    }
+  
+    @media (max-width: 768px) {
+      .client-info {
+        padding: 1.2em;
+      }
+  
+      .client-info h2 {
+        font-size: 1.4em;
+      }
+  
+      .client-info p {
+        font-size: 0.85em;
+      }
+    }
+  
+    @media (max-width: 480px) {
+      .content {
+        gap: 1em;
+      }
+  
+      .client-info {
+        padding: 1em;
+        font-size: 0.8em;
+      }
+  
+      .client-info h2 {
+        font-size: 1.2em;
+      }
+  
+      .client-info p {
+        font-size: 0.8em;
+      }
+  
+      .back-button button {
+        padding: 0.5em 1em;
+        font-size: 0.85em;
+      }
+  
+      main {
+        padding-top: 180px; /* Ajuste adicional para telas menores */
+        width: 95vw;
+      }
     }
   </style>
 </body>

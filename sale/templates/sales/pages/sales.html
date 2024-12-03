@@ -314,6 +314,95 @@
       height: 25px;
       width: 25px;
     }
+    /* Responsividade para diferentes tamanhos de tela */
+@media screen and (max-width: 1200px) {
+  .content {
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  /* Para tablets */
+  h1 {
+    font-size: 1.8em;
+  }
+
+  .content {
+    padding: 2em 1em;
+  }
+
+  form {
+    width: 100%;
+  }
+
+  form input, form select {
+    width: 90%;
+  }
+
+  .action_button {
+    flex-direction: column;
+    gap: 1em;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  /* Para smartphones */
+  h1 {
+    font-size: 1.5em;
+  }
+
+  form {
+    width: 100%;
+  }
+
+  form input, form select {
+    width: 100%;
+    font-size: 1.1em;
+  }
+
+  .action_button {
+    flex-direction: column;
+  }
+
+  .content {
+    padding: 1em;
+  }
+
+  .icons {
+    width: 20px;
+    height: 20px;
+  }
+
+  .add {
+    width: 100%;
+    margin-top: 1em;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  /* Para smartphones pequenos */
+  h1 {
+    font-size: 1.3em;
+  }
+
+  form input, form select {
+    font-size: 1em;
+  }
+
+  .action_button {
+    width: 100%;
+  }
+
+  .enviar {
+    width: 100%;
+    padding: 1em;
+  }
+
+  .icons {
+    width: 18px;
+    height: 18px;
+  }
+}
 
 
    

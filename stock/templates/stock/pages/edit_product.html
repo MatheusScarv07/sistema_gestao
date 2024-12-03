@@ -128,19 +128,67 @@
             background-color: #c9302c;
         }
 
-        footer {
-            text-align: center;
-            padding: 1em;
-            background-color: #f1f1f1;
-            border-top: 1px solid #ddd;
-            margin-top: 2em;
+        /* Estilos Responsivos */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 1.5em;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            input[type="text"],
+            input[type="number"],
+            textarea {
+                font-size: 0.9em;
+            }
+
+            .actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cancel-btn {
+                margin-top: 1em;
+            }
         }
 
-        footer p {
-            margin: 0;
-            font-size: 0.9em;
-            color: #777;
+        @media (max-width: 480px) {
+            .container {
+                width: 100%;
+                padding: 1em;
+            }
+
+            h1 {
+                font-size: 1.2em;
+            }
+
+            input[type="text"],
+            input[type="number"],
+            textarea {
+                font-size: 0.8em;
+            }
+
+            .actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            button[type="submit"],
+            .cancel-btn {
+                width: 100%;
+                padding: 0.8em 1.5em;
+                font-size: 1em;
+            }
+
+            .cancel-btn {
+                margin-top: 1em;
+            }
         }
+
+     
     </style>
 </head>
 <body>

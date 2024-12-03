@@ -102,4 +102,55 @@
   .save-button:hover {
       background-color: #218838;
   }
+  /* Responsividade */
+@media (max-width: 768px) {
+    /* Ajustes no conteúdo */
+    .content {
+        width: 90%; /* Aumenta a largura para telas menores */
+        padding: 1em;
+    }
+
+    /* Ajustes nos inputs */
+    .edit-form input[type="text"] {
+        padding: 0.5em; /* Reduz o padding dos inputs */
+    }
+
+    .save-button {
+        padding: 0.7em; /* Reduz o padding do botão */
+    }
+
+    .content h1 {
+        font-size: 1.8em; /* Reduz o tamanho do título */
+        margin-bottom: 1em;
+    }
+
+    /* Ajuste na largura do botão */
+    .save-button {
+        font-size: 0.9em; /* Ajusta o tamanho do texto no botão */
+    }
+}
+
+@media (max-width: 480px) {
+    /* Ajustes em telas menores (exemplo de celular) */
+    .content {
+        width: 100%; /* A largura ocupa 100% da tela */
+        padding: 0.5em;
+    }
+
+    /* Ajustes nos inputs */
+    .edit-form input[type="text"] {
+        padding: 0.4em; /* Menos padding nos inputs */
+    }
+
+    .save-button {
+        padding: 0.6em; /* Reduz o tamanho do botão */
+        font-size: 0.8em; /* Reduz o tamanho do texto */
+    }
+
+    .content h1 {
+        font-size: 1.6em; /* Ajusta o tamanho do título */
+        margin-bottom: 0.8em;
+    }
+}
+
 </style>

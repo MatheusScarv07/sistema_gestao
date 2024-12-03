@@ -74,7 +74,7 @@
         </table>
       </div>
     </div>
-    <footer>footer</footer>
+  
   </main>
 
   <style>
@@ -147,15 +147,105 @@
     tbody tr:nth-child(even) {
       background-color: #f2f2f2;
     }
-
-    footer {
-      background-color: #333;
-      color: white;
-      padding: 10px 0;
-      text-align: center;
-      margin-top: 20px;
-      width: 100%;
+    /* Responsividade */
+@media (max-width: 768px) {
+    /* Ajuste no conteúdo */
+    .content {
+        width: 90vw; /* Aumenta a largura para telas menores */
+        margin-left: 5vw; /* Ajuste a margem esquerda para centralizar melhor */
     }
+
+    /* Ajustes no submenu */
+    .sub_menu {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; /* Centraliza os botões */
+        gap: 10px; /* Espaço entre os botões */
+    }
+
+    .sub_menu button {
+        width: 100%; /* Botões ocupam toda a largura */
+        padding: 1em;
+        margin: 0.5em 0;
+    }
+
+    /* Ajuste nas cartas de resumo */
+    .sales-summary {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .card_datas {
+        width: 100%; /* As cartas ocupam toda a largura disponível */
+        max-width: 300px;
+    }
+
+    /* Ajustes na tabela de tipos de pagamento */
+    table {
+        width: 100%;
+    }
+
+    th, td {
+        padding: 10px;
+    }
+
+    /* Ajuste nos cabeçalhos da tabela */
+    th {
+        font-size: 0.9em;
+    }
+
+    /* Ajuste nas células da tabela */
+    td {
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Ajustes para telas pequenas (exemplo de celulares) */
+    .content {
+        width: 100%; /* O conteúdo ocupa toda a tela */
+        margin-left: 0; /* Remove a margem esquerda */
+    }
+
+    /* Ajuste nos botões */
+    .sub_menu button {
+        width: 100%;
+        padding: 1.2em;
+    }
+
+    .sales-summary {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .card_datas {
+        width: 100%; /* Carta ocupa toda a largura disponível */
+        max-width: 250px; /* Ajusta o tamanho das cartas */
+        padding: 15px;
+    }
+
+    /* Ajuste no título */
+    h1 {
+        font-size: 1.6em;
+    }
+
+    /* Ajuste nos cabeçalhos e células da tabela */
+    th, td {
+        padding: 8px;
+    }
+
+    th {
+        font-size: 0.85em; /* Menor tamanho de fonte */
+    }
+
+    td {
+        font-size: 0.75em; /* Menor tamanho de fonte */
+    }
+}
+
+
+    
   </style>
 </body>
 </html>

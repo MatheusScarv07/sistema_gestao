@@ -181,6 +181,83 @@
     #tabela-carrinho th {
       background-color: #f0f0f0;
     }
+    @media (max-width: 1024px) {
+      .content {
+        width: 90vw; /* Ajusta a largura do conteúdo */
+      }
+  
+      .nfe-data, .product-data {
+        width: 100%; /* Expandem para ocupar a largura disponível */
+      }
+  
+      .nfe-data input, .nfe-data select, .product-data input, .product-data select {
+        width: 100%; /* Inputs e selects ocupam toda a largura */
+        font-size: 0.9em; /* Reduz o tamanho da fonte */
+      }
+  
+      #tabela-carrinho {
+        font-size: 0.9em; /* Texto menor na tabela */
+      }
+  
+      #tabela-carrinho th, #tabela-carrinho td {
+        padding: 8px; /* Reduz o padding */
+      }
+    }
+  
+    @media (max-width: 768px) {
+      .content {
+        padding: 1em; /* Ajusta o padding geral */
+      }
+  
+      h1, h2 {
+        font-size: 1.5em; /* Títulos menores */
+      }
+  
+      .nfe-data, .product-data {
+        gap: 0.8em; /* Reduz o espaçamento interno */
+      }
+  
+      button {
+        width: 100%; /* Botões ocupam toda a largura */
+        padding: 0.8em; /* Reduz o padding */
+        font-size: 0.9em; /* Texto menor */
+      }
+  
+      #tabela-carrinho th, #tabela-carrinho td {
+        font-size: 0.85em; /* Texto compacto */
+        padding: 6px; /* Menor espaçamento */
+      }
+    }
+  
+    @media (max-width: 480px) {
+      .content {
+        padding: 0.5em; /* Espaçamento mais compacto */
+      }
+  
+      h1, h2 {
+        font-size: 1.2em; /* Títulos ainda menores */
+      }
+  
+      .nfe-data, .product-data {
+        padding: 1em; /* Reduz o padding interno */
+        gap: 0.5em; /* Reduz o espaçamento entre os elementos */
+      }
+  
+      .nfe-data input, .product-data input, select {
+        font-size: 0.8em; /* Texto ainda menor */
+        padding: 0.5em; /* Menor padding interno */
+      }
+  
+      button {
+        font-size: 0.8em; /* Texto menor */
+        padding: 0.6em; /* Compacta os botões */
+      }
+  
+      #tabela-carrinho th, #tabela-carrinho td {
+        font-size: 0.75em; /* Texto compacto */
+        padding: 4px; /* Espaçamento mínimo */
+      }
+    }
   </style>
 </body>
 </html>

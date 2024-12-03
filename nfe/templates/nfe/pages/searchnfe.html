@@ -142,6 +142,72 @@
   .nfe-item p {
       margin: 0.5em 0;
   }
+  /* Responsividade para telas menores */
+  @media (max-width: 1024px) {
+      .content {
+          width: 90vw; /* Ajusta a largura do conteúdo */
+      }
+
+      .search-section {
+          width: 90%; /* Ajusta a largura da seção de pesquisa */
+      }
+
+      .search-form input, .search-form select {
+          font-size: 0.9em; /* Ajusta o tamanho da fonte */
+      }
+
+      .nfe-list {
+          width: 90%; /* Ajusta a largura da lista de NFE */
+      }
+  }
+
+  @media (max-width: 768px) {
+      .search-form {
+          flex-direction: column; /* Empilha os campos de pesquisa */
+      }
+
+      .search-form input, .search-form select {
+          width: 100%; /* Campos de pesquisa ocupam 100% de largura */
+          margin-bottom: 1em; /* Espaço entre os campos */
+      }
+
+      .styled-button {
+          width: 100%; /* Botão ocupa 100% de largura */
+          padding: 1em; /* Aumenta o tamanho do botão */
+      }
+
+      .nfe-item {
+          padding: 0.8em; /* Ajusta o padding para telas menores */
+      }
+
+      .nfe-item p {
+          font-size: 0.9em; /* Ajusta o tamanho da fonte */
+      }
+  }
+
+  @media (max-width: 480px) {
+      .search-form input, .search-form select {
+          padding: 0.6em; /* Reduz o padding */
+          font-size: 0.8em; /* Menor fonte */
+      }
+
+      .styled-button {
+          padding: 0.8em; /* Ajusta o padding */
+          font-size: 0.8em; /* Menor fonte no botão */
+      }
+
+      .nfe-item {
+          padding: 0.7em; /* Menor padding nos itens da NFE */
+      }
+
+      .nfe-item p {
+          font-size: 0.8em; /* Ajuste de fonte */
+      }
+
+      .nfe-list {
+          width: 100%; /* Lista ocupa toda a largura */
+      }
+  }
 </style>
 
 </html>

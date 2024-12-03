@@ -161,6 +161,54 @@
         .styled-button:hover {
             background-color: #0056b3;
         }
+        /* Estilos Responsivos */
+        @media (max-width: 768px) {
+            main {
+                width: 90%; /* Aumenta o tamanho da área principal para telas menores */
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            form {
+                padding: 15px;
+            }
+
+            form input, form textarea {
+                font-size: 0.9em;
+            }
+
+            .styled-button {
+                padding: 0.6em;
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            main {
+                width: 100%;
+                margin: 120px auto 0;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            form {
+                width: 100%;
+                padding: 10px;
+            }
+
+            form input, form textarea {
+                font-size: 0.8em;
+            }
+
+            .styled-button {
+                font-size: 1em;
+                padding: 0.7em;
+            }
+        }
     </style>
 </body>
 </html>

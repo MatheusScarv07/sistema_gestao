@@ -177,6 +177,106 @@
             background-color: transparent;
             cursor: pointer;
           }
+          @media (max-width: 1024px) {
+            .content {
+              width: 95vw; /* Ajusta a largura da seção principal */
+              gap: 1.5em;
+            }
+        
+            .search-section, .employees-list {
+              width: 90%; /* Reduz a largura para caber em telas menores */
+            }
+        
+            .search-form {
+              flex-wrap: wrap; /* Permite que os elementos fiquem em linhas diferentes */
+              gap: 0.5em;
+            }
+        
+            .search-form input, .styled-button {
+              flex: none; /* Remove o crescimento flexível */
+              width: 100%; /* Ocupa toda a largura disponível */
+            }
+        
+            table {
+              font-size: 0.9em; /* Diminui o tamanho da fonte */
+            }
+        
+            th, td {
+              padding: 0.8em; /* Ajusta o padding */
+            }
+        
+            .icons {
+              width: 1.5em; /* Diminui o tamanho dos ícones */
+            }
+          }
+        
+          @media (max-width: 768px) {
+            header {
+              font-size: 0.9em; /* Reduz o tamanho do texto no cabeçalho */
+            }
+        
+            .content {
+              width: 100%; /* Ocupa toda a largura disponível */
+              gap: 1em;
+            }
+        
+            h1, h2 {
+              font-size: 1.4em; /* Reduz o tamanho dos títulos */
+            }
+        
+            .search-section {
+              width: 100%; /* Expande para ocupar toda a largura */
+            }
+        
+            .search-form input, .styled-button {
+              padding: 0.4em; /* Reduz o padding */
+              font-size: 0.9em; /* Ajusta o tamanho da fonte */
+            }
+        
+            table {
+              font-size: 0.85em; /* Reduz ainda mais o tamanho da fonte */
+            }
+        
+            th, td {
+              padding: 0.5em; /* Reduz o padding das células */
+            }
+          }
+        
+          @media (max-width: 480px) {
+            header {
+              padding: 0.5em; /* Reduz o padding do cabeçalho */
+            }
+        
+            .content {
+              gap: 0.8em; /* Ajusta o espaçamento */
+            }
+        
+            h1, h2 {
+              font-size: 1.2em; /* Reduz o tamanho dos títulos */
+              margin: 0.5em 0;
+            }
+        
+            .search-form {
+              gap: 0.4em; /* Reduz o espaço entre os inputs */
+            }
+        
+            .search-form input, .styled-button {
+              padding: 0.3em; /* Reduz o padding */
+              font-size: 0.85em; /* Reduz o tamanho da fonte */
+            }
+        
+            table {
+              font-size: 0.8em; /* Tabela compacta para pequenos dispositivos */
+            }
+        
+            th, td {
+              padding: 0.4em; /* Reduz o padding ainda mais */
+            }
+        
+            .icons {
+              width: 1.2em; /* Reduz o tamanho dos ícones */
+            }
+          }
     </style>
 
     <script src="{% static 'employee/js/employee.js' %}"></script>
