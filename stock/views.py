@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect,get_object_or_404
 from supplier.models import Supplier
 from stock.models import Stock
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
-
+@login_required
 def home (request):
   return render (request, 'stock/pages/home.html')
 
@@ -22,6 +23,7 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.urls import reverse  # Para gerar URLs dinâmicas
 
+@login_required
 def cadastrar_produto(request):
     if request.method == "POST":
         id = request.POST.get('id-product')
@@ -75,7 +77,7 @@ def cadastrar_produto(request):
 
 
  
-
+@login_required
 def editar_produto(request, id):
     produto = get_object_or_404(Stock, id=id)
     if request.method == "POST":
@@ -93,7 +95,7 @@ def editar_produto(request, id):
 
 
 
-
+@login_required
 def product(request):
     print("Acessando a página de produtos")
     produtos = Stock.objects.all()

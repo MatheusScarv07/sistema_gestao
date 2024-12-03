@@ -20,11 +20,14 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
 from django.template.loader import get_template
 from xhtml2pdf import pisa
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+
 def formatar_moeda(valor):
     return f"R$ {valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
+@login_required
 def home (request):
     data = datetime.now()
     mes = data.month
@@ -105,7 +108,7 @@ def home (request):
     })
 
 
-@csrf_exempt
+@login_required
 def new_sale(request):
     clients = Client.objects.all()
     carts = CartTemp.objects.all()
@@ -121,6 +124,8 @@ def new_sale(request):
         'response': response,
         'produtos_estoque': produtos
     })
+
+@login_required
 def get_product(request, product_id):
     try:
         # Busque o produto no banco de dados
@@ -136,8 +141,7 @@ def get_product(request, product_id):
     except Stock.DoesNotExist:
         return JsonResponse({'error': 'Produto não encontrado'}, status=404)
     
-
-@csrf_exempt
+@login_required
 def cart(request):
     response = ''
     if request.method == 'POST':
@@ -213,7 +217,7 @@ def cart(request):
 
     
 
-@csrf_exempt
+@login_required
 def excluir_produto(request, id):
     try:
         produto = CartTemp.objects.get(id=id)
@@ -254,7 +258,7 @@ def excluir_produto(request, id):
         return JsonResponse({'success': False, 'message': 'Produto não encontrado'})
 
 
-@csrf_exempt
+@login_required
 def efetuar_venda(request):
     try:
         carrinho = CartTemp.objects.all()
@@ -302,7 +306,7 @@ def efetuar_venda(request):
      except Sale.DoesNotExist:
         return HttpResponseNotFound("Venda não encontrada")
 
-@csrf_exempt
+@login_required
 def enviar_orcamento(request):
     try:
         if request.method == 'POST':
@@ -358,6 +362,7 @@ def enviar_orcamento(request):
         # Handle exceptions appropriately, e.g., return an error response
         return HttpResponseBadRequest(f"An error occurred: {e}")
  
+@login_required
 def searchsales(request):
     try:
         vendas_list = SaleInfo.objects.select_related('cliente', 'vendedor').all().order_by('-data_venda')
@@ -398,6 +403,7 @@ def searchsales(request):
             'mensagem': f'Ocorreu um erro inesperado ao processar sua solicitação. Tente novamente mais tarde. {e}'
         })
 
+@login_required
 def search_sale_by_number(request, num_venda):
     try:
         products = Sale.objects.filter(num_sale = num_venda)
@@ -417,7 +423,7 @@ def search_sale_by_number(request, num_venda):
     except Exception as e:
         ...
 
-@csrf_exempt
+@login_required
 def search_sales_filter(request):
     data_inicial = request.POST.get('date_inicial')
     data_final = request.POST.get('date_final')
@@ -434,7 +440,7 @@ def search_sales_filter(request):
             'vendedores': vendedor_db
         })
 
-@csrf_exempt
+@login_required
 def gerar_pdf(request, num_sale):
     # Dados para o template
     sale = SaleInfo.objects.get(num_sale= num_sale)
@@ -462,7 +468,7 @@ def gerar_pdf(request, num_sale):
     return response
 
 
-@csrf_exempt
+@login_required
 def exportar(request):
     # Dados para o template
     sale = SaleInfo.objects.all().order_by('-data_venda')

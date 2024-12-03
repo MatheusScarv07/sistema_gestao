@@ -3,13 +3,14 @@ from .models import pay
 from datetime import datetime
 from supplier.models import Supplier
 from nfe.models import NFEInfo
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
-
+@login_required
 def home (request):
   return render (request, 'payment/pages/home.html')
 
-
+@login_required
 def new_payment(request):
     fornecedor = Supplier.objects.all()
     if request.method == 'POST':
@@ -43,7 +44,7 @@ def new_payment(request):
         "fornecedores" : fornecedor
     })
 
-
+@login_required
 def new_payment_nfe(request, numero_nota):
     nota = NFEInfo.objects.get(numero_nota=numero_nota)
     num_nota = nota.numero_nota
@@ -75,9 +76,7 @@ def new_payment_nfe(request, numero_nota):
         "fornecedores" : fornecedor
     })
 
-
-
-
+@login_required
 def search_payment(request):
     if request.method == "GET": 
         num_nota = request.GET.get('num_nota')
