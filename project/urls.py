@@ -15,7 +15,6 @@ urlpatterns = [
     path('', include('receive.urls')),
     path('', include('payment.urls')),
     path('', include('supplier.urls')),
-    path('', include('login.urls'))
-    
-    
+    path('', include('login.urls')),
+    path('', include('users.urls'))
 ]
