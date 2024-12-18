@@ -6,17 +6,18 @@
     <div class="login-box">
       <h2>Login</h2>
       {% if messages %}
-  <ul>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
+      <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
       <form action="" method="post">
         {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}"> <!-- Campo para redirecionamento -->
         <div class="input-box">
           <input type="text" name="username" id="username" required>
-          <label for="email">Usuario</label>
+          <label for="email">Usuário</label>
         </div>
         <div class="input-box">
           <input type="password" name="password" id="password" required>
