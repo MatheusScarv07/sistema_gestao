@@ -4,9 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Usuários</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        button {
+            padding: 6px 12px;
+            background-color: transparent;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        
+    </style>
 </head>
 <body>
+    {% include "global/partials/header.html" %}
     <h1>Lista de Usuários</h1>
+
     {% if messages %}
         <ul>
             {% for message in messages %}
@@ -14,7 +86,8 @@
             {% endfor %}
         </ul>
     {% endif %}
-    <table border="1">
+
+    <table>
         <thead>
             <tr>
                 <th>ID</th>
@@ -30,13 +103,23 @@
                     <td>{{ usuario.id }}</td>
                     <td>{{ usuario.username }}</td>
                     <td>{{ usuario.email }}</td>
-                    <td>{{ "Ativo" if usuario.is_active else "Inativo" }}</td>
+                    <td>
+                        {% if usuario.is_active %}
+                            Ativo
+                        {% else %}
+                            Inativo
+                        {% endif %}
+                    </td>
                     <td>
                         <form method="post">
                             {% csrf_token %}
                             <input type="hidden" name="user_id" value="{{ usuario.id }}">
                             <button type="submit">
-                                {{ "Desativar" if usuario.is_active else "Ativar" }}
+                                {% if usuario.is_active %}
+                                    Desativar
+                                {% else %}
+                                    Ativar
+                                {% endif %}
                             </button>
                         </form>
                     </td>
