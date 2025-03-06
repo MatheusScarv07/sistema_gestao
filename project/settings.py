@@ -148,6 +148,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/login/'  # Altere para o caminho do seu login, se necessário
 LOGIN_REDIRECT_URL = '/'
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Sessões armazenadas no banco
-SESSION_COOKIE_AGE = 1  # Torna a sessão expirar quando o navegador é fechado
+SESSION_COOKIE_AGE = 3600  # Torna a sessão expirar quando o navegador é fechado
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Fecha a sessão ao fechar o navegador
 

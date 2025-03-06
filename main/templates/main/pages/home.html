@@ -1,28 +1,86 @@
-
 {% include "main/partials/head.html" %}
 
 <body>
-    {% include "global/partials/header.html" %}
+    <header>
+        {% include "global/partials/header.html" %}
+    </header>
     <main>
-        <div class='content'>
+        <div class="imagem">
+            <img src="../../../static/main/img/logo.png" alt="" />
         </div>
-        
     </main>
 </body>
-</html>
-
 
 <style>
-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #007bff;
-    padding: 1em;
-    color: white;
-    text-align: center;
-    z-index: 1000;
-}
+    /* Cabeçalho fixo no topo */
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #007bff;
+        padding: 1em;
+        color: white;
+        text-align: center;
+        z-index: 1000;
+    }
 
+    /* Centraliza a imagem abaixo do cabeçalho */
+    main {
+        
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Usa a altura total da tela */
+    }
+
+    .imagem {
+        text-align: center; /* Garante que a imagem esteja centralizada */
+        padding: 10px;
+    }
+
+    img {
+        max-width: 100%; /* Garante que a imagem se ajuste bem em telas menores */
+        height: auto;
+    }
+
+    /* Responsividade para telas menores que 1024px (tablets e menores) */
+    @media (max-width: 1024px) {
+        main {
+            height: auto; /* Ajuste para que o conteúdo não ultrapasse a tela */
+            margin-top: 120px; /* Ajuste do espaço abaixo do cabeçalho para telas menores */
+        }
+
+        img {
+            max-width: 80%; /* Imagem vai ocupar 80% da largura da tela em tablets */
+        }
+    }
+
+    /* Responsividade para telas menores que 768px (tablets pequenos e celulares) */
+    @media (max-width: 768px) {
+        main {
+            height: auto; /* Ajusta a altura para evitar que o conteúdo ultrapasse a tela */
+            margin-top: 140px; /* Aumenta o espaço entre o cabeçalho e o conteúdo */
+        }
+
+        img {
+            max-width: 90%; /* A imagem vai ocupar 90% da largura em tablets pequenos e celulares */
+        }
+    }
+
+    /* Responsividade para telas menores que 480px (celulares) */
+    @media (max-width: 480px) {
+        header {
+            padding: 0.8em; /* Reduz o padding do cabeçalho para telas menores */
+        }
+
+        main {
+            height: auto; /* Ajusta o conteúdo para a altura necessária */
+            margin-top: 80px; /* Ajuste de margem para caber melhor na tela */
+        }
+
+        img {
+            max-width: 95%; /* Imagem vai ocupar 95% da largura da tela em celulares */
+        }
+    }
 </style>

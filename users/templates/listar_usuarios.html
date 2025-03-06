@@ -14,7 +14,7 @@
         }
 
         header {
-            background-color: #4CAF50;
+            background-color: #007bff;
             color: white;
             padding: 15px;
             text-align: center;
@@ -41,7 +41,7 @@
         }
 
         th {
-            background-color: #4CAF50;
+            background-color: #007bff;
             color: white;
         }
 
@@ -63,7 +63,7 @@
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #007bff;
         }
 
         ul {
@@ -71,12 +71,64 @@
             padding: 0;
             text-align: center;
         }
+        .container{
+            margin-top: 50px;
+        }
+        /* Responsividade */
+        @media (max-width: 1024px) { /* Para tablets */
+            table {
+                width: 90%;
+            }
+            h1 {
+                font-size: 22px;
+            }
+        }
+
+        @media (max-width: 768px) { /* Para telas menores que tablets */
+            table {
+                width: 100%;
+                font-size: 14px; /* Ajusta o tamanho da fonte na tabela */
+            }
+
+            th, td {
+                padding: 10px;
+            }
+
+            button {
+                padding: 5px 10px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) { /* Para celulares */
+            h1 {
+                font-size: 20px;
+                margin-top: 10px;
+            }
+
+            table {
+                width: 100%;
+                font-size: 12px; /* Menor fonte em telas pequenas */
+            }
+
+            th, td {
+                padding: 8px;
+            }
+
+            button {
+                padding: 4px 8px;
+                font-size: 12px;
+            }
+        }
 
         
     </style>
 </head>
 <body>
-    {% include "global/partials/header.html" %}
+    <header>
+        {% include "global/partials/header.html" %}
+      </header>
+      <div class="container">
     <h1>Lista de Usuários</h1>
 
     {% if messages %}
@@ -127,5 +179,6 @@
             {% endfor %}
         </tbody>
     </table>
+    <div>
 </body>
 </html>

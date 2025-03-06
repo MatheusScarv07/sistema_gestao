@@ -18,7 +18,7 @@
         }
 
         header {
-            background-color: #4CAF50;
+            background-color: #007bff;
             color: white;
             padding: 15px;
             text-align: center;
@@ -28,7 +28,7 @@
         h1 {
             text-align: center;
             color: #333;
-            margin-top: 20px;
+            margin-top: 550px;
         }
 
         form {
@@ -56,9 +56,12 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
+        .container{
+            margin-top: 100px;
+        }
 
         input:focus {
-            border-color: #4CAF50;
+            border-color: #007bff;
             outline: none;
         }
 
@@ -74,7 +77,7 @@
         }
 
         button:hover {
-            background-color: #45a049;
+            background-color: #007bff;
         }
 
         ul {
@@ -82,13 +85,38 @@
             padding: 0;
             text-align: center;
         }
+        /* Responsividade */
+        @media (max-width: 768px) { /* Para tablets */
+            form {
+                width: 80%; /* Reduz a largura do formulário */
+            }
+        }
+
+        @media (max-width: 480px) { /* Para celulares */
+            form {
+                width: 100%; /* O formulário ocupa toda a largura */
+                padding: 15px; /* Reduz o padding em telas menores */
+            }
+
+            h1 {
+                font-size: 24px; /* Reduz o tamanho do título */
+            }
+
+            button {
+                font-size: 14px; /* Ajusta o tamanho do botão */
+            }
+        }
 
        
     </style>
 </head>
 <body>
-    {% include "global/partials/header.html" %}
-    <h1>Criar Novo Usuário</h1>
+    <header>
+        {% include "global/partials/header.html" %}
+      </header>
+    
+    <div class="container">
+      <h1>Criar Novo Usuário</h1>
 
     {% if messages %}
         <ul>
@@ -111,5 +139,6 @@
         
         <button type="submit">Criar Usuário</button>
     </form>
+</div>
 </body>
 </html>

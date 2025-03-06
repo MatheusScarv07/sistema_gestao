@@ -4,44 +4,60 @@
 <body>
   <header>
     <div class="company-header">
-      <h1>Empresa XYZ</h1>
-      <p>Endereço: Rua Exemplo, 123 - Cidade, Estado</p>
-      <p>Contato: (11) 98765-4321 | Email: contato@empresa.com</p>
-      <p>CNPJ: 12.345.678/0001-99</p>
+      <div class="logo">
+        <img src="{% static 'images/logo.png' %}" alt="Logo da Empresa" width="150">
+      </div>
+      <div class="company-info">
+        <h1>Interseg Distribuidora</h1>
+        <p>Endereço: Av. Miguel Rosa, 4386, Nossa senhora das gracas - Teresina, Piaui</p>
+        <p>Contato: (86)3217-3232 | Email: interseguranca@hotmail.com</p>
+        <p>CNPJ: 12.632.869/0001-38</p>
+      </div>
     </div>
   </header>
 
   <main>
     <div class="content">
-      <!-- Título da página -->
       <h1>Relatórios de Orçamento</h1>
 
-      <!-- Tabela de relatórios recentes -->
-      <fieldset class="infos">
-        <legend>Relatórios Recentes</legend>
-        <table id="tabela-relatorios">
-          <thead>
-            <tr>
-              <th>Numero</th>
-              <th>Data</th>
-              <th>Cliente</th>
-              <th>CPF ou CNPJ</th>
-              <th>Valor</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for relatorio in budget %}
+      {% for relatorio in budget %}
+        <div class="client-info">
+          <p><strong>Cliente:</strong> {{ relatorio.cliente.nome }}</p>
+          <p><strong>CPF/CNPJ:</strong> {{ relatorio.cpf_cnpj_cliente }}</p>
+        </div>
+
+        <fieldset class="infos">
+          <legend>Detalhes do Orçamento</legend>
+          <div class="budget-info">
+            <p><strong>Data do Orçamento:</strong> {{ relatorio.data_orcamento }}</p>
+            <p><strong>Número do Orçamento:</strong> {{ relatorio.number_budget }}</p>
+          </div>
+          <table id="tabela-relatorios">
+            <thead>
               <tr>
-                <td>{{ relatorio.number_budget }}</td>
+                <th>Produto</th>
+                <th>Valor Unitário</th>
+                <th>Quantidade</th>
+                <th>Valor Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for relatorio in budget %}
+              <tr>
+                <td>{{ relatorio.number_budget }}</td> ##ajustar para numero do produto
                 <td>{{ relatorio.data_orcamento }}</td>
                 <td>{{ relatorio.cliente.nome }}</td>
                 <td>{{ relatorio.cpf_cnpj_cliente }}</td>
                 <td>{{ relatorio.total }}</td>
               </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </fieldset>
+              {% endfor %}
+            </tbody>
+          </table>
+          <div class="total-budget">
+            <p><strong>Total do Orçamento:</strong> {{ relatorio.total }}</p>
+          </div>
+        </fieldset>
+      {% endfor %}
     </div>
   </main>
 
@@ -56,16 +72,30 @@
       padding: 1em;
       text-align: center;
       border: solid 1px black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .company-header h1 {
+    .company-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo img {
+      max-width: 150px;
+      height: auto;
+    }
+
+    .company-info h1 {
       margin: 0;
-      font-size: 1.8em;
+      font-size: 4em;
     }
 
-    .company-header p {
+    .company-info p {
       margin: 0.2em 0;
-      font-size: 0.9em;
+      font-size: 2em;
     }
 
     .content {
@@ -81,12 +111,34 @@
       text-align: center;
     }
 
+    .client-info {
+      margin-bottom: 1em;
+      font-size: 1.2em;
+      border: 1px solid #ddd;
+      padding: 1em;
+      border-radius: 10px;
+    }
+
     .infos {
       width: 100%;
       border: 1px solid #ddd;
       border-radius: 10px;
       padding: 1em;
       margin-top: 1em;
+    }
+
+    .budget-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1em;
+      font-size: 1.2em;
+    }
+
+    .total-budget {
+      text-align: right;
+      font-size: 1.2em;
+      margin-top: 1.8em;
+      font-weight: bold;
     }
 
     table {
