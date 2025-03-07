@@ -95,10 +95,18 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'intersegs-database',  # Substitua pelo nome do seu banco
+        'USER': 'kjgmucyhig',
+        'PASSWORD': 'Proxs10bmx.',  # Insira a senha correta
+        'HOST': 'intersegs-server.mysql.database.azure.com',
+        'PORT': '3306',
+        'OPTIONS': {
+            'ssl': {'ssl-mode': 'require'},  # Requer SSL para conexão segura
+        },
     }
 }
+
 
 
 # Password validation
