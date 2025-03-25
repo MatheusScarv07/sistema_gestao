@@ -95,14 +95,16 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'intersegs-database',  # Substitua pelo nome do seu banco
-        'USER': 'kjgmucyhig',
-        'PASSWORD': 'Proxs10bmx.',  # Insira a senha correta
-        'HOST': 'intersegs-server.mysql.database.azure.com',
-        'PORT': '3306',
+        'ENGINE': 'mssql',
+        'NAME': 'interseg',
+        'USER': 'matheus',
+        'PASSWORD': 'Proxs10bmx.',
+        'HOST': 'interseg.database.windows.net',
+        'PORT': '1433',
         'OPTIONS': {
-            'ssl': {'ssl-mode': 'require'},  # Requer SSL para conexão segura
+            'driver': 'ODBC Driver 18 for SQL Server',
+            'encrypt': True,
+            'trustServerCertificate': False,
         },
     }
 }
@@ -157,7 +159,8 @@ STATICFILES_DIRS = [
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 
 LOGIN_URL = '/login/'  # Altere para o caminho do seu login, se necessário
 LOGIN_REDIRECT_URL = '/'
