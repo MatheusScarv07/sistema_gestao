@@ -163,3 +163,6 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Sessões armazenadas n
 SESSION_COOKIE_AGE = 3600  # Torna a sessão expirar quando o navegador é fechado
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Fecha a sessão ao fechar o navegador
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://intersegs.azurewebsites.net',
+]
